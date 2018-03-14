@@ -1,0 +1,40 @@
+#pragma once
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <random>
+#include <ctime>
+
+using namespace std;
+
+class Lattice
+{
+public:
+	Lattice(int Deg);
+	~Lattice();
+
+	vector< vector<double> > fromSpinToDimer(vector< vector<double> > S);
+	vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
+	void printoutSpin(string suppl); // Creates outputfile of the Spin Lattice
+protected:
+	// Attributes
+	vector< vector<double> > S_;				// Spin lattice S(i, j)
+	//vector< vector<double> > D_;				// Dimer lattice D(i, j)
+	int Deg_; // Degree of triangular lattice
+	int N_; // Max of i, j of S(i, j)
+	//const double J1_; // J1
+	//const double J2_; // J2
+	//const double J3_; // J3
+	
+
+	// Methods
+	//vector< vector<double> > fromSpinToDimer(vector< vector<double> > S);
+	//vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
+
+private:
+	// random
+	random_device rd;							// Random device
+	mt19937 mt;									// mt19937
+	uniform_real_distribution<double> dist;		// Uniform real distribution
+};
+
