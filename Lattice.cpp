@@ -1,11 +1,11 @@
 #include "Lattice.h"
 
 
-Lattice::Lattice(int Deg)
-	: Deg_(Deg), N_(2 * Deg + 1), S_(2 * Deg + 1, vector<double>(2 * Deg + 1, 0)), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0))
+Lattice::Lattice(int Deg) //TODO: periodic boundary conditions
+	: Deg_(Deg), N_(2 * Deg + 1), S_(2 * Deg + 1, vector<double>(2 * Deg + 1, 0)), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0)) // @suppress("Function cannot be resolved")
 {
 	// init S_
-	mt.seed(::time(NULL));
+	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
@@ -31,13 +31,17 @@ Lattice::~Lattice()
 }
 
 /**
+
 vector< vector<double> > Lattice::fromSpinToDimer(vector< vector<double> > S)
 {
-	vector< vector<double> > D;
-	
+	vector< vector<double> > D(N_, N_);
+	for(int i; i < N_; i++) {
+		for(int j; j < N_; j++)  {
+
+		}
+	}
 	return D;
 }
-
 
 vector< vector<double> > Lattice::fromDimerToSpin(vector< vector<double> > D)
 {
