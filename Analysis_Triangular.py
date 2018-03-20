@@ -6,14 +6,18 @@ import matplotlib.pyplot as plt
 # init graphs
 S = nx.Graph()
 SpinData = np.genfromtxt('Outputfiles/Spin1.dat',dtype=float, delimiter="\t")
+Spin_val = SpinData[:, 2]
+
 i_max = max(SpinData[:, 0])
 j_max = max(SpinData[:, 1])
 rows = range(int(i_max)+1)
 cols = range(int(j_max)+1)
 
 Spin_pos = zip(SpinData[:, 0], SpinData[:, 1])
+Spin_val = SpinData[:, 2]
+Spin_couple = {pos: Spin_val[ind] for ind, pos in enumerate(Spin_pos)}
 S.add_nodes_from(Spin_pos)
-nx.set_node_attributes(S, "spin", SpinData[:, 2])
+nx.set_node_attributes(S, 'spin', Spin_couple) # apparently they aren't set...
 
 # no periodic bc at the moment
 for i in rows:
