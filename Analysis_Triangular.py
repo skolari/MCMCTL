@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # init graphs
 S = nx.Graph()
-SpinData = np.genfromtxt('Outputfiles/Spin2.dat', dtype=float, delimiter="\t")
+SpinData = np.genfromtxt('Outputfiles/Spin1.dat', dtype=float, delimiter="\t")
 
 i_max = max(SpinData[:, 0])
 j_max = max(SpinData[:, 1])
@@ -22,19 +22,22 @@ nx.set_node_attributes(S, 'none', 'color')
 # no periodic bc at the moment some error potential
 for i in rows:
     for j in cols:
-        if i < i_max:
-            if j < j_max:
-                S.add_edge((i, j), (i + 1, j))
+        if (i, j) in S:
+            if i < i_max and j < j_max:
+                    S.add_edge((i, j), (i + 1, j))
+                    S.add_edge((i, j), (i, j + 1))
+                    S.add_edge((i + 1, j), (i, j + 1))
+            elif i == i_max and j < j_max:
                 S.add_edge((i, j), (i, j + 1))
-                S.add_edge((i + 1, j), (i, j + 1))
-
+            elif j == j_max and i < i_max:
+                S.add_edge((i, j), (i + 1, j))
 # positions
-
 for i in rows:
     for j in cols:
-        x = (j * 0.5) + i
-        y = j * math.sqrt(3) / 2
-        S.node[(i, j)]['pos'] = (x, y)
+        if (i, j) in S:
+            x = (j * 0.5) + i
+            y = j * math.sqrt(3) / 2
+            S.node[(i, j)]['pos'] = (x, y)
 
 remove = [node for node, data in S.nodes(data=True) if data['spin'] == 0]
 S.remove_nodes_from(remove)
