@@ -31,7 +31,7 @@ Lattice::~Lattice()
 
 }
 
-
+// test to github
 vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 {
 	vector< vector<double> > D(N_ * 2 * N_, vector<double>(N_ * 2 * N_));
