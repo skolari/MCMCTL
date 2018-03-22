@@ -11,8 +11,8 @@ int main()
 	cout << "before print out" << endl;
 	L->printoutSpin("1");
 	L->printoutSpin("2");
-
+	L->printoutDimerAdj("1");
 	cout << "after print out" << endl;
-	delete L;
+	// delete L;
 	return 0;
 }

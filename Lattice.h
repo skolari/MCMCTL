@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include <ctime>
+#include <cmath>
 
 using namespace std;
 
@@ -13,14 +14,15 @@ public:
 	Lattice(int Deg);
 	~Lattice();
 
-	vector< vector<double> > fromSpinToDimer(vector< vector<double> > S);
+	vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
 	vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
 	void printoutSpin(string suppl); // Creates outputfile of the Spin Lattice
+	void printoutDimerAdj(string suppl);
 
 protected:
 	// Attributes
 	vector< vector<double> > S_;				// Spin lattice S(i, j)
-	//vector< vector<double> > D_;				// Dimer lattice D(i, j)
+	vector< vector<double> > Dadj_;				// Dimer Adj. Matrix
 	int Deg_; // Degree of triangular lattice
 	int N_; // Max of i, j of S(i, j)
 
