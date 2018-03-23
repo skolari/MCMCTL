@@ -14,8 +14,8 @@ class TriangularLattice:
 
         i_max = max(spin_data[:, 0])
         j_max = max(spin_data[:, 1])
-        rows = range(int(i_max) + 1)
-        cols = range(int(j_max) + 1)
+        self.rows = range(int(i_max) + 1)
+        self.cols = range(int(j_max) + 1)
 
         spin_pos = zip(spin_data[:, 0], spin_data[:, 1])
         spin_val = spin_data[:, 2]
@@ -25,8 +25,8 @@ class TriangularLattice:
         nx.set_node_attributes(self.S, 'none', 'color')
 
         # no periodic bc at the moment some error potential
-        for i in rows:
-            for j in cols:
+        for i in self.rows:
+            for j in self.cols:
                 if (i, j) in self.S:
                     if i < i_max and j < j_max:
                         self.S.add_edge((i, j), (i + 1, j))
@@ -37,8 +37,8 @@ class TriangularLattice:
                     elif j == j_max and i < i_max:
                         self.S.add_edge((i, j), (i + 1, j))
         # positions
-        for i in rows:
-            for j in cols:
+        for i in self.rows:
+            for j in self.cols:
                 if (i, j) in self.S:
                     x = (j * 0.5) + i
                     y = j * math.sqrt(3) / 2 * h
@@ -56,6 +56,16 @@ class TriangularLattice:
             elif data['spin'] == -1:
                 color_map.append('r')  # red color
 
-        nx.draw(self.S, positions, node_color=color_map)
+        node_size = 400 / math.sqrt(self.S.number_of_nodes())
+        nx.draw_networkx_nodes(self.S,
+                               pos=positions,
+                               with_labels=False,
+                               node_color=color_map,
+                               node_size=node_size)
+        nx.draw_networkx_edges(self.S,
+                               pos=positions,
+                               alpha=0.4)
+
         plt.axis('equal')
+        plt.axis('off')
         plt.show()
