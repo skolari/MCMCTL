@@ -14,8 +14,6 @@ public:
 	Lattice(int Deg);
 	~Lattice();
 
-	// vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
-	// vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
 	void printoutSpin(string suppl); // Creates outputfile of the Spin Lattice
 	void printoutDimerAdj(string suppl);
 
@@ -32,8 +30,11 @@ protected:
 	
 
 	// Methods
-	bool ifUpperBoundary(int i, int j);
+	int ifUpperBoundary(int i, int j);
+	vector<int> helpBoundaryCondition(int i, int j, int b);
+
 	//vector< vector<double> > fromSpinToDimer(vector< vector<double> > S);
+	//vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
 	//vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
 
 private:
