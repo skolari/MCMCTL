@@ -23,7 +23,7 @@ Lattice::Lattice(int Deg) //TODO: periodic boundary conditions
 			}
 		}
 	};
-	Dadj_ = Lattice::fromSpinToDimerAdj(S_);
+	// Dadj_ = Lattice::fromSpinToDimerAdj(S_);
 }
 
 Lattice::~Lattice()
@@ -31,6 +31,25 @@ Lattice::~Lattice()
 
 }
 
+bool Lattice::ifUpperBoundary(int i, int j)
+{
+	if (j > 0){
+		if(i == N_ - 1){
+			if(j < Deg_ + 1)
+				return true;
+		}
+
+		if (j == N_ - 1) {
+			if(i < Deg_ + 1)
+				return true;
+		}
+		if (i + j == N_ + Deg_)
+			return true;
+	}
+	return false;
+}
+
+/**
 vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 {
 	vector< vector<double> > D(N_ * 2 * N_, vector<double>(N_ * 2 * N_));
@@ -80,7 +99,7 @@ vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 	}
 	return D;
 }
-
+/*
 /**
 
 vector< vector<double> > Lattice::fromDimerToSpin(vector< vector<double> > D)
