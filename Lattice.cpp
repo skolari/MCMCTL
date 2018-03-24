@@ -26,7 +26,11 @@ Lattice::Lattice(int Deg) //TODO: periodic boundary conditions
 			}
 		}
 	};
-	// Dadj_ = Lattice::fromSpinToDimerAdj(S_);
+	int i_max = 2 * (N_ - 1);
+	int j_max = N_ - 1;
+	NDadj_ = i_max * j_max;
+
+	Dadj_ = Lattice::fromSpinToDimerAdj(S_);
 }
 
 Lattice::~Lattice()
@@ -55,7 +59,7 @@ int Lattice::ifUpperBoundary(int i, int j)
 
 vector<int> Lattice::helpBoundaryCondition(int i, int j, int b)
 {
-	vector<int> coord = {0, 0};
+	vector<int> coord = {i, j};
 	if (b == 0){
 		return coord;
 	}
@@ -73,18 +77,46 @@ vector<int> Lattice::helpBoundaryCondition(int i, int j, int b)
 	}
 	return coord;
 }
-/**
+
 vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 {
-	vector< vector<double> > D(N_ * 2 * N_, vector<double>(N_ * 2 * N_));
+	vector< vector<double> > D(NDadj_, vector<double>(NDadj_, 0.0));
 	double delta = 0;
 	int k = 0;
 	int l = 0;
-	for(int i = 0; i < N_; ++i) {
-		for(int j = 0; j < N_; ++j)  {
+
+	vector <int> coord1(2);
+	vector <int> coord2(2);
+	for(int i = 0; i < N_ - 1; ++i) {
+		for(int j = 0; j < N_ - 1; ++j)  {
 			if (S[i][j] != 0) {
-				if (Lattice::ifUpperBoundary(i, j) == 0) {
-					delta = abs(S_[i + 1][j] - S_[i][j + 1]);
+
+				delta = abs(S[i][j] - S[i][j + 1]);
+				k = N_ * j + 2 * i - 1;
+				l = N_ * j + 2 * i;
+				if(delta == 2) {
+					D[k][l] = 1;
+					D[l][k] = D[k][l];
+				} if(delta == 0){
+					D[k][l] = -1;
+					D[l][k] = D[k][l];
+				}
+
+				delta = abs(S[i][j] - S[i + 1][j]);
+				k = N_ * (j - 1) + 2 * i + 1;
+				l = N_ * j + 2 * i;
+				if(delta == 2) {
+					D[k][l] = 1;
+					D[l][k] = D[k][l];
+				} if(delta == 0){
+					D[k][l] = -1;
+					D[l][k] = D[k][l];
+				}
+
+				if(i + j == N_ + Deg_ - 2) {
+					coord1 = Lattice::helpBoundaryCondition(i + 1, j, 2);
+					coord2 = Lattice::helpBoundaryCondition(i, j + 1, 2);
+					delta = abs(S_[coord1[0]][coord1[1]] - S_[coord2[0]][coord2[1]]);
 					k = N_ * j + 2 * i + 1;
 					l = N_ * j + 2 * i;
 					if(delta == 2) {
@@ -94,20 +126,9 @@ vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 						D[k][l] = -1;
 						D[l][k] = D[k][l];
 					}
-
-					delta = abs(S[i][j] - S[i][j + 1]);
-					k = N_ * j + 2 * i - 1;
-					l = N_ * j + 2 * i;
-					if(delta == 2) {
-						D[k][l] = 1;
-						D[l][k] = D[k][l];
-					} if(delta == 0){
-						D[k][l] = -1;
-						D[l][k] = D[k][l];
-					}
-
-					delta = abs(S[i][j] - S[i + 1][j]);
-					k = N_ * (j - 1) + 2 * i + 1;
+				} else {
+					delta = abs(S_[i + 1][j] - S_[i][j + 1]);
+					k = N_ * j + 2 * i + 1;
 					l = N_ * j + 2 * i;
 					if(delta == 2) {
 						D[k][l] = 1;
@@ -122,7 +143,7 @@ vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 	}
 	return D;
 }
-*/
+
 /**
 
 vector< vector<double> > Lattice::fromDimerToSpin(vector< vector<double> > D)
@@ -180,8 +201,8 @@ void Lattice::printoutDimerAdj(string suppl)
 		outputFileSpin = NULL;
 	}
 
-	for (int i = 0; i < N_; ++i) {
-		for (int j = 0; j < N_; ++j) {
+	for (int i = 0; i < NDadj_; ++i) {
+		for (int j = 0; j < NDadj_; ++j) {
 			*outputFileSpin << Dadj_[i][j] << "\t";
 		}
 		*outputFileSpin << endl;

@@ -23,6 +23,7 @@ protected:
 	vector< vector<double> > Dadj_;				// Dimer Adj. Matrix
 	int Deg_; // Degree of triangular lattice
 	int N_; // Max of i, j of S(i, j)
+	int NDadj_; // size of Dadj_ matrix
 
 	//const double J1_; // J1
 	//const double J2_; // J2
@@ -34,7 +35,7 @@ protected:
 	vector<int> helpBoundaryCondition(int i, int j, int b);
 
 	//vector< vector<double> > fromSpinToDimer(vector< vector<double> > S);
-	//vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
+	vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
 	//vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
 
 private:
