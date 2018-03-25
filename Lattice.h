@@ -34,11 +34,16 @@ protected:
 	int ifUpperBoundary(int i, int j);
 	vector<int> helpBoundaryCondition(int i, int j, int b);
 
+	double const getS_ij(int i, int j);
 	//vector< vector<double> > fromSpinToDimer(vector< vector<double> > S);
 	vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
 	//vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
 
 private:
+	// Methods
+
+	int getDadjInd(int i, int j);
+
 	// random
 	random_device rd;							// Random device // @suppress("Type cannot be resolved")
 	mt19937 mt;									// mt19937 // @suppress("Type cannot be resolved")
