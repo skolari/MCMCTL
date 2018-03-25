@@ -10,7 +10,7 @@ static double deltaSpintoDimer(double Sij, double Skl) {
 Lattice::Lattice(int Deg) //TODO: periodic boundary conditions
 	: Deg_(Deg), N_(2 * Deg + 1), S_(2 * Deg + 1, vector<double>(2 * Deg + 1, 0)), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0)) // @suppress("Function cannot be resolved")
 {
-	// init S_
+	// Initialisation S_
 	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
