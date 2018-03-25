@@ -48,4 +48,3 @@ class DualLattice:
 
         plt.axis('equal')
         plt.axis('off')
-        plt.show()

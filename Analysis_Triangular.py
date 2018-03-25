@@ -1,9 +1,7 @@
-from TriangularLattice import TriangularLattice
-from DualLattice import DualLattice
+from DrawPlot import DrawPlot
 
-filename = 'Outputfiles/Spin1.dat'
-filename2 = 'Outputfiles/DimerAdj2.dat'
-triangular_lattice = TriangularLattice(filename)
-dual_lattice = DualLattice(filename2)
-#  triangular_lattice.draw_tri_lattice()
-dual_lattice.draw_dual_lattice()
+
+filename_s = 'Outputfiles/Spin1.dat'
+filename_d = 'Outputfiles/DimerAdj1.dat'
+draw_plot = DrawPlot(filename_s, filename_d)
+draw_plot.draw_spin_and_dual_lattice()
