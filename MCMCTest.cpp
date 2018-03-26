@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {	
-	int Deg = 1;
+	int Deg = 10;
 	Lattice* L = new Lattice(Deg);
 	cout << "before print out" << endl;
 	L->printoutSpin("1");
