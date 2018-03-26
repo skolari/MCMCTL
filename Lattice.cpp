@@ -104,29 +104,25 @@ vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 	for(int j = 0; j < N_ - 1; ++j) {
 		for(int i = 0; i < N_ - 1; ++i)  {
 			if (S[i][j] != 0) {
+				k = Lattice::getDadjInd(2 * i, j);
 
 				ii = 2 * i - 1;
-				jj = j;
-				k = Lattice::getDadjInd(2 * i, j);
+				jj = j + 1;
 				l = Lattice::getDadjInd(ii, jj);
 				D[k][l] = deltaSpintoDimer(S[i][j], S[i][j + 1]);
 				D[l][k] = D[k][l];
 
 				ii = 2 * i + 1;
 				jj = j - 1;
-				k = Lattice::getDadjInd(2 * i, j);
 				l = Lattice::getDadjInd(ii, jj);
 				D[k][l] = deltaSpintoDimer(S[i][j], S[i + 1][j]);
 				D[l][k] = D[k][l];
 
 				ii = 2 * i + 1;
 				jj = j;
-				k = Lattice::getDadjInd(2 * i, j);
 				l = Lattice::getDadjInd(ii, jj);
-				D[k][l] = deltaSpintoDimer(S[i + 1][j], S[i][j + 1]);
 				D[k][l] = deltaSpintoDimer(Lattice::getS_ij(i + 1, j), Lattice::getS_ij(i, j + 1));
 				D[l][k] = D[k][l];
-
 			}
 		}
 	}
