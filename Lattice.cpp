@@ -7,31 +7,13 @@ static double deltaSpintoDimer(double Sij, double Skl) {
 	else return 0;
 }
 
-Lattice::Lattice(int Deg) //TODO: periodic boundary conditions
-	: Deg_(Deg), N_(2 * Deg + 1), S_(2 * Deg + 1, vector<double>(2 * Deg + 1, 0)), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0)) // @suppress("Function cannot be resolved")
+Lattice::Lattice(int Deg)
+	: Deg_(Deg), N_(2 * Deg + 1), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0)) // @suppress("Function cannot be resolved")
 {
-	// Initialisation S_
+	// Initialization S_
 	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
 	double rnd = 0;
-	for (int i = 0; i < N_; ++i) {
-		for (int j = 0; j < N_; ++j) {
-			if (Lattice::ifUpperBoundary(i, j) != 0){
-				S_[i][j] = 0;
-			}
-			else if ((i + j > Deg_ - 1) && (i + j < 2 * N_ - Deg_ - 1)) {
-				rnd = dist(mt);
-				if (rnd < 0.5) {
-					S_[i][j] = 1;
-				}
-				else {
-					S_[i][j] = -1;
-				}
-			}
-			else {
-				S_[i][j] = 0;
-			}
-		}
-	};
+
 	int i_max = 2 * (N_ - 1);
 	int j_max = N_ - 1;
 	NDadj_ = i_max * j_max;
@@ -140,38 +122,7 @@ vector< vector<double> > Lattice::fromDimerToSpin(vector< vector<double> > D)
 */
 
 
-void Lattice::printoutSpin(string suppl)
-{	
-	string path = "./Outputfiles/Spin" + suppl + ".dat";
 
-	ofstream *outputFileSpin = new ofstream();
-	outputFileSpin->open(path.c_str());
-
-	if (!outputFileSpin->is_open())
-	{
-		delete outputFileSpin;
-		outputFileSpin = NULL;
-	}
-
-	int iUB = 0;
-	double Spin = 0;
-	vector<int> coord(2);
-	for (int i = 0; i < N_; ++i) {
-		for (int j = 0; j < N_; ++j) {
-			iUB = Lattice::ifUpperBoundary(i, j);
-			if (iUB == 0) {
-				Spin = S_[i][j];
-			} else {
-				coord = Lattice::helpBoundaryCondition(i, j, iUB);
-				Spin = S_[coord[0]][coord[1]];
-			}
-			*outputFileSpin << i << "\t" << j << "\t" << Spin << endl;
-		}
-	}
-
-	outputFileSpin->close();
-	delete outputFileSpin;
-}
 
 void Lattice::printoutDimerAdj(string suppl)
 {
