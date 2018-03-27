@@ -1,24 +1,26 @@
 #include "Lattice.h"
-
+ /**
 static double deltaSpintoDimer(double Sij, double Skl) {
 	double delta = abs(Sij - Skl);
 	if (delta == 0) return 1;
 	else if (delta == 2) return -1;
 	else return 0;
 }
+*/
 
 Lattice::Lattice(int Deg)
 	: Deg_(Deg), N_(2 * Deg + 1), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0)) // @suppress("Function cannot be resolved")
 {
 	// Initialization S_
+	Nc_ = N_ - Deg_;
 	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
 	double rnd = 0;
 
 	int i_max = 2 * (N_ - 1);
 	int j_max = N_ - 1;
-	NDadj_ = i_max * j_max;
+	//NDadj_ = i_max * j_max;
 
-	Dadj_ = Lattice::fromSpinToDimerAdj(S_);
+	//Dadj_ = Lattice::fromSpinToDimerAdj(S_);
 }
 
 Lattice::~Lattice()
@@ -26,53 +28,7 @@ Lattice::~Lattice()
 
 }
 
-int Lattice::ifUpperBoundary(int i, int j)
-{
-	if (j > 0){
-
-		if (j == N_ - 1) {
-			if(i < Deg_ + 1)
-				return 1;
-		}
-		if (i + j == N_ + Deg_ - 1)
-			return 2;
-
-		if(i == N_ - 1){
-			if(j < Deg_ + 1)
-				return 3;
-		}
-	}
-	return 0;
-}
-
-vector<int> Lattice::helpBoundaryCondition(int i, int j, int b)
-{
-	vector<int> coord = {i, j};
-	if (b == 0){
-		return coord;
-	}
-	else if (b == 1) {
-		coord = {N_ - i - 1, 0};
-		return coord;
-	}
-	else if (b == 2) {
-		coord = {N_ - 1 - i ,N_ - 1 - j};
-		return coord;
-	}
-	else if (b == 3) {
-		coord = {0, N_ - j - 1};
-		return coord;
-	}
-	return coord;
-}
-
-double const Lattice::getS_ij(int i, int j)
-{
-	int b = Lattice::ifUpperBoundary(i, j);
-	vector<int> coord = Lattice::helpBoundaryCondition(i, j, b);
-	return S_[coord[0]][coord[1]];
-}
-
+/**
 vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
 {
 	vector< vector<double> > D(NDadj_, vector<double>(NDadj_, 0.0));
@@ -123,7 +79,7 @@ vector< vector<double> > Lattice::fromDimerToSpin(vector< vector<double> > D)
 
 
 
-
+/**
 void Lattice::printoutDimerAdj(string suppl)
 {
 	string path = "./Outputfiles/DimerAdj" + suppl + ".dat";
@@ -147,8 +103,10 @@ void Lattice::printoutDimerAdj(string suppl)
 	outputFileSpin->close();
 	delete outputFileSpin;
 }
+
 // (i, j) indices of Dimer Lattice, returns coordinates in Ajd matrix.
 int Lattice::getDadjInd(int i, int j)
 {
 	return N_ * j + i;
 }
+*/

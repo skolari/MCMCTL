@@ -12,8 +12,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <random>
-#include <ctime>
 #include <cmath>
 #include "Lattice.h"
 
@@ -28,7 +26,7 @@ public:
 
 	// Getters and Setters
 	double get_Spin_ax(int q, int r);
-	double get_Spin_cube(int x, int y, int z);
+	double get_Spin_cube_periodic(int x, int y, int z);
 
 	void set_Spin_ax(int q, int r, double val);
 	void set_Spin_cube(int x, int y, int z, double val);
@@ -36,9 +34,10 @@ public:
 protected:
 	vector<int> Axial_to_cube(int q, int r);
 	vector<int> Cube_to_axial(int x, int y, int z);
-
+	int set_cube_periodic(int x);
+	bool Cube_same_position(int x1, int x2, int x3, int y1, int y2, int y3);
 private:
-	vector< vector<double> > S_;	// Spin lattice S(q, r) axial coordinates
+	vector< vector<double*> > S_;	// Spin lattice S(q, r) axial coordinates
 };
 
 

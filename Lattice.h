@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <random>
 #include <ctime>
 #include <cmath>
@@ -15,22 +14,20 @@ public:
 	virtual ~Lattice();
 
 	virtual void Printout(string suppl); // Creates outputfile of the Spin Lattice
-	void printoutDimerAdj(string suppl);
+	//void printoutDimerAdj(string suppl);
 
 protected:
 	// Attributes
-	vector< vector<double> > Dadj_;				// Dimer Adj. Matrix
+	//vector< vector<double> > Dadj_;				// Dimer Adj. Matrix
 	int Deg_; // Degree of triangular lattice
 	int N_; // Max of i, j of S(i, j)
-	int NDadj_; // size of Dadj_ matrix
+	int Nc_; // Max index of cube lattice
+	// int NDadj_; // size of Dadj_ matrix
 
 	// Methods
-	int ifUpperBoundary(int i, int j);
-	vector<int> helpBoundaryCondition(int i, int j, int b);
 
-	double const getS_ij(int i, int j);
 	//vector< vector<double> > fromSpinToDimer(vector< vector<double> > S);
-	vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
+	//vector< vector<double> > fromSpinToDimerAdj(vector< vector<double> > S);
 	//vector< vector<double> > fromDimerToSpin(vector< vector<double> > D);
 
 	// random
@@ -41,7 +38,6 @@ protected:
 private:
 	// Methods
 
-	int getDadjInd(int i, int j);
-
+	//int getDadjInd(int i, int j);
 };
 
