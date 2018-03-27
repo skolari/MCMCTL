@@ -22,7 +22,7 @@ SpinLattice::SpinLattice(int Deg)
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
 			S_[i][j] = new double;
-			if ((i + j > Deg_ - 1) && (i + j < 2 * N_ - Deg_ - 1)) {
+			if ((i + j > Deg_ - 1) && (i + j < Nc_ + N_ - 1)) {
 				rnd = dist(mt);
 				if (rnd < 0.5) {
 					*S_[i][j] = 1;
@@ -38,16 +38,17 @@ SpinLattice::SpinLattice(int Deg)
 	}
 
 	// Set Boundary references
+
 	for (int i = 0; i < Nc_; ++i) {
 		S_[i][N_ - 1] = S_[i + Deg_][0];
 	}
+
 	for (int j = 1; j < Nc_; ++j) {
-		S_[N_ - 1][j] = S_[0][N_ - (j + 1)];
+		S_[N_ - 1][j] = S_[0][Deg_ + j];
 	}
-	for (int i = 1; i < Deg_; i ++) {
-		for (int j = 1; j < Deg_; j++) {
-			S_[Deg_ + i][N_ - 1 - j] = S_[i][Deg_ - j];
-		}
+
+	for (int i = 0; i < Nc_; i ++) {
+		S_[Nc_ - 1 + i][N_ - 1 - i] = S_[i][Deg_ - i];
 	}
 }
 
