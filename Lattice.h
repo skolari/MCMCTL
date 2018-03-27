@@ -13,7 +13,6 @@ public:
 	Lattice(int Deg);
 	virtual ~Lattice();
 
-	virtual void Printout(string suppl); // Creates outputfile of the Spin Lattice
 	//void printoutDimerAdj(string suppl);
 
 protected:
