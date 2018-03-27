@@ -16,7 +16,7 @@
 
 
 SpinLattice::SpinLattice(int Deg)
-	: Lattice(Deg), S_(2 * Deg + 1, vector<double>(2 * Deg + 1, NULL))
+	: Lattice(Deg), S_(2 * Deg + 1, vector<double*>(2 * Deg + 1, NULL))
 {
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
@@ -39,14 +39,14 @@ SpinLattice::SpinLattice(int Deg)
 
 	// Set Boundary references
 	for (int i = 0; i < Nc_; ++i) {
-		S_[i][N_ - 1] = &S_[i - Deg_][0];
+		S_[i][N_ - 1] = S_[i + Deg_][0];
 	}
 	for (int j = 1; j < Nc_; ++j) {
-		S_[N_ - 1][j] = &S_[0][N_ - (j + 1)];
+		S_[N_ - 1][j] = S_[0][N_ - (j + 1)];
 	}
 	for (int i = 1; i < Deg_; i ++) {
 		for (int j = 1; j < Deg_; j++) {
-			S_[Deg_ + i][N_ - 1 - j] = &S_[i][Deg_ - j];
+			S_[Deg_ + i][N_ - 1 - j] = S_[i][Deg_ - j];
 		}
 	}
 }
@@ -56,7 +56,7 @@ SpinLattice::~SpinLattice()
 	// TODO Auto-generated constructor stub
 }
 
-void SpinLattice::Printout(string suppl)
+void SpinLattice::Printout(string suppl) const
 {
 	string path = "./Outputfiles/Spin" + suppl + ".dat";
 
@@ -69,10 +69,7 @@ void SpinLattice::Printout(string suppl)
 		outputFileSpin = NULL;
 	}
 
-	int iUB = 0;
 	double Spin = 0;
-	vector<int> coord(2);
-
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
 			Spin = SpinLattice::get_Spin_ax(i, j);
@@ -84,7 +81,7 @@ void SpinLattice::Printout(string suppl)
 }
 
 // Helper functions
-vector<int> SpinLattice::Axial_to_cube(int q, int r)
+vector<int> SpinLattice::Axial_to_cube(int q, int r) const
 {
 	vector<int> cube(3);
     cube[X] = q - Nc_;
@@ -93,7 +90,7 @@ vector<int> SpinLattice::Axial_to_cube(int q, int r)
     return cube;
 }
 
-vector<int> SpinLattice::Cube_to_axial(int x, int y, int z)
+vector<int> SpinLattice::Cube_to_axial(int x, int y, int z) const
 {
 	vector<int> ax(2);
 	ax[Q] = x + Nc_;
@@ -101,35 +98,35 @@ vector<int> SpinLattice::Cube_to_axial(int x, int y, int z)
     return ax;
 }
 
-int SpinLattice::set_cube_periodic(int x)
+int SpinLattice::make_cube_periodic(int x) const
 {
 	return ((x + Nc_) % (N_ - 1)) - Nc_;
 }
 
-// Takes two cubic coordinates x = (x1, x2, x3) and y = (y1, y2, y3) and verifies if they are at the same point.
+// Takes two cubic coordinates x = (x1, x2, x3) and y = (y1, y2, y3) and verifies if they are at the same point. does not work...
 bool SpinLattice::Cube_same_position(int x1, int x2, int x3, int y1, int y2, int y3)
 {
 	bool flag = true;
-	flag = flag && (SpinLattice::set_cube_periodic(x1) == SpinLattice::set_cube_periodic(y1));
-	flag = flag && (SpinLattice::set_cube_periodic(x2) == SpinLattice::set_cube_periodic(y2));
-	flag = flag && (SpinLattice::set_cube_periodic(x3) == SpinLattice::set_cube_periodic(y3));
+	flag = flag && (SpinLattice::make_cube_periodic(x1) == SpinLattice::make_cube_periodic(y1));
+	flag = flag && (SpinLattice::make_cube_periodic(x2) == SpinLattice::make_cube_periodic(y2));
+	flag = flag && (SpinLattice::make_cube_periodic(x3) == SpinLattice::make_cube_periodic(y3));
 	return flag;
 }
 
 // Getters and Setters
 
 // Without periodic boundary !!
-double SpinLattice::get_Spin_ax(int q, int r)
+double SpinLattice::get_Spin_ax(int q, int r) const
 {
 	return *S_[q][r];
 }
 
 // With periodic boundary !!
-double SpinLattice::get_Spin_cube_periodic(int x, int y, int z)
+double SpinLattice::get_Spin_cube_periodic(int x, int y, int z) const
 {
-	x = SpinLattice::set_cube_periodic(x);
-	y = SpinLattice::set_cube_periodic(y);
-	z = SpinLattice::set_cube_periodic(z);
+	x = SpinLattice::make_cube_periodic(x);
+	y = SpinLattice::make_cube_periodic(y);
+	z = SpinLattice::make_cube_periodic(z);
 
 	vector<int> ax = SpinLattice::Cube_to_axial(x, y, z);
 	return *S_[ax[Q]][ax[R]];
@@ -142,9 +139,9 @@ void SpinLattice::set_Spin_ax(int q, int r, double val) {
 
 // With periodic Boundary!!
 void SpinLattice::set_Spin_cube(int x, int y, int z, double val) {
-	x = SpinLattice::set_cube_periodic(x);
-	y = SpinLattice::set_cube_periodic(y);
-	z = SpinLattice::set_cube_periodic(z);
+	x = SpinLattice::make_cube_periodic(x);
+	y = SpinLattice::make_cube_periodic(y);
+	z = SpinLattice::make_cube_periodic(z);
 
 	vector<int> ax = SpinLattice::Cube_to_axial(x, y, z);
 	*S_[ax[Q]][ax[R]] = val;
