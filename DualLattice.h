@@ -22,7 +22,7 @@ public:
 	DualLattice(int Deg, SpinLattice* S);
 	virtual ~DualLattice();
 
-	std::vector<std::vector<double*>> From_Spin_to_Dual(SpinLattice* S);
+	std::vector<std::vector<double>> From_Spin_to_Dual(SpinLattice* S);
 
 	// Getters and Setters
 	//void set_dimer(node n1, node n2, double val);
@@ -30,11 +30,11 @@ public:
 	//void printoutDimerAdj(string suppl);
 
 protected:
-
+	inline int DualLattice::getDadjInd(int i, int j) const;
 private:
 	//vector<node*> Entry_Sites;
 	//vector<vector<node*>> Dual_; //
-	std::vector<std::vector<double*>> Dual_adj_; // (N, M) : N=EntrySites, M=VertexSites
+	std::vector<std::vector<double>> Dual_adj_; // (N, M) : N=EntrySites, M=VertexSites
 	int NDadj_;
 };
 
