@@ -1,14 +1,6 @@
 #include "Lattice.h"
 using namespace std;
 
- /**
-static double deltaSpintoDimer(double Sij, double Skl) {
-	double delta = abs(Sij - Skl);
-	if (delta == 0) return 1;
-	else if (delta == 2) return -1;
-	else return 0;
-}
-*/
 
 Lattice::Lattice(int Deg)
 	: Deg_(Deg), N_(2 * Deg + 1), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0)) // @suppress("Function cannot be resolved")

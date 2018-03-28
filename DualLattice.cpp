@@ -5,10 +5,19 @@
  *      Author: Manuel Stathis
  */
 
+#include "DualLattice.h"
+
+#define Q 0
+#define R 1
+
 using namespace std;
 
-
-#include "DualLattice.h"
+static double deltaSpintoDimer(double Sij, double Skl) {
+	double delta = abs(Sij - Skl);
+	if (delta == 0) return 1;
+	else if (delta == 2) return -1;
+	else return 0;
+}
 
 DualLattice::DualLattice(int Deg, SpinLattice* S)
 	: Lattice(Deg)
@@ -26,78 +35,44 @@ DualLattice::~DualLattice() {
 	// TODO Auto-generated destructor stub
 }
 
-vector<vector<double*>> DualLattice::From_Spin_to_Dual(SpinLattice* S) {
-	vector<vector<double*>> Dual(NDadj_, vector<double*>(NDadj_));
+vector<vector<double>> DualLattice::From_Spin_to_Dual(SpinLattice* S) {
+	vector<vector<double>> Dual(NDadj_, vector<double>(NDadj_));
 	double Spin_ref = 0;
 	double Spin_neigh = 0;
-	for (int q = 0; q < N_ - 1; q++) {
-		for(int r = 0; r < N_ - 1; r++) {
-			Spin_ref = S->SpinLattice::get_Spin_ax(q, r);
-			Spin_neigh = S->SpinLattice::get_Spin_ax(q + 1, r);
+	int r = 0;
+	int q = 0;
+	int k = 0;
+	int l = 0;
+	double dimer = 0;
+	vector<int> step(2);
 
-			/**
-			 * var results = [new Cube(0, 0, 0)];
-        for (var k = spiral? 1 : N; k <= N; k++) {
-            var H = Cube.scale(Cube.direction(4), k);
-            for (var i = 0; i < 6; i++) {
-                for (var j = 0; j < k; j++) {
-                    results.push(H);
-                    H = Cube.neighbor(H, i);
-                }
-            }
-        }
-        for (int q = -map_radius; q <= map_radius; q++) {
-    		int r1 = max(-map_radius, -q - map_radius);
-    		int r2 = min(map_radius, -q + map_radius);
-    	for (int r = r1; r <= r2; r++) {
-        	map.insert(Hex(q, r, -q-r));
-    }
-}
-			 *
-			 */
+	for (int qq = -Deg_; qq <= Deg_; qq++) { // int q = -map_radius; q <= map_radius; q++
+		int r1 = max(-Deg_, - qq - Deg_); // int r1 = max(-map_radius, -q - map_radius);
+		int r2 = min(Deg_, -qq + Deg_); // int r2 = min(map_radius, -q + map_radius);
+    	for (int rr = r1; r <= r2; rr++) { // for (int r = r1; r <= r2; r++)
+    		r = rr + Deg_;
+    		q = qq + Deg_;
+    		if ((q < N_ - 1) && (r < N_ - 1) && (qq < Deg_)) {
+				Spin_ref = S->SpinLattice::get_Spin_ax(q, r);
+				k = DualLattice::getDadjInd(q, r);
+
+    			for (int dir = 1; dir < 4; dir++) {
+    				step = S->SpinLattice::step_dir(q, r, dir);
+    				Spin_neigh = S->SpinLattice::get_Spin_ax(step[Q], step[R]);
+
+    				dimer = deltaSpintoDimer(Spin_ref, Spin_neigh);
+    				l = DualLattice::getDadjInd(step[Q], step[R]);
+    				Dual[k][l] = dimer;
+    				Dual[l][k] = dimer;
+    			}
+    		}
 		}
 	}
 	return Dual;
 }
 
-
-/**
-vector< vector<double> > Lattice::fromSpinToDimerAdj(vector< vector<double> > S)
+// (i, j) indices of Dimer Lattice, returns coordinates in Ajd matrix.
+inline int DualLattice::getDadjInd(int i, int j) const
 {
-	vector< vector<double> > D(NDadj_, vector<double>(NDadj_, 0.0));
-	double delta = 0;
-	int k = 0; // (k, l) of Dadj_
-	int l = 0; // (k, l) of Dadj_
-	int ii = 0; // index i of D(i,j)
-	int jj = 0; // index j of D(i,j)
-	vector <int> coord1(2);
-	vector <int> coord2(2);
-	for(int j = 0; j < N_ - 1; ++j) {
-		for(int i = 0; i < N_ - 1; ++i)  {
-			if (S[i][j] != 0) {
-				k = Lattice::getDadjInd(2 * i, j);
-
-				ii = 2 * i - 1;
-				jj = j + 1;
-				l = Lattice::getDadjInd(ii, jj);
-				D[k][l] = deltaSpintoDimer(S[i][j], S[i][j + 1]);
-				D[l][k] = D[k][l];
-
-				ii = 2 * i + 1;
-				jj = j - 1;
-				l = Lattice::getDadjInd(ii, jj);
-				D[k][l] = deltaSpintoDimer(S[i][j], S[i + 1][j]);
-				D[l][k] = D[k][l];
-
-				ii = 2 * i + 1;
-				jj = j;
-				l = Lattice::getDadjInd(ii, jj);
-				D[k][l] = deltaSpintoDimer(Lattice::getS_ij(i + 1, j), Lattice::getS_ij(i, j + 1));
-				D[l][k] = D[k][l];
-			}
-		}
-	}
-	return D;
+	return N_ * j + i;
 }
-
-/**
