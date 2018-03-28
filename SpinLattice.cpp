@@ -74,7 +74,7 @@ void SpinLattice::Printout(string suppl) const
 	double Spin = 0;
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
-			Spin = SpinLattice::get_Spin_ax(i, j);
+			Spin = this->get_Spin_ax(i, j);
 			*outputFileSpin << i << "\t" << j << "\t" << Spin << endl;
 		}
 	}
@@ -85,9 +85,9 @@ void SpinLattice::Printout(string suppl) const
 // Helper functions
 vector<int> SpinLattice::Axial_to_cube(int q, int r) const
 {
-	vector<int> cube(3);
-    cube[X] = q - Nc_;
-    cube[Z] =  - (r - Nc_);
+	vector<int> cube(3, 0);
+    cube[X] = -(q - Deg_);
+    cube[Z] =  - (r - Deg_);
     cube[Y] = -cube[X] - cube[Z];
     return cube;
 }
@@ -95,82 +95,107 @@ vector<int> SpinLattice::Axial_to_cube(int q, int r) const
 vector<int> SpinLattice::Cube_to_axial(int x, int y, int z) const
 {
 	vector<int> ax(2);
-	ax[Q] = x + Nc_;
-	ax[R] =  - z + Nc_;
+	ax[Q] = - x + Deg_;
+	ax[R] =  - z + Deg_;
     return ax;
 }
 
-inline int SpinLattice::mod_Nc(int x) const
+// Takes two coordinates x = (x1, x2) and y = (y1, y2) and verifies if they are at the same point.
+bool SpinLattice::Same_point(int i1, int j1, int i2, int j2) const
 {
-	return ((x + Nc_) % (N_ - 1)) - Nc_;
-}
-
-// Takes two cubic coordinates x = (x1, x2, x3) and y = (y1, y2, y3) and verifies if they are at the same point.
-bool SpinLattice::Cube_same_position(int x1, int x2, int x3, int y1, int y2, int y3)
-{
-	return (x1 == y1) && (x2 == y2) && (x3 == y3);
+	return (i1 == i2) && (j1 == j2);
 }
 
 // Getters and Setters
 
-// Without periodic boundary !!
-inline double SpinLattice::get_Spin_ax(int q, int r) const
-{
-	return *S_[q][r];
-}
 
-// Without periodic Boundary!!
 void SpinLattice::set_Spin_ax(int q, int r, double val) {
 	*S_[q][r] = val;
 }
 
 void SpinLattice::set_Spin_cube(int x, int y, int z, double val) {
-	vector<int> ax = SpinLattice::Cube_to_axial(x, y, z);
+	vector<int> ax = this->Cube_to_axial(x, y, z);
 	*S_[ax[Q]][ax[R]] = val;
 }
 
 vector<int> SpinLattice::step_dir(int q, int r, int d) const {
 	assert(abs(d) == 1 || abs(d) == 2 || abs(d) == 3);
 	vector<int> step(2);
-	vector<int> cube = SpinLattice::Axial_to_cube(q, r);
+	vector<int> cube = this->Axial_to_cube(q, r);
 	int x = 0;
 	int y = 0;
 	int z = 0;
 	if (d == 1 || d == -1) {
-		x =  SpinLattice::mod_Nc(cube[X] + d);
-		if (x != cube[X]) {
+		x = cube[X] + d;
+		bool spec_pos = this->Cube_same_position(cube[X], cube[Y], cube[Z], -1, 1 - Lattice::get_Deg() , Lattice::get_Deg());
+		if ((x != this->mod_Nc(x)) && !spec_pos) {
+
+			x = this->mod_Nc(x);
 			y = -cube[Y];
 			z = -cube[Z];
-			step = SpinLattice::Cube_to_axial(x, y, z);
+			step = this->Cube_to_axial(x, y, z);
 			return step;
+
 		} else {
-			step = SpinLattice::Cube_to_axial(x, y - d, z);
+
+			step = this->Cube_to_axial(x, y - d, z);
+			cout << "x="<<x <<",y="<< y-d << ",Z=" << z << endl;
 			return step;
+
 		}
 	} else if (d == 2 || d == -2){
 		d = d/2;
-		z =  SpinLattice::mod_Nc(cube[Z] + d);
+		z =  this->mod_Nc(cube[Z] + d);
 		if (z != cube[Z]) {
 			x = -cube[Y];
 			y = -cube[X];
-			step = SpinLattice::Cube_to_axial(x, y, z);
+			step = this->Cube_to_axial(x, y, z);
 			return step;
 		} else {
-			step = SpinLattice::Cube_to_axial(x - d, y, z);
+			step =  this->Cube_to_axial(x - d, y, z);
 			return step;
 		}
 	} else if (d == 3 || d == -3){
 		d = d/3;
-		y =  SpinLattice::mod_Nc(cube[Y] + d);
+		y =  this->mod_Nc(cube[Y] + d);
 		if (y != cube[Y]) {
 			x = -cube[Z];
 			z = -cube[X];
-			step = SpinLattice::Cube_to_axial(x, y, z);
+			step = this->Cube_to_axial(x, y, z);
 			return step;
 		} else {
-			step = SpinLattice::Cube_to_axial(x, y, z - d);
+			step = this->Cube_to_axial(x, y, z - d);
 			return step;
 		}
 	 }
 	return step;
+}
+
+vector<int> SpinLattice::fix_bc(int i, int j){
+	if (j == N_ - 1) {
+		i = i + Deg_;
+		j = 0;
+	}
+	if(i == N_ - 1 && j > 0) {
+		i = 0;
+		j = j + Deg_;
+	}
+	if(j + i == (N_ - 1 + Deg_) && j < N_ - 1 && i < N_ - 1){
+		i = i - Deg_;
+		j = j - Deg_;
+	}
+	if (j == -1) {
+		i = i - Deg_;
+		j = N_ - 2;
+	}
+	if (i == -1) {
+		i = N_ - 2;
+		j = j - Deg_;
+	}
+	if (i + j == Deg_ - 1) {
+		i = i + Deg_;
+		j = j + Deg_;
+	}
+	vector<int> coord = {i, j};
+	return coord;
 }
