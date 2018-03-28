@@ -6,6 +6,7 @@
  */
 
 #include "SpinLattice.h"
+using namespace std;
 
 #define X 0
 #define Y 1
@@ -122,7 +123,7 @@ double SpinLattice::get_Spin_ax(int q, int r) const
 	return *S_[q][r];
 }
 
-// With periodic boundary !!
+// With periodic boundary !! not working
 double SpinLattice::get_Spin_cube_periodic(int x, int y, int z) const
 {
 	x = SpinLattice::make_cube_periodic(x);
@@ -138,7 +139,7 @@ void SpinLattice::set_Spin_ax(int q, int r, double val) {
 	*S_[q][r] = val;
 }
 
-// With periodic Boundary!!
+// With periodic Boundary!! not working
 void SpinLattice::set_Spin_cube(int x, int y, int z, double val) {
 	x = SpinLattice::make_cube_periodic(x);
 	y = SpinLattice::make_cube_periodic(y);

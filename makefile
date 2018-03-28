@@ -3,7 +3,7 @@ CFLAGS = -std=c++0x -g -O0
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
 LIBS =
-OBJ_FILES = MCMCTest.o SpinLattice.o Lattice.o 
+OBJ_FILES = MCMCTest.o Lattice.o SpinLattice.o DualLattice.o  
 
 all : $(EXEC_NAME)
 

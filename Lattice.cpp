@@ -1,4 +1,6 @@
 #include "Lattice.h"
+using namespace std;
+
  /**
 static double deltaSpintoDimer(double Sij, double Skl) {
 	double delta = abs(Sij - Skl);
@@ -16,9 +18,7 @@ Lattice::Lattice(int Deg)
 	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
 	double rnd = 0;
 
-	int i_max = 2 * (N_ - 1);
-	int j_max = N_ - 1;
-	//NDadj_ = i_max * j_max;
+
 
 	//Dadj_ = Lattice::fromSpinToDimerAdj(S_);
 }

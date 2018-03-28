@@ -15,14 +15,13 @@
 #include <cmath>
 #include "Lattice.h"
 
-using namespace std;
 
 class SpinLattice: protected Lattice {
 public:
 	SpinLattice(int Deg);
 	virtual ~SpinLattice();
 
-	void Printout(string suppl) const;
+	void Printout(std::string suppl) const;
 
 	// Getters and Setters
 	double get_Spin_ax(int q, int r) const;
@@ -32,12 +31,12 @@ public:
 	void set_Spin_cube(int x, int y, int z, double val);
 
 protected:
-	vector<int> Axial_to_cube(int q, int r) const;
-	vector<int> Cube_to_axial(int x, int y, int z) const;
+	std::vector<int> Axial_to_cube(int q, int r) const;
+	std::vector<int> Cube_to_axial(int x, int y, int z) const;
 	int make_cube_periodic(int x) const;
 	bool Cube_same_position(int x1, int x2, int x3, int y1, int y2, int y3);
 private:
-	vector< vector<double*> > S_;	// Spin lattice S(q, r) axial coordinates
+	std::vector< std::vector<double*> > S_;	// Spin lattice S(q, r) axial coordinates
 };
 
 
