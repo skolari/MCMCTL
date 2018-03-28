@@ -74,7 +74,7 @@ void SpinLattice::Printout(string suppl) const
 	double Spin = 0;
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
-			Spin = this->get_Spin_ax(i, j);
+			Spin = this->get_Spin(i, j);
 			*outputFileSpin << i << "\t" << j << "\t" << Spin << endl;
 		}
 	}
@@ -109,8 +109,8 @@ bool SpinLattice::Same_point(int i1, int j1, int i2, int j2) const
 // Getters and Setters
 
 
-void SpinLattice::set_Spin_ax(int q, int r, double val) {
-	*S_[q][r] = val;
+void SpinLattice::set_Spin(int i, int j, double val) {
+	*S_[i][j] = val;
 }
 
 void SpinLattice::set_Spin_cube(int x, int y, int z, double val) {
@@ -118,65 +118,12 @@ void SpinLattice::set_Spin_cube(int x, int y, int z, double val) {
 	*S_[ax[Q]][ax[R]] = val;
 }
 
-vector<int> SpinLattice::step_dir(int q, int r, int d) const {
-	assert(abs(d) == 1 || abs(d) == 2 || abs(d) == 3);
-	vector<int> step(2);
-	vector<int> cube = this->Axial_to_cube(q, r);
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	if (d == 1 || d == -1) {
-		x = cube[X] + d;
-		bool spec_pos = this->Cube_same_position(cube[X], cube[Y], cube[Z], -1, 1 - Lattice::get_Deg() , Lattice::get_Deg());
-		if ((x != this->mod_Nc(x)) && !spec_pos) {
-
-			x = this->mod_Nc(x);
-			y = -cube[Y];
-			z = -cube[Z];
-			step = this->Cube_to_axial(x, y, z);
-			return step;
-
-		} else {
-
-			step = this->Cube_to_axial(x, y - d, z);
-			cout << "x="<<x <<",y="<< y-d << ",Z=" << z << endl;
-			return step;
-
-		}
-	} else if (d == 2 || d == -2){
-		d = d/2;
-		z =  this->mod_Nc(cube[Z] + d);
-		if (z != cube[Z]) {
-			x = -cube[Y];
-			y = -cube[X];
-			step = this->Cube_to_axial(x, y, z);
-			return step;
-		} else {
-			step =  this->Cube_to_axial(x - d, y, z);
-			return step;
-		}
-	} else if (d == 3 || d == -3){
-		d = d/3;
-		y =  this->mod_Nc(cube[Y] + d);
-		if (y != cube[Y]) {
-			x = -cube[Z];
-			z = -cube[X];
-			step = this->Cube_to_axial(x, y, z);
-			return step;
-		} else {
-			step = this->Cube_to_axial(x, y, z - d);
-			return step;
-		}
-	 }
-	return step;
-}
-
 vector<int> SpinLattice::fix_bc(int i, int j){
-	if (j == N_ - 1) {
+	if (j == N_ - 1  && i < Nc_) {
 		i = i + Deg_;
 		j = 0;
 	}
-	if(i == N_ - 1 && j > 0) {
+	if(i == N_ - 1 && j > 0 && j < Nc_) {
 		i = 0;
 		j = j + Deg_;
 	}
@@ -198,4 +145,23 @@ vector<int> SpinLattice::fix_bc(int i, int j){
 	}
 	vector<int> coord = {i, j};
 	return coord;
+}
+
+vector<int> SpinLattice::step_dir(int i, int j, int d) {
+	assert(abs(d) == 1 || abs(d) == 2 || abs(d) == 3);
+	vector<int> step(2);
+	if (d == 1 || d == -1) {
+		i = i + d;
+		step = this->fix_bc(i, j);
+	} else if (d == 2 || d == -2){
+		d = d/2;
+		j = j + d;
+		step = this->fix_bc(i, j);
+	} else if (d == 3 || d == -3){
+		d = d/2;
+		j = j + d;
+		i = i - d;
+		step = this->fix_bc(i, j);
+	}
+	return step;
 }
