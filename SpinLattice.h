@@ -24,12 +24,12 @@ public:
 	void Printout(std::string suppl) const;
 
 	// Getters and Setters
-	inline double get_Spin_ax(int q, int r) const { return *S_[q][r]; }
-	void set_Spin_ax(int q, int r, double val);
+	inline double get_Spin(int q, int r) const { return *S_[q][r]; }
+	void set_Spin(int i, int j, double val);
 	void set_Spin_cube(int x, int y, int z, double val);
 
 	std::vector<int> get_direction(int i, int j, int d) const;
-	std::vector<int> step_dir(int i, int j, int d) const;
+	std::vector<int> step_dir(int i, int j, int d);
 
 protected:
 	std::vector<int> Axial_to_cube(int q, int r) const;

@@ -7,8 +7,8 @@
 
 #include "DualLattice.h"
 
-#define Q 0
-#define R 1
+#define I 0
+#define J 1
 
 using namespace std;
 
@@ -45,25 +45,24 @@ vector<vector<double>> DualLattice::From_Spin_to_Dual(SpinLattice* S) {
 	int l = 0;
 	double dimer = 0;
 	vector<int> step(2);
-	step = S->SpinLattice::step_dir(3, 0, 1);
-	cout << "q = " <<step[Q]<< ", r = "<< step[R]<<endl;
 	for (int qq = -Deg_; qq <= Deg_; qq++) { // int q = -map_radius; q <= map_radius; q++
 		int r1 = max(-Deg_, - qq - Deg_); // int r1 = max(-map_radius, -q - map_radius);
 		int r2 = min(Deg_, -qq + Deg_); // int r2 = min(map_radius, -q + map_radius);
     	for (int rr = r1; rr <= r2; rr++) { // for (int r = r1; r <= r2; r++)
-    		r = rr + Deg_;
     		q = qq + Deg_;
+    		r = rr + Deg_;
     		if ((q < N_ - 1) && (r < N_ - 1) && (qq < Deg_)) {
-
-				Spin_ref = S->SpinLattice::get_Spin_ax(q, r);
+				Spin_ref = S->SpinLattice::get_Spin(q, r);
 				k = this->getDadjInd(q, r);
 
     			for (int dir = 1; dir < 4; dir++) {
     				step = S->SpinLattice::step_dir(q, r, dir);
-    				Spin_neigh = S->SpinLattice::get_Spin_ax(step[Q], step[R]);
+    				cout << q << "<q,r>" << r << endl;
+        			cout << step[I] << " annd "<< step[J] <<" dir: " <<dir <<  endl;
+    				Spin_neigh = S->SpinLattice::get_Spin(step[I], step[J]);
 
     				dimer = deltaSpintoDimer(Spin_ref, Spin_neigh);
-    				l = this->getDadjInd(step[Q], step[R]);
+    				l = this->getDadjInd(step[I], step[J]);
     				Dual[k][l] = dimer;
     				Dual[l][k] = dimer;
     			}
