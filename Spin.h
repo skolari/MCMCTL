@@ -1,50 +1,62 @@
 /*
  * Spin.h
  *
- *  Created on: 28.03.2018
+ *  Created on: 01.04.2018
  *      Author: Manuel Stathis
  */
 
 #ifndef SPIN_H_
 #define SPIN_H_
+
 #include <vector>
 #include <cassert>
+#include <iostream>
 
-struct Spin{
-    const int q_, r_, spin_;
-    std::vector<Spin*> neighbors_;
+// struct Neighbor;
 
-    Spin(int q, int r, int s, double spin, std::vector<Spin*> neighbors)
-    :	q_(q), r_(r), spin_(spin), neighbors_(neighbors)
-    {
-        assert (q + r + s == 0);
-    }
-    Spin(int q, int r, double spin, std::vector<Spin*> neighbors)
-    : q_(q), r_(r), spin_(spin), neighbors_(neighbors)
-    {
-    }
+class Spin {
+public:
+	Spin(int i, int j, double Spin = 0);
+	virtual ~Spin();
 
-    inline int q() { return q_; }
-    inline int r() { return r_; }
-    inline int s() { return - q_ - r_; }
-    inline int spin() { return spin_; }
-    inline Spin* neighbor(int d) { return neighbors_(d); }
+	inline double getSpin() const
+	{
+		return Spin_;
+	}
+
+	void setSpin(double newSpin);
+
+	inline double getPos(int i) const
+	{
+		assert(i < 2 && i >= 0);
+		return Pos_[i];
+	}
+
+	void addNeighbor(Spin* newNeigh, int dir);
+
+	inline Spin* getNeighbor(int dir) {
+		return Neighbor_[dir];
+	}
+
+private:
+	double Spin_;
+	std::vector<int> Pos_; // maybe add const
+	std::vector<Spin*> Neighbor_;
+
 };
-
-// if Spin at the same position
-bool operator == (Spin a, Spin b) {
-    return a.q == b.q && a.r == b.r && a.s == b.s;
+/*
+bool operator == (Spin* a, Spin* b) {
+    return a->getPos(0) == b->getPos(0) && a->getPos(1) == b->getPos(1);
 }
 
-
-/**
-std::vector<int> Spin_neighbor(Spin a, int i) {
-    return [a.q + b.q, a.r + b.r, a.s + b.s];
+bool operator != (Spin* a, Spin* b) {
+    return !(a == b);
 }
-
-Hex hex_multiply(Hex a, int k) {
-    return Hex(a.q * k, a.r * k, a.s * k);
 */
-}
-
+/*
+struct Neighbor {
+	Spin* Neighbor;
+	double* Dimer;
+};
+*/
 #endif /* SPIN_H_ */
