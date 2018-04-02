@@ -26,6 +26,7 @@ public:
 
 	// Getters and Setters
 	inline double get_Spin(int i, int j) const { return S_[i][j]->getSpin(); }
+	inline Spin* get_Spin_pointer(int i, int j) const { return S_[i][j]; }
 	void set_Spin(Spin* S, double val);
 
 	bool ifInsideLattice(int i, int j);

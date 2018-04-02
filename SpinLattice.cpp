@@ -66,8 +66,7 @@ void SpinLattice::Printout(string suppl) const
 	vector<int> coord(2, 0);
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
-			coord = this->fix_bc(i, j);
-			Spin = this->get_Spin(coord[0], coord[1]);
+			Spin = this->get_Spin(i, j);
 			*outputFileSpin << i << "\t" << j << "\t" << Spin << endl;
 		}
 	}
@@ -120,35 +119,29 @@ bool SpinLattice::ifInsideLattice(int i, int j) {
 	if (i + j > Deg_ + Nc_) { flag = false; }
 	return flag;
 }
-
+// Clockwise starting from 3 o'clock == 0
 vector<int> SpinLattice::step_dir(int i, int j, int d) {
 	assert(d < 6 && d >= 0);
 	vector<int> step(2);
 	if (d == 0) { // before d = 1
-		d = 1;
-		i = i + d;
-		step = this->fix_bc(i, j);
-	} else if (d == 3) { // before d = -1
-		d = -1;
-		i = i + d;
-		step = this->fix_bc(i, j);
-	} else if (d == 2){ // before d = 2
-		d = 1;
-		j = j + d;
-		step = this->fix_bc(i, j);
-	} else if (d == 5){ // before d = -2
-		d = -1;
-		j = j + d;
+		i = i + 1;
 		step = this->fix_bc(i, j);
 	} else if (d == 1){ // before d = 3
-		d = - 1;
-		j = j + d;
-		i = i - d;
+		j = j - 1;
+		i = i + 1;
 		step = this->fix_bc(i, j);
-	} else if (d == 4){ // before d = -3
-		d = 1;
-		j = j + d;
-		i = i - d;
+	} else if (d == 2) { // before d = 2
+		j = j - 1;
+		step = this->fix_bc(i, j);
+	} else if (d == 3) { // before d = -1
+		i = i - 1;
+		step = this->fix_bc(i, j);
+	} else if (d == 4) { // before d = -3
+		j = j + 1;
+		i = i - 1;
+		step = this->fix_bc(i, j);
+	} else if (d == 5) { // before d = -2
+		j = j + 1;
 		step = this->fix_bc(i, j);
 	}
 	return step;

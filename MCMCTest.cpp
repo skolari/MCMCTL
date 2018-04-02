@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cassert>
 #include "SpinLattice.h"
+#include "Spin.h"
 //#include "DualLattice.h"
 using namespace std;
 
@@ -9,11 +10,11 @@ int main()
 {	
 
 	// SpinLattice Test;
-	int Deg = 2;
+	int Deg = 10;
 	SpinLattice* S = new SpinLattice(Deg);
 	bool test = false;
 
-	// Test fix_bc
+	// Test fix_bc deg = 2
 	int i = 1;
 	int j = 4;
 	vector<int> coord = S->fix_bc(i, j);
@@ -29,24 +30,42 @@ int main()
 	coord = S->fix_bc(i, j);
 	test = test && coord[0] == 1 && coord[1] == 1;
 
-	i = 2;
+	i = 4;
 	j = 2;
 	coord = S->fix_bc(i, j);
-	test = test && coord[0] == 2 && coord[1] == 2;
+	test = test && coord[0] == 0 && coord[1] == 4;
 
 	if(test) {
-		cout << "test fix_bc passed" << endl;
+		cout << "YES! test fix_bc passed" << endl;
 	} else {
-		cout << "test fix_bc failed" << endl;
+		cout << "NO :( test fix_bc failed" << endl;
 	}
 
 
+	// Test step_dir
+	i = 3;
+	j = 2;
+	int dir = 0;
+	coord = S->step_dir(i, j, dir);
+	test = coord[0] == 0 && coord[1] == 4;
 
+	dir = 1;
+	coord = S->step_dir(i, j, dir);
+	test = test && coord[0] == 0 && coord[1] == 3;
 
+	dir = 3;
+	coord = S->step_dir(i, j, dir);
+	test = test && coord[0] == 2 && coord[1] == 2;
 
+	dir = 5;
+	coord = S->step_dir(i, j, dir);
+	test = test && coord[0] == 1 && coord[1] == 1;
 
-
-
+	if(test) {
+		cout << "YES! test step_dir passed" << endl;
+	} else {
+		cout << "NO! :( test step_dir failed" << endl;
+	}
 
 
 
