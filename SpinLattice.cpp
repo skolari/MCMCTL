@@ -20,7 +20,6 @@ SpinLattice::SpinLattice(int Deg)
 		for (int j = 0; j < N_; ++j) {
 			S_[i][j] = new Spin(i, j);
 			if (this->ifInsideLattice(i, j)) {
-				cout << "i: " << i<<", j: " << j<< endl;
 				rnd = dist(mt);
 				if (rnd < 0.5) {
 					S_[i][j]->Spin::setSpin(1);
