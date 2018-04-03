@@ -20,6 +20,7 @@ SpinLattice::SpinLattice(int Deg)
 		for (int j = 0; j < N_; ++j) {
 			S_[i][j] = new Spin(i, j);
 			if (this->ifInsideLattice(i, j)) {
+				cout << "i: " << i<<", j: " << j<< endl;
 				rnd = dist(mt);
 				if (rnd < 0.5) {
 					S_[i][j]->Spin::setSpin(1);
@@ -116,7 +117,7 @@ bool SpinLattice::ifInsideLattice(int i, int j) {
 	if (i + j < Deg_) { flag = false; }
 	if (i == N_ - 1) { flag = false; }
 	if (j == N_ - 1) { flag = false; }
-	if (i + j > Deg_ + Nc_) { flag = false; }
+	if (i + j > N_ + Deg_ - 2) { flag = false; }
 	return flag;
 }
 // Clockwise starting from 3 o'clock == 0
