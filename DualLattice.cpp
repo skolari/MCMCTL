@@ -11,30 +11,128 @@
 #define J 1
 
 using namespace std;
-
+/*
 static double deltaSpintoDimer(double Sij, double Skl) {
 	double delta = abs(Sij - Skl);
 	if (delta == 0) return 1;
 	else if (delta == 2) return -1;
 	else return 0;
 }
-
+*/
 DualLattice::DualLattice(int Deg, SpinLattice* S)
 	: Lattice(Deg)
 {
-	int i_max = 2 * (N_ - 1);
-	int j_max = N_ - 1;
-	NDadj_ = i_max * j_max;
+	int i_len = 2 * (N_ - 1);
+	int j_len = N_ - 2;
 
-	// Dual_(i_max, vector<node*>(j_max, NULL));
+	Dual_(i_len, vector<DimerNode*>(j_len, NULL));
+	for ( int j = 0; j < j_len; j++ ) {
+		for ( int i = 0; i < i_len; i++ ) {
+			Dual_[i][j] = new DimerNode(i, j);
+		}
+	}
+
+	vector<int> coord(2, 0);
+	vector<int> coord2(2, 0);
+	int dir2 = 0;
+	for ( int j = 0; j < N_; j++ ) {
+		for ( int i = 0; i < N_; i++ ) {
+			if(S->ifInsideLattice(i, j)) {
+				Spin* Spin_right = S->get_Spin_pointer(i, j);
+				for (int dir = 0; dir < 6; dir++) {
+					Spin* Spin_left = Spin_right->getNeighbor(dir);
+					coord = SpinDirDualNode(i, j ,dir);
+					DimerNode* start = Dual_[coord[0]][coord[1]];
+
+					dir2 = (dir + 1) % 6;
+					coord2 = SpinDirDualNode(i, j ,dir2);
+					DimerNode* end = Dual_[coord2[0]][coord2[1]];
+
+					Dual_[coord[0]][coord[1]]->addEdge(new DimerEdge(start, end, Spin_right, Spin_left));
+				}
+			}
+		}
+	}
 	//  Entry_Sites(N_ * N_, NULL);
-	Dual_adj_ = From_Spin_to_Dual(S);
+	//NDadj_ = i_max * j_max;
+
+	//Dual_adj_ = From_Spin_to_Dual(S);
 }
 
 DualLattice::~DualLattice() {
 	// TODO Auto-generated destructor stub
 }
 
+
+vector<int> DualLattice::fix_bc(int i, int j) const{
+	/*
+	if (j == N_ - 1  && i < 2 * Nc_) {
+		i = i + 2 * Deg_;
+		j = 0;
+	}
+
+	if(i == 2 * ( N_ - 1 ) && j < Nc_) {
+		i = 0;
+		j = j + Deg_;
+	}
+
+	if(j + i == (N_ - 1 + Deg_) && j < N_ - 1 && i < N_ - 1) {
+		i = i - Deg_;
+		j = j - Deg_;
+	}
+
+	*/
+
+	if (j == -1) {
+		i = i - 2 * Deg_;
+		j = N_ - 1;
+	}
+
+	if (i == -1) {
+		i = N_ - 1;
+		j = j - Deg_;
+	}
+
+	if (i + j == Deg_ - 1) {
+		i = i + 2 * Deg_;
+		j = j + Deg_;
+	}
+
+	vector<int> coord = {i, j};
+	return coord;
+}
+
+vector<int> DualLattice::SpinDirDualNode(int i, int j, int dir) const
+{
+	assert( dir < 6 && dir >= 0);
+	int k = i;
+	int l = j;
+
+	if (dir == 0) {
+		k = 2 * i;
+		l = j;
+	} else if ( dir == 1) {
+		k = 2 * i + 1;
+		l = j - 1;
+	} else if ( dir == 2) {
+		k = 2 * i;
+		l = j - 1;
+	} else if ( dir == 3) {
+		k = 2 * i - 1;
+		l = j - 1;
+	} else if ( dir == 4) {
+		k = 2 * i - 2;
+		l = j;
+ 	} else if ( dir == 5 ) {
+ 		k = 2 * i - 1;
+ 		l = j;
+ 	}
+
+	vector<int> coord = this->fix_bc(k, l);
+	return coord;
+}
+
+/*
 vector<vector<double>> DualLattice::From_Spin_to_Dual(SpinLattice* S) {
 	vector<vector<double>> Dual(NDadj_, vector<double>(NDadj_));
 	double Spin_ref = 0;
@@ -71,14 +169,9 @@ vector<vector<double>> DualLattice::From_Spin_to_Dual(SpinLattice* S) {
 	}
 	return Dual;
 }
+*/
 
-// (i, j) indices of Dimer Lattice, returns coordinates in Ajd matrix.
-inline int DualLattice::getDadjInd(int i, int j) const
-{
-	return N_ * j + i;
-}
-
-
+/*
 void DualLattice::Printout(string suppl) const
 {
 	string path = "./Outputfiles/DimerAdj" + suppl + ".dat";
@@ -102,4 +195,4 @@ void DualLattice::Printout(string suppl) const
 	outputFileSpin->close();
 	delete outputFileSpin;
 }
-
+*/
