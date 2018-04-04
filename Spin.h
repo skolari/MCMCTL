@@ -46,7 +46,7 @@ private:
 };
 /*
 bool operator == (Spin* a, Spin* b) {
-    return a->getPos(0) == b->getPos(0) && a->getPos(1) == b->getPos(1);
+     ((a->getPos(0) == b->getPos(0)) && (a->getPos(1) == b->getPos(1)));
 }
 
 bool operator != (Spin* a, Spin* b) {
