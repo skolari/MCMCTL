@@ -10,7 +10,7 @@ int main()
 {	
 
 	// SpinLattice Test;
-	int Deg = 10;
+	int Deg = 2;
 	SpinLattice* S = new SpinLattice(Deg);
 	bool test = false;
 
@@ -30,6 +30,11 @@ int main()
 		j = 3;
 		coord = S->fix_bc(i, j);
 		test = test && coord[0] == 1 && coord[1] == 1;
+
+		i = 1;
+		j = 0;
+		coord = S->fix_bc(i, j);
+		test = test && coord[0] == 3 && coord[1] == 2;
 
 		i = 4;
 		j = 2;

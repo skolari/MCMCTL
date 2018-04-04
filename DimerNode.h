@@ -14,7 +14,8 @@
 
 class DimerNode {
 public:
-	DimerNode();
+
+	DimerNode(int i, int j);
 	virtual ~DimerNode();
 
 	inline double getPos(int i) const
@@ -23,14 +24,24 @@ public:
 		return Pos_[i];
 	}
 
-	inline bool ifEntry() const
+	inline DimerEdge* getEdge(int i) const
 	{
-		return ifEntry_;
+		assert(i < Edges_.size());
+		return Edges_[i];
+	}
+	DimerEdge* getEdge(DimerNode* end) const;
+
+	inline void addEdge(DimerEdge* edge) {
+		Edges_.push_back(edge);
 	}
 
 private:
-	const std::vector<int> Pos_;
-	const bool ifEntry_;
+	std::vector<int> Pos_;
+	std::vector<DimerEdge*> Edges_;
 };
+
+bool operator == (DimerNode* a, DimerNode* b) {
+    return ((a->getPos(0) == b->getPos(0)) && (a->getPos(1) == b->getPos(1)));
+}
 
 #endif /* DIMERNODE_H_ */
