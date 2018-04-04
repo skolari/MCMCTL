@@ -29,6 +29,7 @@ public:
 		assert(i < Edges_.size());
 		return Edges_[i];
 	}
+
 	DimerEdge* getEdge(DimerNode* end) const;
 
 	inline void addEdge(DimerEdge* edge) {

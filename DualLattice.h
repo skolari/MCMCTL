@@ -23,18 +23,28 @@ public:
 	DualLattice(int Deg, SpinLattice* S);
 	virtual ~DualLattice();
 
-	void Printout(std::string suppl) const;
+	//void Printout(std::string suppl) const;
 	// Getters and Setters
 
 	//void printoutDimerAdj(string suppl);
 
+	// Changes the dimer value of both edges
+	//void changeDimer(double val);
 protected:
-	inline int getDadjInd(int i, int j) const;
+	// (i, j) indices of Dimer Lattice, returns coordinates in Ajd matrix.
+	inline int getDadjInd(int i, int j) const
+	{
+		return N_ * j + i;
+	}
+
+	std::vector<int> fix_bc(int i, int j) const;
+	std::vector<int> SpinDirDualNode(int i, int j, int dir) const;
+
 private:
 	//vector<node*> Entry_Sites;
 	std::vector< std::vector< DimerNode* > > Dual_; //
 	//std::vector<std::vector<double>> Dual_adj_; // (N, M) : N=EntrySites, M=VertexSites
-	int NDadj_;
+	//int NDadj_;
 };
 
 #endif /* DUALLATTICE_H_ */
