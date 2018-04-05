@@ -12,7 +12,6 @@
 #include <cassert>
 #include <iostream>
 
-// struct Neighbor;
 
 class Spin {
 public:
@@ -41,19 +40,5 @@ private:
 	std::vector<Spin*> Neighbor_;
 
 };
-/*
-bool operator == (Spin* a, Spin* b) {
-     ((a->getPos(0) == b->getPos(0)) && (a->getPos(1) == b->getPos(1)));
-}
 
-bool operator != (Spin* a, Spin* b) {
-    return !(a == b);
-}
-*/
-/*
-struct Neighbor {
-	Spin* Neighbor;
-	double* Dimer;
-};
-*/
 #endif /* SPIN_H_ */

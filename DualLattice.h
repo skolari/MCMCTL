@@ -26,10 +26,8 @@ public:
 	void Printout(std::string suppl) const;
 	// Getters and Setters
 
-	//void printoutDimerAdj(string suppl);
-
 	// Changes the dimer value of both edges
-	//void changeDimer(double val);
+	void switchDimer(DimerEdge* edge);
 protected:
 	// (i, j) indices of Dimer Lattice, returns coordinates in Ajd matrix.
 	inline int getDadjInd(int i, int j) const
@@ -41,7 +39,6 @@ protected:
 	std::vector<int> SpinDirDualNode(int i, int j, int dir) const;
 	std::vector< std::vector<double> > getDadj() const;
 private:
-	//vector<node*> Entry_Sites;
 	std::vector< std::vector< DimerNode* > > Dual_; //
 	//std::vector<std::vector<double>> Dual_adj_; // (N, M) : N=EntrySites, M=VertexSites
 	//int NDadj_;

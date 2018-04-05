@@ -19,3 +19,6 @@ DimerEdge::~DimerEdge() {
 	// TODO Auto-generated destructor stub
 }
 
+void DimerEdge::setDimer(double val) {
+	Dimer_ = val;
+}

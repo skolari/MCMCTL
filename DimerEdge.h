@@ -26,6 +26,8 @@ public:
 		return Dimer_;
 	}
 
+	void setDimer(double val);
+
 	inline DimerNode* getStart() const{
 		return start_;
 	}

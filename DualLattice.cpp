@@ -11,14 +11,7 @@
 #define J 1
 
 using namespace std;
-/*
-static double deltaSpintoDimer(double Sij, double Skl) {
-	double delta = abs(Sij - Skl);
-	if (delta == 0) return 1;
-	else if (delta == 2) return -1;
-	else return 0;
-}
-*/
+
 DualLattice::DualLattice(int Deg, SpinLattice* S)
 	: Lattice(Deg), S_(S), Dual_(2 * (N_ - 1), vector<DimerNode*>(N_ - 1, NULL))
 {
@@ -132,45 +125,6 @@ vector<int> DualLattice::SpinDirDualNode(int i, int j, int dir) const
 	return coord;
 }
 
-/*
-vector<vector<double>> DualLattice::From_Spin_to_Dual(SpinLattice* S) {
-	vector<vector<double>> Dual(NDadj_, vector<double>(NDadj_));
-	double Spin_ref = 0;
-	double Spin_neigh = 0;
-	int r = 0;
-	int q = 0;
-	int k = 0;
-	int l = 0;
-	double dimer = 0;
-	vector<int> step(2);
-	for (int qq = -Deg_; qq <= Deg_; qq++) { // int q = -map_radius; q <= map_radius; q++
-		int r1 = max(-Deg_, - qq - Deg_); // int r1 = max(-map_radius, -q - map_radius);
-		int r2 = min(Deg_, -qq + Deg_); // int r2 = min(map_radius, -q + map_radius);
-    	for (int rr = r1; rr <= r2; rr++) { // for (int r = r1; r <= r2; r++)
-    		q = qq + Deg_;
-    		r = rr + Deg_;
-    		if ((q < N_ - 1) && (r < N_ - 1) && (qq < Deg_)) {
-				Spin_ref = S->SpinLattice::get_Spin(q, r);
-				k = this->getDadjInd(q, r);
-
-    			for (int dir = 1; dir < 4; dir++) {
-    				step = S->SpinLattice::step_dir(q, r, dir);
-    				cout << q << "<q,r>" << r << endl;
-        			cout << step[I] << " annd "<< step[J] <<" dir: " <<dir <<  endl;
-    				Spin_neigh = S->SpinLattice::get_Spin(step[I], step[J]);
-
-    				dimer = deltaSpintoDimer(Spin_ref, Spin_neigh);
-    				l = this->getDadjInd(step[I], step[J]);
-    				Dual[k][l] = dimer;
-    				Dual[l][k] = dimer;
-    			}
-    		}
-		}
-	}
-	return Dual;
-}
-*/
-
 vector< vector<double> > DualLattice::getDadj() const{
 	vector< vector<double> > Dadj(2 * (N_ - 1) * (N_ - 1), vector<double>(2 * (N_ - 1) * (N_ - 1), 0));
 
@@ -199,6 +153,16 @@ vector< vector<double> > DualLattice::getDadj() const{
 	}
 	return Dadj;
 }
+
+void DualLattice::switchDimer(DimerEdge* edge) {
+	DimerNode* start = edge->getStart();
+	DimerNode* end = edge->getEnd();
+	DimerEdge* opposite = end->getEdge(start);
+	double dimer = (-1) * edge->getDimer();
+	edge->setDimer(dimer);
+	opposite->setDimer(dimer);
+}
+
 
 void DualLattice::Printout(string suppl) const
 {
