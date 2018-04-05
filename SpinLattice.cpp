@@ -42,6 +42,7 @@ SpinLattice::SpinLattice(int Deg, double J1 = 0, double J2 = 0, double J3 = 0 )
 			}
 		}
 	}
+	Energy_ = this->calculate_Energy();
 }
 
 SpinLattice::~SpinLattice()
