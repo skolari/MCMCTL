@@ -2,12 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Analysis_Triangular.py" afterPath="$PROJECT_DIR$/Analysis_Triangular.py" />
+      <change beforePath="$PROJECT_DIR$/DimerEdge.cpp" afterPath="$PROJECT_DIR$/DimerEdge.cpp" />
+      <change beforePath="$PROJECT_DIR$/DimerEdge.h" afterPath="$PROJECT_DIR$/DimerEdge.h" />
+      <change beforePath="$PROJECT_DIR$/DimerNode.h" afterPath="$PROJECT_DIR$/DimerNode.h" />
+      <change beforePath="$PROJECT_DIR$/DualLattice.cpp" afterPath="$PROJECT_DIR$/DualLattice.cpp" />
+      <change beforePath="$PROJECT_DIR$/DualLattice.h" afterPath="$PROJECT_DIR$/DualLattice.h" />
+      <change beforePath="$PROJECT_DIR$/DualLattice.o" afterPath="$PROJECT_DIR$/DualLattice.o" />
+      <change beforePath="$PROJECT_DIR$/DualLattice.py" afterPath="$PROJECT_DIR$/DualLattice.py" />
       <change beforePath="$PROJECT_DIR$/MCMCIsingTri.exe" afterPath="$PROJECT_DIR$/MCMCIsingTri.exe" />
       <change beforePath="$PROJECT_DIR$/MCMCTest.cpp" afterPath="$PROJECT_DIR$/MCMCTest.cpp" />
       <change beforePath="$PROJECT_DIR$/MCMCTest.o" afterPath="$PROJECT_DIR$/MCMCTest.o" />
+      <change beforePath="$PROJECT_DIR$/OutputFiles/DimerAdj11.dat" afterPath="$PROJECT_DIR$/OutputFiles/DimerAdj11.dat" />
       <change beforePath="$PROJECT_DIR$/OutputFiles/Spin11.dat" afterPath="$PROJECT_DIR$/OutputFiles/Spin11.dat" />
+      <change beforePath="$PROJECT_DIR$/Spin.h" afterPath="$PROJECT_DIR$/Spin.h" />
+      <change beforePath="$PROJECT_DIR$/Spin.o" afterPath="$PROJECT_DIR$/Spin.o" />
       <change beforePath="$PROJECT_DIR$/SpinLattice.cpp" afterPath="$PROJECT_DIR$/SpinLattice.cpp" />
       <change beforePath="$PROJECT_DIR$/SpinLattice.o" afterPath="$PROJECT_DIR$/SpinLattice.o" />
+      <change beforePath="$PROJECT_DIR$/delphine.py" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/makefile" afterPath="$PROJECT_DIR$/makefile" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,11 +35,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="Analysis_Triangular.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Analysis_Triangular.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="175">
-              <caret line="7" column="33" lean-forward="true" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
+              <caret line="7" column="33" lean-forward="false" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -44,18 +58,18 @@
       <file leaf-file-name="TriangularLattice.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TriangularLattice.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="975">
+            <state relative-caret-position="850">
               <caret line="42" column="48" lean-forward="false" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="48" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DualLattice.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DualLattice.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DualLattice.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+            <state relative-caret-position="121">
+              <caret line="50" column="18" lean-forward="false" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -66,7 +80,7 @@
       <file leaf-file-name="DrawPlot.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DrawPlot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
+            <state relative-caret-position="325">
               <caret line="15" column="31" lean-forward="false" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
@@ -95,9 +109,9 @@
         <option value="$PROJECT_DIR$/TriangularLattice.py" />
         <option value="$PROJECT_DIR$/DrawPlots.py" />
         <option value="$PROJECT_DIR$/DrawPlot.py" />
-        <option value="$PROJECT_DIR$/DualLattice.py" />
-        <option value="$PROJECT_DIR$/Analysis_Triangular.py" />
         <option value="$PROJECT_DIR$/delphine.py" />
+        <option value="$PROJECT_DIR$/Analysis_Triangular.py" />
+        <option value="$PROJECT_DIR$/DualLattice.py" />
       </list>
     </option>
   </component>
@@ -108,8 +122,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="214" />
-    <option name="y" value="-18" />
+    <option name="x" value="16" />
+    <option name="y" value="23" />
     <option name="width" value="1314" />
     <option name="height" value="980" />
   </component>
@@ -117,7 +131,7 @@
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -130,21 +144,7 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="MCMC - Triangular Lattice" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MCMC - Triangular Lattice" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -253,15 +253,15 @@
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33209875" sideWeight="0.093429774" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20675105" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="0" y="0" width="300" height="780" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30989584" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="0" y="0" width="300" height="780" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30619267" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30848625" sideWeight="0.9065702" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33142203" sideWeight="0.9065702" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20729166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="SciView" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32864583" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="SciView" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48802084" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39876544" sideWeight="0.6353225" order="3" side_tool="false" content_ui="tabs" />
@@ -305,13 +305,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DualLattice.py</url>
-          <line>28</line>
-          <option name="timeStamp" value="73" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
@@ -708,17 +701,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TriangularLattice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="42" column="48" lean-forward="false" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/delphine.py" />
     <entry file="file://$PROJECT_DIR$/DrawPlot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
+        <state relative-caret-position="325">
           <caret line="15" column="31" lean-forward="false" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
@@ -726,29 +712,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DualLattice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/delphine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
-          <caret line="7" column="33" lean-forward="true" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
+          <caret line="7" column="33" lean-forward="false" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TriangularLattice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="42" column="48" lean-forward="false" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DualLattice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="50" column="18" lean-forward="false" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

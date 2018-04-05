@@ -13,6 +13,9 @@
 #include "DimerNode.h"
 
 // always from entry true to false
+
+class DimerNode;
+
 class DimerEdge {
 public:
 	DimerEdge(DimerNode* start, DimerNode* end, Spin* Spin_right, Spin* Spin_left);
@@ -20,7 +23,7 @@ public:
 
 	inline double getDimer() const
 	{
-		return *Dimer_;
+		return Dimer_;
 	}
 
 	inline DimerNode* getStart() const{
@@ -41,8 +44,8 @@ public:
 
 private:
 	double Dimer_; // if 1 both Spin_right and Spin_left are equal, else -1.
-	DimerNode *start_;
-	DimerNode *end_;
+	DimerNode* start_;
+	DimerNode* end_;
 	Spin* Spin_right_;
 	Spin* Spin_left_;
 };

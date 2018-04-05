@@ -19,13 +19,10 @@ public:
 	Spin(int i, int j, double Spin = 0);
 	virtual ~Spin();
 
-	inline double getSpin() const
-	{
+	void setSpin(double newSpin);
+	inline double getSpin() const {
 		return Spin_;
 	}
-
-	void setSpin(double newSpin);
-
 	inline double getPos(int i) const
 	{
 		assert(i < 2 && i >= 0);

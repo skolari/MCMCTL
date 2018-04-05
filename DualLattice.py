@@ -15,7 +15,7 @@ class DualLattice:
         d_start = nx.from_numpy_matrix(d_adj)
 
         self.N = int(math.sqrt(len(d_adj[:, 0])/2))
-        self.rows = range(self.N + 1)
+        self.rows = range(self.N)
         self.cols = range(self.N * 2)
 
         node_map = {}
@@ -43,8 +43,17 @@ class DualLattice:
         # node_size = 400 / math.sqrt(self.D.number_of_nodes())
         positions = nx.get_node_attributes(self.D, 'pos')
 
+        elarge = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] > 0.0]
+        esmall = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] <= 0.0]
+
         nx.draw_networkx_edges(self.D,
-                               pos=positions)
+                               pos=positions,
+                               edgelist=elarge,
+                               width=3)
+        nx.draw_networkx_edges(self.D,
+                               pos=positions,
+                               edgelist=esmall,
+                               width=1)
 
         plt.axis('equal')
         plt.axis('off')
