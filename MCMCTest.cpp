@@ -10,7 +10,7 @@ int main()
 {	
 
 	// SpinLattice Test;
-	int Deg = 2;
+	int Deg = 5;
 	SpinLattice* S = new SpinLattice(Deg);
 	bool test = false;
 

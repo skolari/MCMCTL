@@ -2,26 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Analysis_Triangular.py" afterPath="$PROJECT_DIR$/Analysis_Triangular.py" />
-      <change beforePath="$PROJECT_DIR$/DimerEdge.cpp" afterPath="$PROJECT_DIR$/DimerEdge.cpp" />
-      <change beforePath="$PROJECT_DIR$/DimerEdge.h" afterPath="$PROJECT_DIR$/DimerEdge.h" />
-      <change beforePath="$PROJECT_DIR$/DimerNode.h" afterPath="$PROJECT_DIR$/DimerNode.h" />
       <change beforePath="$PROJECT_DIR$/DualLattice.cpp" afterPath="$PROJECT_DIR$/DualLattice.cpp" />
-      <change beforePath="$PROJECT_DIR$/DualLattice.h" afterPath="$PROJECT_DIR$/DualLattice.h" />
       <change beforePath="$PROJECT_DIR$/DualLattice.o" afterPath="$PROJECT_DIR$/DualLattice.o" />
-      <change beforePath="$PROJECT_DIR$/DualLattice.py" afterPath="$PROJECT_DIR$/DualLattice.py" />
       <change beforePath="$PROJECT_DIR$/MCMCIsingTri.exe" afterPath="$PROJECT_DIR$/MCMCIsingTri.exe" />
       <change beforePath="$PROJECT_DIR$/MCMCTest.cpp" afterPath="$PROJECT_DIR$/MCMCTest.cpp" />
       <change beforePath="$PROJECT_DIR$/MCMCTest.o" afterPath="$PROJECT_DIR$/MCMCTest.o" />
       <change beforePath="$PROJECT_DIR$/OutputFiles/DimerAdj11.dat" afterPath="$PROJECT_DIR$/OutputFiles/DimerAdj11.dat" />
       <change beforePath="$PROJECT_DIR$/OutputFiles/Spin11.dat" afterPath="$PROJECT_DIR$/OutputFiles/Spin11.dat" />
-      <change beforePath="$PROJECT_DIR$/Spin.h" afterPath="$PROJECT_DIR$/Spin.h" />
-      <change beforePath="$PROJECT_DIR$/Spin.o" afterPath="$PROJECT_DIR$/Spin.o" />
-      <change beforePath="$PROJECT_DIR$/SpinLattice.cpp" afterPath="$PROJECT_DIR$/SpinLattice.cpp" />
-      <change beforePath="$PROJECT_DIR$/SpinLattice.o" afterPath="$PROJECT_DIR$/SpinLattice.o" />
-      <change beforePath="$PROJECT_DIR$/delphine.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/makefile" afterPath="$PROJECT_DIR$/makefile" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />

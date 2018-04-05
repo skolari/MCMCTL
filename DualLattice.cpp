@@ -191,11 +191,6 @@ vector< vector<double> > DualLattice::getDadj() const{
 					DimerNode* end = Dual_[coord2[0]][coord2[1]];
 					k = this->getDadjInd(coord[0], coord[1]);
 					l = this->getDadjInd(coord2[0], coord2[1]);
-					if (dir == 3) {
-						cout << "k = " << k << ", l = " << l << endl;
-						cout << "i = " << coord[0] << ", j = " << coord[1] << endl;
-						cout << "i2 = " << coord2[0] << ", j2 = " << coord2[1] << endl;
-					}
 					Dadj[k][l] = Dual_[coord[0]][coord[1]]->getEdge(end)->getDimer();
 
 				}
