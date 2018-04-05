@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/DualLattice.cpp" afterPath="$PROJECT_DIR$/DualLattice.cpp" />
-      <change beforePath="$PROJECT_DIR$/DualLattice.o" afterPath="$PROJECT_DIR$/DualLattice.o" />
-      <change beforePath="$PROJECT_DIR$/MCMCIsingTri.exe" afterPath="$PROJECT_DIR$/MCMCIsingTri.exe" />
-      <change beforePath="$PROJECT_DIR$/MCMCTest.cpp" afterPath="$PROJECT_DIR$/MCMCTest.cpp" />
-      <change beforePath="$PROJECT_DIR$/MCMCTest.o" afterPath="$PROJECT_DIR$/MCMCTest.o" />
-      <change beforePath="$PROJECT_DIR$/OutputFiles/DimerAdj11.dat" afterPath="$PROJECT_DIR$/OutputFiles/DimerAdj11.dat" />
-      <change beforePath="$PROJECT_DIR$/OutputFiles/Spin11.dat" afterPath="$PROJECT_DIR$/OutputFiles/Spin11.dat" />
-    </list>
+    <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -108,7 +100,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="16" />
     <option name="y" value="23" />
     <option name="width" value="1314" />
@@ -236,7 +228,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
+    <frame x="-11" y="-11" width="1942" height="1042" extended-state="7" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33209875" sideWeight="0.093429774" order="7" side_tool="true" content_ui="tabs" />
