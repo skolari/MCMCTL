@@ -12,8 +12,8 @@ using namespace std;
 #define R 1
 
 
-SpinLattice::SpinLattice(int Deg)
-	: Lattice(Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL))
+SpinLattice::SpinLattice(int Deg, double J1 = 0, double J2 = 0, double J3 = 0 )
+	: Lattice(Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3)
 {
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
@@ -146,4 +146,48 @@ vector<int> SpinLattice::step_dir(int i, int j, int d) {
 		step = this->fix_bc(i, j);
 	}
 	return step;
+}
+
+double SpinLattice::calculate_Energy() {
+	double Energy = 0;
+	Spin* Spin_origin = NULL;
+	Spin* Spin_neigh = NULL;
+	double S_o = 0;
+	double S_n = 0;
+	int dir2 = 0;
+	for (int i = 0; i < N_; ++i) {
+		for (int j = 0; j < N_; ++j) {
+			if (this->ifInsideLattice(i, j)) {
+				Spin_origin = this->get_Spin(i, j);
+				S_o =  Spin_origin->getSpin();
+
+				for (int dir = 0; dir < 6; dir++) {
+					// nearest neighbor
+					Spin_neigh = Spin_origin->getNeighbor(dir);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J1_ * S_o * S_n;
+
+					// next nearest neighbor
+					dir2 = (dir + 1) % 6;
+					Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir2);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J2_ * S_o * S_n;
+
+					// next next nearest neighbor
+					Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J3_ * S_o * S_n;
+				}
+			}
+		}
+	}
+	return Energy;
+}
+
+void SpinLattice::update_Energy() {
+	Energy_ = this->calculate_Energy();
+}
+
+void SpinLattice::update_Energy(double val) {
+	Energy_ = Energy_ + val;
 }
