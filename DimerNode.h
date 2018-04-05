@@ -12,6 +12,8 @@
 #include <cassert>
 #include "DimerEdge.h"
 
+class DimerEdge;
+
 class DimerNode {
 public:
 
@@ -36,13 +38,14 @@ public:
 		Edges_.push_back(edge);
 	}
 
+	bool operator == (const DimerNode *other) {
+	    return ((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
+	}
 private:
 	std::vector<int> Pos_;
 	std::vector<DimerEdge*> Edges_;
 };
 
-bool operator == (DimerNode* a, DimerNode* b) {
-    return ((a->getPos(0) == b->getPos(0)) && (a->getPos(1) == b->getPos(1)));
-}
+
 
 #endif /* DIMERNODE_H_ */

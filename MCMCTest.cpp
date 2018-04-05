@@ -3,7 +3,7 @@
 #include <cassert>
 #include "SpinLattice.h"
 #include "Spin.h"
-//#include "DualLattice.h"
+#include "DualLattice.h"
 using namespace std;
 
 int main()
@@ -75,12 +75,11 @@ int main()
 	}
 
 
-
 	// DualLattice Test
-	//DualLattice* D = new DualLattice(Deg, S);
+	DualLattice* D = new DualLattice(Deg, S);
 	cout << "before print out" << endl;
 	S->Printout("11");
-	//D->Printout("11");
+	D->Printout("11");
 	cout << "after print out" << endl;
 	// delete L;
 	return 0;

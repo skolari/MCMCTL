@@ -20,12 +20,11 @@ static double deltaSpintoDimer(double Sij, double Skl) {
 }
 */
 DualLattice::DualLattice(int Deg, SpinLattice* S)
-	: Lattice(Deg)
+	: Lattice(Deg), S_(S), Dual_(2 * (N_ - 1), vector<DimerNode*>(N_ - 1, NULL))
 {
 	int i_len = 2 * (N_ - 1);
-	int j_len = N_ - 2;
+	int j_len = N_ - 1;
 
-	Dual_(i_len, vector<DimerNode*>(j_len, NULL));
 	for ( int j = 0; j < j_len; j++ ) {
 		for ( int i = 0; i < i_len; i++ ) {
 			Dual_[i][j] = new DimerNode(i, j);
@@ -40,7 +39,9 @@ DualLattice::DualLattice(int Deg, SpinLattice* S)
 			if(S->ifInsideLattice(i, j)) {
 				Spin* Spin_right = S->get_Spin_pointer(i, j);
 				for (int dir = 0; dir < 6; dir++) {
+
 					Spin* Spin_left = Spin_right->getNeighbor(dir);
+
 					coord = SpinDirDualNode(i, j ,dir);
 					DimerNode* start = Dual_[coord[0]][coord[1]];
 
@@ -48,7 +49,9 @@ DualLattice::DualLattice(int Deg, SpinLattice* S)
 					coord2 = SpinDirDualNode(i, j ,dir2);
 					DimerNode* end = Dual_[coord2[0]][coord2[1]];
 
-					Dual_[coord[0]][coord[1]]->addEdge(new DimerEdge(start, end, Spin_right, Spin_left));
+					DimerEdge* edge = new DimerEdge(start, end, Spin_right, Spin_left);
+					Dual_[coord[0]][coord[1]]->addEdge(edge);
+
 				}
 			}
 		}
@@ -65,37 +68,34 @@ DualLattice::~DualLattice() {
 
 
 vector<int> DualLattice::fix_bc(int i, int j) const{
-	/*
-	if (j == N_ - 1  && i < 2 * Nc_) {
-		i = i + 2 * Deg_;
-		j = 0;
-	}
 
-	if(i == 2 * ( N_ - 1 ) && j < Nc_) {
-		i = 0;
-		j = j + Deg_;
-	}
-
-	if(j + i == (N_ - 1 + Deg_) && j < N_ - 1 && i < N_ - 1) {
-		i = i - Deg_;
-		j = j - Deg_;
-	}
-
-	*/
-
-	if (j == -1) {
+	if ( j == -1 && i >= 2 * Deg_) {
 		i = i - 2 * Deg_;
-		j = N_ - 1;
+		j = N_ - 2;
 	}
 
-	if (i == -1) {
-		i = N_ - 1;
+	if (i == -1 && j >= Deg_) {
+		i = 2 * (N_ - 1) - 1;
 		j = j - Deg_;
+
 	}
 
-	if (i + j == Deg_ - 1) {
-		i = i + 2 * Deg_;
-		j = j + Deg_;
+	if (i == -2 && j >= Deg_) {
+		i = 2 * (N_ - 1) - 2;
+		j = j - Deg_;
+
+	}
+
+	if (i % 2 == 0) {
+		if (i / 2 + j == Deg_ - 1) {
+			i = i + 2 * Deg_;
+			j = j + Deg_;
+		}
+	} else {
+		if ((i + 1)/ 2 + j == Deg_ - 1) {
+			i =  i + 2 * Deg_;
+			j = j + Deg_;
+		}
 	}
 
 	vector<int> coord = {i, j};
@@ -171,7 +171,40 @@ vector<vector<double>> DualLattice::From_Spin_to_Dual(SpinLattice* S) {
 }
 */
 
-/*
+vector< vector<double> > DualLattice::getDadj() const{
+	vector< vector<double> > Dadj(2 * (N_ - 1) * (N_ - 1), vector<double>(2 * (N_ - 1) * (N_ - 1), 0));
+
+	vector<int> coord(2, 0);
+	vector<int> coord2(2, 0);
+	int dir2 = 0;
+	double dimer = 0;
+	int k = 0;
+	int l = 0;
+	for (int j = 0; j < N_; ++j) {
+		for (int i = 0; i < N_; ++i) {
+			if(S_->ifInsideLattice(i, j)) {
+				for( int dir = 0; dir < 6; dir++ ){
+
+					dir2 = (dir + 1) % 6;
+					coord = SpinDirDualNode(i, j ,dir);
+					coord2 = SpinDirDualNode(i, j ,dir2);
+					DimerNode* end = Dual_[coord2[0]][coord2[1]];
+					k = this->getDadjInd(coord[0], coord[1]);
+					l = this->getDadjInd(coord2[0], coord2[1]);
+					if (dir == 3) {
+						cout << "k = " << k << ", l = " << l << endl;
+						cout << "i = " << coord[0] << ", j = " << coord[1] << endl;
+						cout << "i2 = " << coord2[0] << ", j2 = " << coord2[1] << endl;
+					}
+					Dadj[k][l] = Dual_[coord[0]][coord[1]]->getEdge(end)->getDimer();
+
+				}
+			}
+		}
+	}
+	return Dadj;
+}
+
 void DualLattice::Printout(string suppl) const
 {
 	string path = "./Outputfiles/DimerAdj" + suppl + ".dat";
@@ -185,9 +218,13 @@ void DualLattice::Printout(string suppl) const
 		outputFileSpin = NULL;
 	}
 
-	for (int i = 0; i < NDadj_; ++i) {
-		for (int j = 0; j < NDadj_; ++j) {
-			*outputFileSpin << Dual_adj_[i][j] << "\t";
+	vector< vector<double> > Dadj = this->getDadj();
+	int i_len = Dadj.size();
+	int j_len = Dadj[1].size();
+
+	for (int j = 0; j < j_len; ++j) {
+		for (int i = 0; i < i_len; ++i) {
+			*outputFileSpin << Dadj[i][j] << "\t";
 		}
 		*outputFileSpin << endl;
 	}
@@ -195,4 +232,4 @@ void DualLattice::Printout(string suppl) const
 	outputFileSpin->close();
 	delete outputFileSpin;
 }
-*/
+

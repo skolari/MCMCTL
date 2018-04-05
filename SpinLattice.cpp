@@ -119,6 +119,7 @@ bool SpinLattice::ifInsideLattice(int i, int j) {
 	if (i + j > N_ + Deg_ - 2) { flag = false; }
 	return flag;
 }
+
 // Clockwise starting from 3 o'clock == 0
 vector<int> SpinLattice::step_dir(int i, int j, int d) {
 	assert(d < 6 && d >= 0);
