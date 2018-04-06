@@ -32,6 +32,11 @@ public:
 		return Edges_[i];
 	}
 
+	inline std::vector<DimerEdge*> getEdges() const
+		{
+			return Edges_;
+		}
+
 	DimerEdge* getEdge(DimerNode* end) const;
 
 	inline void addEdge(DimerEdge* edge) {
@@ -40,6 +45,10 @@ public:
 
 	bool operator == (const DimerNode *other) {
 	    return ((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
+	}
+
+	bool operator != (const DimerNode *other) {
+		return !((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
 	}
 private:
 	std::vector<int> Pos_;

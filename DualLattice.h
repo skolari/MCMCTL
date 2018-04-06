@@ -35,9 +35,14 @@ protected:
 		return 2 * (N_ - 1) * j + i;
 	}
 
+	inline DimerNode* getDimerNode(int i, int j) const {
+			return Dual_[i][j];
+	}
+
 	std::vector<int> fix_bc(int i, int j) const;
 	std::vector<int> SpinDirDualNode(int i, int j, int dir) const;
 	std::vector< std::vector<double> > getDadj() const;
+
 private:
 	std::vector< std::vector< DimerNode* > > Dual_; //
 	//std::vector<std::vector<double>> Dual_adj_; // (N, M) : N=EntrySites, M=VertexSites

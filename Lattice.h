@@ -12,7 +12,7 @@ public:
 	Lattice(int Deg);
 	virtual ~Lattice();
 	inline int get_Deg() const { return Deg_; }
-
+	inline int get_N() const { return N_; }
 protected:
 	// Attributes
 	int Deg_; // Degree of triangular lattice

@@ -31,6 +31,7 @@ public:
 	inline double get_Spin(int i, int j) const { return S_[i][j]->getSpin(); }
 	inline Spin* get_Spin_pointer(int i, int j) const { return S_[i][j]; }
 	void set_Spin(Spin* S, double val);
+	void set_Spin(int i, int j, double val);
 
 	bool ifInsideLattice(int i, int j);
 	std::vector<int> get_direction(int i, int j, int d) const;

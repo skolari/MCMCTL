@@ -83,6 +83,12 @@ void SpinLattice::set_Spin(Spin* S, double val) {
 	S->Spin::setSpin(val);
 }
 
+void SpinLattice::set_Spin(int i, int j, double val){
+	Spin* S = this->get_Spin_pointer(i, j);
+	this->set_Spin(S, val);
+}
+
+
 vector<int> SpinLattice::fix_bc(int i, int j) const{
 	if (j == N_ - 1  && i < Nc_) {
 		i = i + Deg_;
