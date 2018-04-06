@@ -7,7 +7,6 @@
 
 #include "MonteCarlo.h"
 
-namespace std {
 
 MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo)
 	: worm_(), N_thermal_(N_thermal),
@@ -33,8 +32,6 @@ MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo)
 MonteCarlo::~MonteCarlo() {
 	// TODO Auto-generated destructor stub
 }
-
-} /* namespace std */
 
 void MonteCarlo::init_update() {
 
@@ -178,4 +175,9 @@ void MonteCarlo::update_winding_number() {
 	if ( delta_j == -(N_- 2)){
 		winding_number_ -= 1;
 	}
+}
+
+void MonteCarlo::printout(std::string suppl){
+	S_->Printout(suppl);
+	D_->Printout(suppl);
 }

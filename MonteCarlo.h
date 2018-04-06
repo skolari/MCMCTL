@@ -29,6 +29,8 @@ public:
 	void create_update();
 	void run_algorithm();
 
+	// Printout
+	void printout(std::string suppl);
 	// getters and setters
 	inline DimerNode* get_entry_node() const {
 		return entry_node_;
