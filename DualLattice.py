@@ -39,12 +39,14 @@ class DualLattice:
                         y = j * hh + 2 / 3 * hh
                         self.D.node[(i, j)]['pos'] = (x, y)
 
+    # Note that we don't show the periodic edges.
     def draw_dual_lattice(self):
-        # node_size = 400 / math.sqrt(self.D.number_of_nodes())
         positions = nx.get_node_attributes(self.D, 'pos')
 
-        elarge = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] > 0.0]
-        esmall = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] <= 0.0]
+        elarge = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] > 0.0 and
+                  abs(u[0] - v[0]) + abs(u[1] - v[1]) < self.N]
+        esmall = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] <= 0.0 and
+                  abs(u[0] - v[0]) + abs(u[1] - v[1]) < self.N]
 
         nx.draw_networkx_edges(self.D,
                                pos=positions,
