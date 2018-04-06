@@ -39,6 +39,7 @@ public:
 	}
 
 	double getWeight();
+	void update_spin_neighbor_dir(int i, int j, int dir);
 
 private:
 	SpinLattice* S_;

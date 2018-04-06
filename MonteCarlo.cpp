@@ -80,44 +80,44 @@ void MonteCarlo::proba_step() {
 void MonteCarlo::map_dimer_to_spin() {
 	std::vector<int> coord1(2);
 	std::vector<int> coord2(2);
+	// update vertical Spins
 
+
+
+	// update horizontal Spins
 	double dimer = 0;
 	double val = 0;
 	for (int j = Deg_; j >= 0; j--) {
 		for (int i = Deg_ - j; i < N_; i++){
 			if(S_->ifInsideLattice(i, j)) {
-				coord1 = D_->SpinDirDualNode(i, j, 0);
-				coord2 = D_->SpinDirDualNode(i, j, 1);
-				dimer = D_->getDimerNode(coord1[0], coord1[1])->getEdge(D_->getDimerNode(coord1[0], coord1[1]))->getDimer();
-
-				coord1 = S_->get_direction(i, j, 0);
-				if (dimer == 1) {
-					val = S_->get_Spin(i, j);
-					S_->set_Spin(coord1[0], coord1[1], val);
-				} else if (dimer == -1) {
-					val = (-1) * S_->get_Spin(i, j);
-					S_->set_Spin(coord1[0], coord1[1], val);
+					this->update_spin_neighbor_dir(i, j, 0);
 				}
 			}
 		}
 	}
-	for (int j = Deg_; j < N_; j++) {
+	for (int j = Deg_ + 1; j < N_; j++) {
 		for (int i = 0; i < N_ + Deg_ - j; i++){
 			if(S_->ifInsideLattice(i, j)) {
-				coord1 = D_->SpinDirDualNode(i, j, 0);
-				coord2 = D_->SpinDirDualNode(i, j, 1);
-				dimer = D_->getDimerNode(coord1[0], coord1[1])->getEdge(D_->getDimerNode(coord1[0], coord1[1]))->getDimer();
-
-				coord1 = S_->get_direction(i, j, 0);
-				if (dimer == 1) {
-					val = S_->get_Spin(i, j);
-					S_->set_Spin(coord1[0], coord1[1], val);
-				} else if (dimer == -1) {
-					val = (-1) * S_->get_Spin(i, j);
-					S_->set_Spin(coord1[0], coord1[1], val);
-				}
+				this->update_spin_neighbor_dir(i, j, 0);
 			}
 		}
+	}
+}
+// Update the neighbor of a Spin from a dimer configuration.
+void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
+	int dir2 = (dir + 1) % 6;
+	double val = 0;
+	std::vector<int> coord1 = D_->SpinDirDualNode(i, j, dir);
+	std::vector<int> coord2 = D_->SpinDirDualNode(i, j, dir2);
+	double dimer = D_->getDimerNode(coord1[0], coord1[1])->getEdge(D_->getDimerNode(coord1[0], coord1[1]))->getDimer();
+
+	coord1 = S_->get_direction(i, j, dir);
+	if (dimer == 1) {
+		val = S_->get_Spin(i, j);
+		S_->set_Spin(coord1[0], coord1[1], val);
+	} else if (dimer == -1) {
+		val = (-1) * S_->get_Spin(i, j);
+		S_->set_Spin(coord1[0], coord1[1], val);
 	}
 }
 
