@@ -22,7 +22,7 @@ public:
 	virtual ~MonteCarlo();
 
 	// Algorithm methods
-	void init_algo();
+	void init_update();
 	void myopic_step();
 	void proba_step();
 	void map_dimer_to_spin();
@@ -34,20 +34,20 @@ public:
 		return entry_node_;
 	}
 
-	inline int get_worm_counter() const {
-		return worm_counter_;
+	inline int get_winding_number() const {
+		return winding_number_;
 	}
 
 	double getWeight();
 	void update_spin_neighbor_dir(int i, int j, int dir);
-
+	void update_winding_number();
 private:
 	SpinLattice* S_;
 	DualLattice* D_;
 
 	DimerNode* entry_node_;
 	std::vector<DimerEdge*> worm_;
-	int worm_counter_;
+	int winding_number_;
 	// TODO winding number
 
 	// Deg_, N_
