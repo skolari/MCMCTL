@@ -167,8 +167,8 @@ double SpinLattice::calculate_Energy() {
 			if (this->ifInsideLattice(i, j)) {
 				Spin_origin = this->get_Spin(i, j);
 				S_o =  Spin_origin->getSpin();
-
-				for (int dir = 0; dir < 6; dir++) {
+				// an other possibility is to loop over all dir and divide the final energy by 2
+				for (int dir = 0; dir < 3; dir++) {
 					// nearest neighbor
 					Spin_neigh = Spin_origin->getNeighbor(dir);
 					S_n = Spin_neigh->getSpin();

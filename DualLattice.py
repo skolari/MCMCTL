@@ -43,10 +43,10 @@ class DualLattice:
     def draw_dual_lattice(self):
         positions = nx.get_node_attributes(self.D, 'pos')
 
-        elarge = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] > 0.0 and
-                  abs(u[0] - v[0]) + abs(u[1] - v[1]) < self.N]
-        esmall = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] <= 0.0 and
-                  abs(u[0] - v[0]) + abs(u[1] - v[1]) < self.N]
+        elarge = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] > 0.0
+        and abs(u[0] - v[0]) + abs(u[1] - v[1]) < self.N]
+        esmall = [(u, v) for (u, v, d) in self.D.edges(data=True) if d['weight'] <= 0.0
+        and abs(u[0] - v[0]) + abs(u[1] - v[1]) < self.N]
 
         nx.draw_networkx_edges(self.D,
                                pos=positions,
