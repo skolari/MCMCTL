@@ -25,7 +25,7 @@ void Spin::setSpin(double newSpin)
 
 // direction dir goes from 0 to 5
 void Spin::addNeighbor(Spin* newNeigh, int dir){
-	assert(newNeigh != NULL);
+	if(newNeigh == NULL) std::cerr << "newNeigh must not be empty" << std::endl;
 	Neighbor_[dir] = newNeigh;
 }
 

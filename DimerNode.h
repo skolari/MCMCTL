@@ -9,7 +9,6 @@
 #define DIMERNODE_H_
 
 #include <vector>
-#include <cassert>
 #include "DimerEdge.h"
 
 class DimerEdge;
@@ -22,7 +21,7 @@ public:
 
 	inline double getPos(int i) const
 	{
-		assert(i < 2);
+		if (!(i < 2)) std::cerr << "pos index not in rage" << std::endl;
 		return Pos_[i];
 	}
 

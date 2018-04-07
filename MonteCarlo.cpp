@@ -17,8 +17,8 @@ MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo)
 {
 	S_ = new SpinLattice(Deg);
 	D_ = new DualLattice(Deg, S_);
-	dist_N = std::uniform_int_distribution<>(0, S_->get_N()-  1);
-	dist_2N = std::uniform_int_distribution<>(0, 2 * (S_->get_N()-1));
+	dist_N = std::uniform_int_distribution<>(0, S_->get_N() -  2);
+	dist_2N = std::uniform_int_distribution<>(0, 2 * (S_->get_N() - 1) - 1);
 	entry_node_ = NULL;
 	winding_number_ = 0;
 

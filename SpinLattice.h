@@ -13,7 +13,6 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
-#include <cassert>
 #include "Lattice.h"
 #include "Spin.h"
 

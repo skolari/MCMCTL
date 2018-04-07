@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <cassert>
 #include "SpinLattice.h"
 #include "Spin.h"
 #include "DualLattice.h"
@@ -13,6 +12,7 @@ int main()
 	MonteCarlo* M = new MonteCarlo(Deg, 1, 0);
 	M->run_algorithm();
 	M->printout("33");
+	cout << "Printout complete" << endl;
 	/*
 	// SpinLattice Test;
 	int Deg = 5;

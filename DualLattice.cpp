@@ -97,7 +97,7 @@ vector<int> DualLattice::fix_bc(int i, int j) const{
 
 vector<int> DualLattice::SpinDirDualNode(int i, int j, int dir) const
 {
-	assert( dir < 6 && dir >= 0);
+	if (!( dir < 6 && dir >= 0)) cerr << "dir not in range" << endl;
 	int k = i;
 	int l = j;
 

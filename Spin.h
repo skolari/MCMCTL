@@ -9,7 +9,6 @@
 #define SPIN_H_
 
 #include <vector>
-#include <cassert>
 #include <iostream>
 
 
@@ -24,7 +23,7 @@ public:
 	}
 	inline double getPos(int i) const
 	{
-		assert(i < 2 && i >= 0);
+		if(!(i < 2 && i >= 0)) std::cerr << "pos not in range" << std::endl;
 		return Pos_[i];
 	}
 

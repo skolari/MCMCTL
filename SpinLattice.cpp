@@ -134,7 +134,7 @@ bool SpinLattice::ifInsideLattice(int i, int j) {
 
 // Clockwise starting from 3 o'clock == 0
 vector<int> SpinLattice::step_dir(int i, int j, int d) {
-	assert(d < 6 && d >= 0);
+	if(!(d < 6 && d >= 0)) cerr << "dir index not in range" << endl;
 	vector<int> step(2);
 	if (d == 0) { // before d = 1
 		i = i + 1;
