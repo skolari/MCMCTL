@@ -28,14 +28,21 @@ public:
 
 	inline DimerEdge* getEdge(int i) const
 	{
-		assert(i < Edges_.size());
 		return Edges_[i];
 	}
 
 	inline std::vector<DimerEdge*> getEdges() const
-		{
+	{
+		if(!(Edges_.empty())) {
 			return Edges_;
+		} else {
+			return {};
 		}
+	}
+
+	inline int numberEdges() const {
+		return Edges_.size();
+	}
 
 	DimerEdge* getEdge(DimerNode* end) const;
 

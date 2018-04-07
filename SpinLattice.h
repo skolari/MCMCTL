@@ -19,7 +19,7 @@
 
 class Lattice;
 
-class SpinLattice: protected Lattice {
+class SpinLattice: public Lattice {
 public:
 	SpinLattice(int Deg, double J1 = 0, double J2 = 0, double J3 = 0 );
 	virtual ~SpinLattice();
@@ -29,12 +29,11 @@ public:
 	// Getters and Setters
 	inline double get_Energy() { return Energy_; }
 	inline double get_Spin(int i, int j) const { return S_[i][j]->getSpin(); }
-	inline Spin* get_Spin_pointer(int i, int j) const { return S_[i][j]; }
+	Spin* get_Spin_pointer(int i, int j) const;
 	void set_Spin(Spin* S, double val);
 	void set_Spin(int i, int j, double val);
 
 	bool ifInsideLattice(int i, int j);
-	std::vector<int> get_direction(int i, int j, int d) const;
 	std::vector<int> step_dir(int i, int j, int d);
 	std::vector<int> fix_bc(int i, int j) const;
 protected:

@@ -4,11 +4,16 @@
 #include "SpinLattice.h"
 #include "Spin.h"
 #include "DualLattice.h"
+#include "MonteCarlo.h"
 using namespace std;
 
 int main()
 {	
-
+	int Deg = 5;
+	MonteCarlo* M = new MonteCarlo(Deg, 1, 0);
+	M->run_algorithm();
+	M->printout("33");
+	/*
 	// SpinLattice Test;
 	int Deg = 5;
 	SpinLattice* S = new SpinLattice(Deg);
@@ -82,5 +87,7 @@ int main()
 	D->Printout("11");
 	cout << "after print out" << endl;
 	// delete L;
+	 *
+	 */
 	return 0;
 }

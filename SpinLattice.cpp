@@ -12,7 +12,7 @@ using namespace std;
 #define R 1
 
 
-SpinLattice::SpinLattice(int Deg, double J1 = 0, double J2 = 0, double J3 = 0 )
+SpinLattice::SpinLattice(int Deg, double J1, double J2, double J3)
 	: Lattice(Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3)
 {
 	double rnd = 0;
@@ -43,6 +43,7 @@ SpinLattice::SpinLattice(int Deg, double J1 = 0, double J2 = 0, double J3 = 0 )
 		}
 	}
 	Energy_ = this->calculate_Energy();
+
 }
 
 SpinLattice::~SpinLattice()
@@ -92,6 +93,10 @@ void SpinLattice::set_Spin(int i, int j, double val){
 vector<int> SpinLattice::fix_bc(int i, int j) const{
 	if (j == N_ - 1  && i < Nc_) {
 		i = i + Deg_;
+		j = 0;
+	}
+	if(i == N_ - 1 && j == Deg_) {
+		i = Deg_;
 		j = 0;
 	}
 	if(i == N_ - 1 && j < Nc_) {
@@ -165,7 +170,7 @@ double SpinLattice::calculate_Energy() {
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
 			if (this->ifInsideLattice(i, j)) {
-				Spin_origin = this->get_Spin(i, j);
+				Spin_origin = this->SpinLattice::get_Spin_pointer(i, j);
 				S_o =  Spin_origin->getSpin();
 				// an other possibility is to loop over all dir and divide the final energy by 2
 				for (int dir = 0; dir < 3; dir++) {
@@ -190,6 +195,12 @@ double SpinLattice::calculate_Energy() {
 	}
 	return Energy;
 }
+
+Spin* SpinLattice::get_Spin_pointer(int i, int j) const
+{
+	return S_[i][j];
+}
+
 
 void SpinLattice::update_Energy() {
 	Energy_ = this->calculate_Energy();

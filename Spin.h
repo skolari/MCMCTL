@@ -31,6 +31,7 @@ public:
 	void addNeighbor(Spin* newNeigh, int dir);
 
 	inline Spin* getNeighbor(int dir) {
+		//assert(Neighbor_[dir] != NULL);
 		return Neighbor_[dir];
 	}
 
