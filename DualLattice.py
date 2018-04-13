@@ -19,6 +19,7 @@ class DualLattice:
         self.cols = range(self.N * 2)
 
         node_map = {}
+        # index i == i + 1, j == j + 1
         for j in self.rows:
             for i in self.cols:
                 ind = j * 2 * self.N + i

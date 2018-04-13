@@ -33,7 +33,13 @@ public:
 		//assert(Neighbor_[dir] != NULL);
 		return Neighbor_[dir];
 	}
+	bool operator == (const Spin *other) {
+	    return ((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
+	}
 
+	bool operator != (const Spin *other) {
+		return !((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
+	}
 private:
 	double Spin_;
 	std::vector<int> Pos_; // maybe add const

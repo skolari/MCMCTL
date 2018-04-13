@@ -192,3 +192,97 @@ void DualLattice::Printout(string suppl) const
 	delete outputFileSpin;
 }
 
+/*
+ * get d1 and d2 like in the figure see rakala
+ */
+vector< DimerEdge* > DualLattice::get_d1_d2(DimerEdge* d0)
+{
+	DimerNode* e = d0->getStart();
+	DimerNode* pc = d0->getEnd();
+	DimerEdge* d1 = NULL;
+	DimerEdge* d2 = NULL;
+
+	vector <DimerEdge*> edges = pc->getEdges();
+	for (auto edge : edges) {
+		if (e != edge->getStart()) {
+			if ( edge->getSpin_right()  == d0->getSpin_right() ) {
+				DimerEdge* d1 = edge;
+			}
+			else if( edge->getSpin_left()  == d0->getSpin_left() ) {
+				DimerEdge* d2 = edge;
+			}
+			else {
+				cerr << "edge is not connected" << endl;
+			}
+		}
+	}
+	return {d0, d1, d2};
+}
+
+/*
+ * get s1 to s11 like in the figure see rakala
+ */
+vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d) {
+	vector< DimerEdge*> s(12, NULL);
+
+	DimerEdge* edge = NULL;
+	// around the first spin
+	DimerNode* start = d[1]->getEnd();
+	DimerNode* end = d[2]->getEnd();
+	Spin* spin_left = d[1]->getSpin_left();
+
+	for (int j = 0; j < 4; j++) {
+		int i = 0;
+		edge = start->getEdge(i);
+		while(edge->getSpin_left() != spin_left) {
+			i += 1;
+			edge = start->getEdge(i);
+		}
+		s[j] = edge;
+		start = edge->getEnd();
+	}
+	if(edge->getEnd() != end) {
+		cerr << "end ist not the real end" << endl;
+	}
+
+	// around the second spin
+	DimerNode* start = d[2]->getEnd();
+	DimerNode* end = d[0]->getStart();
+	Spin* spin_left = d[2]->getSpin_left();
+
+	for (int j = 4; j < 8; j++) {
+		int i = 0;
+		edge = start->getEdge(i);
+		while(edge->getSpin_left() != spin_left) {
+			i += 1;
+			edge = start->getEdge(i);
+		}
+		s[j] = edge;
+		start = edge->getEnd();
+	}
+	if(edge->getEnd() != end) {
+		cerr << "end ist not the real end" << endl;
+	}
+
+	//around the third spin
+	DimerNode* start = d[0]->getStart();
+	DimerNode* end = d[1]->getEnd();
+	Spin* spin_left = d[0]->getSpin_right();
+
+	for (int j = 8; j < 12; j++) {
+		int i = 0;
+		edge = start->getEdge(i);
+		while(edge->getSpin_left() != spin_left) {
+			i += 1;
+			edge = start->getEdge(i);
+		}
+		s[j] = edge;
+		start = edge->getEnd();
+	}
+	if(edge->getEnd() != end) {
+		cerr << "end ist not the real end" << endl;
+	}
+
+	return s;
+}
+
