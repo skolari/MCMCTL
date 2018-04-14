@@ -49,10 +49,7 @@ DualLattice::DualLattice(int Deg, SpinLattice* S)
 			}
 		}
 	}
-	//  Entry_Sites(N_ * N_, NULL);
-	//NDadj_ = i_max * j_max;
-
-	//Dual_adj_ = From_Spin_to_Dual(S);
+	Energy_ = S_->get_Energy();
 }
 
 DualLattice::~DualLattice() {
@@ -206,10 +203,10 @@ vector< DimerEdge* > DualLattice::get_d1_d2(DimerEdge* d0)
 	for (auto edge : edges) {
 		if (e != edge->getStart()) {
 			if ( edge->getSpin_right()  == d0->getSpin_right() ) {
-				DimerEdge* d1 = edge;
+				d1 = edge;
 			}
 			else if( edge->getSpin_left()  == d0->getSpin_left() ) {
-				DimerEdge* d2 = edge;
+				d2 = edge;
 			}
 			else {
 				cerr << "edge is not connected" << endl;
@@ -222,7 +219,8 @@ vector< DimerEdge* > DualLattice::get_d1_d2(DimerEdge* d0)
 /*
  * get s1 to s11 like in the figure see rakala
  */
-vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d) {
+vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d)
+{
 	vector< DimerEdge*> s(12, NULL);
 
 	DimerEdge* edge = NULL;
@@ -246,9 +244,9 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d) {
 	}
 
 	// around the second spin
-	DimerNode* start = d[2]->getEnd();
-	DimerNode* end = d[0]->getStart();
-	Spin* spin_left = d[2]->getSpin_left();
+	start = d[2]->getEnd();
+	end = d[0]->getStart();
+	spin_left = d[2]->getSpin_left();
 
 	for (int j = 4; j < 8; j++) {
 		int i = 0;
@@ -265,9 +263,9 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d) {
 	}
 
 	//around the third spin
-	DimerNode* start = d[0]->getStart();
-	DimerNode* end = d[1]->getEnd();
-	Spin* spin_left = d[0]->getSpin_right();
+	start = d[0]->getStart();
+	end = d[1]->getEnd();
+	spin_left = d[0]->getSpin_right();
 
 	for (int j = 8; j < 12; j++) {
 		int i = 0;
@@ -286,8 +284,27 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d) {
 	return s;
 }
 
-double DualLattice::get_local_weight(vector< DimerEdge* > d,vector< DimerEdge* > s)
+std::vector< double > DualLattice::get_local_weight(DimerEdge* d0)
 {
-	double w = 0;
-	return w;
+	vector<double> W(3, 1);
+	vector< DimerEdge* > d = this->get_d1_d2(d0);
+	vector< DimerEdge* > s = this->get_s_dimer(d);
+
+	// J0
+	for ( int i = 0; i < 3; i++ ) {
+		W[0] *= std::exp(-S_->get_Ji(1) * d[i]->getDimer());
+	}
+
+	W[1] *= std::exp(-S_->get_Ji(1) * (-1) * d[0]->getDimer());
+	W[2] *= std::exp(-S_->get_Ji(1) * (-1) * d[0]->getDimer());
+
+	W[1] *= std::exp(-S_->get_Ji(1) * (-1) * d[1]->getDimer());
+	W[2] *= std::exp(-S_->get_Ji(1) * d[1]->getDimer());
+
+	W[1] *= std::exp(-S_->get_Ji(1) * d[2]->getDimer());
+	W[2] *= std::exp(-S_->get_Ji(1) * (-1) * d[2]->getDimer());
+
+	return W;
 }
+
+

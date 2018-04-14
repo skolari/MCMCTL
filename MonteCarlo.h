@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <cmath>
 
 #include "SpinLattice.h"
 #include "DualLattice.h"
@@ -34,6 +35,7 @@ public:
 
 	// Printout
 	void printout(std::string suppl);
+
 	// getters and setters
 	inline DimerNode* get_entry_node() const {
 		return entry_node_;
@@ -49,7 +51,6 @@ public:
 
 	// Probastep matrixes
 	std::vector< std::vector<double>> get_M(std::vector <double> W);
-	std::vector <double> getWeight();
 
 	void update_spin_neighbor_dir(int i, int j, int dir);
 	void update_winding_number();

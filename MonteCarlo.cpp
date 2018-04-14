@@ -79,11 +79,13 @@ void MonteCarlo::proba_step() {
 	DimerEdge* next_edge = d0;
 
 	std::vector< DimerEdge* > d = D_->get_d1_d2(d0);
-	std::vector <double> W = this->getWeight();
+	std::vector <double> W = D_->get_local_weight(d0);
 	std::vector< std::vector<double>> M = this->get_M(W);
-	std::discrete_distribution<double> dist = {M[0][0], M[0][1], M[0][2]};
+	std::vector<double> i{0, 1, 2, 3};
+	std::vector<double> w{M[0][0], M[0][1], M[0][2]};
+	std::piecewise_constant_distribution<> dist(i.begin(), i.end(), w.begin());
 
-	int next_index = dist(mt);
+	int next_index = (int) dist(mt);
 
 
 	if (next_index == 0) {
@@ -92,9 +94,13 @@ void MonteCarlo::proba_step() {
 		next_edge = v->getEdge(n_start);
 	}
 	else if (next_index == 1) {
+		D_->switchDimer(d[0]);
+		D_->switchDimer(d[1]);
 		next_edge = d[1];
 	}
 	else if (next_index == 2) {
+		D_->switchDimer(d[0]);
+		D_->switchDimer(d[2]);
 		next_edge = d[2];
 	}
 
@@ -135,6 +141,7 @@ void MonteCarlo::map_dimer_to_spin() {
 		}
 	}
 }
+
 // Update the neighbor of a Spin from a dimer configuration.
 void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
 	int dir2 = (dir + 1) % 6;
@@ -191,10 +198,6 @@ void MonteCarlo::run_algorithm() {
 
 }
 
-double MonteCarlo::getWeight() {
-	return 0;
-}
-
 void MonteCarlo::update_winding_number() {
 	DimerEdge* last_edge = worm_.back();
 
@@ -234,7 +237,7 @@ std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
 	std::vector< std::vector<double>> A(3, std::vector<double>(3, 0));
 
 	double W_max = *std::max_element(W.begin(), W.end()); // max of W
-	int i_max = std::distance(std::begin(W), W_max); // index of max element
+	int i_max = std::distance(std::begin(W), std::max_element(W.begin(), W.end())); // index of max element
 	double W_other = 0;
 	vector<int> m(2,0);
 	int j = 0;

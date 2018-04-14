@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/DualLattice.cpp" afterPath="$PROJECT_DIR$/DualLattice.cpp" />
       <change beforePath="$PROJECT_DIR$/DualLattice.h" afterPath="$PROJECT_DIR$/DualLattice.h" />
+      <change beforePath="$PROJECT_DIR$/DualLattice.o" afterPath="$PROJECT_DIR$/DualLattice.o" />
+      <change beforePath="$PROJECT_DIR$/MCMCTest.o" afterPath="$PROJECT_DIR$/MCMCTest.o" />
       <change beforePath="$PROJECT_DIR$/MonteCarlo.cpp" afterPath="$PROJECT_DIR$/MonteCarlo.cpp" />
       <change beforePath="$PROJECT_DIR$/MonteCarlo.h" afterPath="$PROJECT_DIR$/MonteCarlo.h" />
-      <change beforePath="$PROJECT_DIR$/SpinLattice.cpp" afterPath="$PROJECT_DIR$/SpinLattice.cpp" />
       <change beforePath="$PROJECT_DIR$/SpinLattice.h" afterPath="$PROJECT_DIR$/SpinLattice.h" />
+      <change beforePath="$PROJECT_DIR$/SpinLattice.o" afterPath="$PROJECT_DIR$/SpinLattice.o" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />

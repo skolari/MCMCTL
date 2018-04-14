@@ -27,6 +27,13 @@ public:
 
 	// Getters and Setters
 	inline double get_Energy() { return Energy_; }
+	inline double get_Ji(int i) {
+		if ( i == 1 ) return J1_;
+		if ( i == 2 ) return J2_;
+		if ( i == 3 ) return J3_;
+		else return 0;
+	}
+
 	inline double get_Spin(int i, int j) const { return S_[i][j]->getSpin(); }
 	Spin* get_Spin_pointer(int i, int j) const;
 	void set_Spin(Spin* S, double val);

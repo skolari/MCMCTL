@@ -34,8 +34,10 @@ public:
 	std::vector<int> SpinDirDualNode(int i, int j, int dir) const;
 	std::vector< DimerEdge* > get_d1_d2(DimerEdge* d0);
 	std::vector< DimerEdge* > get_s_dimer(std::vector<DimerEdge*> d);
-	double get_local_weight(std::vector< DimerEdge* > d, std::vector< DimerEdge* > s);
+	std::vector< double > get_local_weight(DimerEdge* d0);
 
+	inline double get_energy() { return Energy_; }
+	inline void add_energy(double val) { Energy_ += val; }
 protected:
 	// (i, j) indices of Dimer Lattice, returns coordinates in Ajd matrix.
 	inline int getDadjInd(int i, int j) const
@@ -47,8 +49,9 @@ protected:
 	std::vector< std::vector<double> > getDadj() const;
 
 private:
-	std::vector< std::vector< DimerNode* > > Dual_; //
+	std::vector< std::vector< DimerNode* > > Dual_;
 	SpinLattice* S_;
+	double Energy_;
 };
 
 #endif /* DUALLATTICE_H_ */
