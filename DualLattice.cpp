@@ -286,3 +286,8 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d) {
 	return s;
 }
 
+double DualLattice::get_local_weight(vector< DimerEdge* > d,vector< DimerEdge* > s)
+{
+	double w = 0;
+	return w;
+}

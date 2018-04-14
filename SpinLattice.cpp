@@ -202,10 +202,12 @@ Spin* SpinLattice::get_Spin_pointer(int i, int j) const
 }
 
 
-void SpinLattice::update_Energy() {
+void SpinLattice::update_Energy()
+{
 	Energy_ = this->calculate_Energy();
 }
 
-void SpinLattice::update_Energy(double val) {
+void SpinLattice::update_Energy(double val)
+{
 	Energy_ = Energy_ + val;
 }

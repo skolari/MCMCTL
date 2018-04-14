@@ -10,6 +10,9 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <iterator>
+
 #include "SpinLattice.h"
 #include "DualLattice.h"
 #include "DimerEdge.h"
@@ -36,11 +39,18 @@ public:
 		return entry_node_;
 	}
 
-	inline int get_winding_number() const {
-		return winding_number_;
+	inline int get_winding_number_vertical() const {
+		return winding_number_vertical;
 	}
 
-	double getWeight();
+	inline int get_winding_number_horizontal() const {
+			return winding_number_horizontal;
+		}
+
+	// Probastep matrixes
+	std::vector< std::vector<double>> get_M(std::vector <double> W);
+	std::vector <double> getWeight();
+
 	void update_spin_neighbor_dir(int i, int j, int dir);
 	void update_winding_number();
 private:
@@ -49,9 +59,9 @@ private:
 
 	DimerNode* entry_node_;
 	std::vector<DimerEdge*> worm_;
-	int winding_number_;
-	// TODO winding number
 
+	int winding_number_horizontal;
+	int winding_number_vertical;
 	// Deg_, N_
 	int Deg_;
 	int N_;

@@ -20,7 +20,8 @@ MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo)
 	dist_N = std::uniform_int_distribution<>(0, S_->get_N() -  2);
 	dist_2N = std::uniform_int_distribution<>(0, 2 * (S_->get_N() - 1) - 1);
 	entry_node_ = NULL;
-	winding_number_ = 0;
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
 
 	// random
 	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
@@ -55,6 +56,7 @@ void MonteCarlo::init_update() {
 
 // maybe there is a more efficient way.
 void MonteCarlo::myopic_step() {
+
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
 	DimerNode* start_node = last_edge->getStart();
@@ -66,14 +68,37 @@ void MonteCarlo::myopic_step() {
 		rnd = dist_3(mt);
 		next_edge = end_node->getEdge(rnd);
 		new_end = next_edge->getEnd();
-	} while(new_end != start_node);
+	} while(new_end == start_node);
 
 	worm_.push_back(next_edge);
 	this->update_winding_number();
 }
 
 void MonteCarlo::proba_step() {
+	DimerEdge* d0 = worm_.back();
+	DimerEdge* next_edge = d0;
 
+	std::vector< DimerEdge* > d = D_->get_d1_d2(d0);
+	std::vector <double> W = this->getWeight();
+	std::vector< std::vector<double>> M = this->get_M(W);
+	std::discrete_distribution<double> dist = {M[0][0], M[0][1], M[0][2]};
+
+	int next_index = dist(mt);
+
+
+	if (next_index == 0) {
+		DimerNode* v = d0->getEnd();
+		DimerNode* n_start = d0->getStart();
+		next_edge = v->getEdge(n_start);
+	}
+	else if (next_index == 1) {
+		next_edge = d[1];
+	}
+	else if (next_index == 2) {
+		next_edge = d[2];
+	}
+
+	worm_.push_back(next_edge);
 	this->update_winding_number();
 }
 
@@ -143,11 +168,14 @@ void MonteCarlo::create_update() {
 	}
 	while(end_node != entry_node_);
 
-	if (std::abs(winding_number_) % 2 == 0) {
+	if ((std::abs(winding_number_horizontal) % 2 == 0)
+			&& (std::abs(winding_number_vertical) % 2 == 0)) {
 		this->map_dimer_to_spin();
-		winding_number_ = 0;
+		winding_number_horizontal = 0;
+		winding_number_vertical = 0;
 	}
-	else if (std::abs(winding_number_) % 2 == 1) {
+	else if ((std::abs(winding_number_horizontal) % 2 == 1)
+			&& (std::abs(winding_number_vertical) % 2 == 1)) {
 		this->create_update(); // not ideal
 	}
 }
@@ -169,19 +197,80 @@ double MonteCarlo::getWeight() {
 
 void MonteCarlo::update_winding_number() {
 	DimerEdge* last_edge = worm_.back();
+
 	int j_last_edge_start = last_edge->getStart()->getPos(1);
 	int j_last_edge_end = last_edge->getEnd()->getPos(1);
 	int delta_j = j_last_edge_start - j_last_edge_end;
 
+	int i_last_edge_start = last_edge->getStart()->getPos(0);
+	int i_last_edge_end = last_edge->getEnd()->getPos(0);
+	int delta_i = i_last_edge_start - i_last_edge_end;
+
+	//horizontal update
+	if ( delta_i >= Deg_) {
+			winding_number_horizontal += 1;
+	}
+	if ( delta_i >= -Deg_){
+		winding_number_horizontal -= 1;
+	}
+
+	// vertical uptdate
 	if ( delta_j == (N_ - 2 )) {
-		winding_number_ += 1;
+		winding_number_vertical += 1;
 	}
 	if ( delta_j == -(N_- 2)){
-		winding_number_ -= 1;
+		winding_number_vertical -= 1;
 	}
 }
 
 void MonteCarlo::printout(std::string suppl){
 	S_->Printout(suppl);
 	D_->Printout(suppl);
+}
+
+std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
+{
+	std::vector< std::vector<double>> M(3, std::vector<double>(3, 0));
+	std::vector< std::vector<double>> A(3, std::vector<double>(3, 0));
+
+	double W_max = *std::max_element(W.begin(), W.end()); // max of W
+	int i_max = std::distance(std::begin(W), W_max); // index of max element
+	double W_other = 0;
+	vector<int> m(2,0);
+	int j = 0;
+
+	for (int i = 0; i < 3; i ++) {
+		if (i != i_max){
+			W_other += W[i];
+			m[j] = i;
+			j += 1;
+		}
+	}
+
+	if (W_max <= W_other) {
+		A[0][1] = 0.5 * (W[0] + W[1] - W[2]);
+		A[1][0] = A[0][1];
+
+		A[0][2] = 0.5 * ( W[0] + W[2] - W[1]);
+		A[2][0] = A[0][2];
+
+		A[1][2] = 0.5 * ( W[1] + W[2] - W[0]);
+		A[2][1] = A[1][2];
+	} else {
+		A[i_max][i_max] = W_max - W_other;
+
+		A[m[0]][i_max] = W[m[0]];
+		A[i_max][m[0]] = A[m[0]][i_max];
+
+		A[m[1]][i_max] = W[m[1]];
+		A[i_max][m[1]] = A[m[1]][i_max];
+	}
+
+	for ( int i = 0; i < 3; i++ ) {
+		for ( int j = 0; j < 3; j++ ) {
+			M[i][j] = A[i][j] / W[i];
+		}
+	}
+
+	return M;
 }

@@ -35,17 +35,20 @@ public:
 	bool ifInsideLattice(int i, int j);
 	std::vector<int> step_dir(int i, int j, int d);
 	std::vector<int> fix_bc(int i, int j) const;
+
 protected:
 	// Energy methods
 	double calculate_Energy();
 	void update_Energy();
 	void update_Energy(double val);
+
 private:
-	std::vector< std::vector<Spin*> > S_;	// Spin lattice S(q, r) axial coordinates
+	std::vector< std::vector<Spin*> > S_;
 	double Energy_;
 	double J1_;
 	double J2_;
 	double J3_;
+
 };
 
 
