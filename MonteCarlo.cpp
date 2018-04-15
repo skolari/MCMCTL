@@ -43,7 +43,8 @@ void MonteCarlo::init_update() {
 	int rnd = 0;
 
 	do {
-		rnd_i = dist_2N(mt);
+		rnd_i = 2 * dist_N(mt);
+		// rnd_i = dist_2N(mt);
 		rnd_j = dist_N(mt);
 	} while(D_->getDimerNode(rnd_i, rnd_j)->numberEdges() == 0);
 
@@ -87,7 +88,6 @@ void MonteCarlo::proba_step() {
 
 	int next_index = (int) dist(mt);
 
-
 	if (next_index == 0) {
 		DimerNode* v = d0->getEnd();
 		DimerNode* n_start = d0->getStart();
@@ -108,56 +108,12 @@ void MonteCarlo::proba_step() {
 	this->update_winding_number();
 }
 
-void MonteCarlo::map_dimer_to_spin() {
-	std::vector<int> coord1(2);
-	std::vector<int> coord2(2);
-	// update vertical Spins
-	int i = 0;
-	for (int j = 0; j < Deg_; j++) {
-		i = Deg_- j;
-		if(S_->ifInsideLattice(i, j)) {
-			this->update_spin_neighbor_dir(i, j, 4);
-		}
-	}
-	for (int j = Deg_; j < N_ - 2; j++) {
-		i = 0;
-		this->update_spin_neighbor_dir(i, j, 5);
-	}
-	// update horizontal Spins
-
-	double dimer = 0;
-	double val = 0;
-	for (int j = Deg_; j >= 0; j--) {
-		for (int i = Deg_ - j; i < N_ - 1; i++){
-			if(S_->ifInsideLattice(i, j)) {
-				this->update_spin_neighbor_dir(i, j, 0);
-			}
-		}
-	}
-
-	for (int j = Deg_ + 1; j < N_ - 1; j++) {
-		for (int i = 0; i < N_ + Deg_ - j - 1; i++){
-			if(S_->ifInsideLattice(i, j)) {
-				this->update_spin_neighbor_dir(i, j, 0);
-			}
-		}
-	}
-
-}
-
-// Update the neighbor of a Spin from a dimer configuration.
-void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
-	double val = 0;
-	DimerEdge* dimer = S_->get_Spin_pointer(i, j)->getDimer(dir);
-	double d = dimer->getDimer();
-	val = d * S_->get_Spin(i, j);
-	dimer->getSpin_left()->setSpin(val);
-}
 
 void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
+
 	do {
 		this->myopic_step();
 		this->proba_step();
@@ -266,4 +222,50 @@ std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
 	}
 
 	return M;
+}
+
+void MonteCarlo::map_dimer_to_spin() {
+	std::vector<int> coord1(2);
+	std::vector<int> coord2(2);
+	// update vertical Spins
+	int i = 0;
+	for (int j = 0; j < Deg_; j++) {
+		i = Deg_- j;
+		if(S_->ifInsideLattice(i, j)) {
+			this->update_spin_neighbor_dir(i, j, 4);
+		}
+	}
+	for (int j = Deg_; j < N_ - 2; j++) {
+		i = 0;
+		this->update_spin_neighbor_dir(i, j, 5);
+	}
+	// update horizontal Spins
+
+	double dimer = 0;
+	double val = 0;
+	for (int j = Deg_; j >= 0; j--) {
+		for (int i = Deg_ - j; i < N_ - 2; i++){
+			if(S_->ifInsideLattice(i, j)) {
+				this->update_spin_neighbor_dir(i, j, 0);
+			}
+		}
+	}
+
+	for (int j = Deg_ + 1; j < N_ - 1; j++) {
+		for (int i = 0; i < N_ + Deg_ - j - 2; i++){
+			if(S_->ifInsideLattice(i, j)) {
+				this->update_spin_neighbor_dir(i, j, 0);
+			}
+		}
+	}
+
+}
+
+// Update the neighbor of a Spin from a dimer configuration.
+void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
+	double val = 0;
+	DimerEdge* dimer = S_->get_Spin_pointer(i, j)->getDimer(dir);
+	double d = dimer->getDimer();
+	val = d * S_->get_Spin(i, j);
+	dimer->getSpin_left()->setSpin(val);
 }
