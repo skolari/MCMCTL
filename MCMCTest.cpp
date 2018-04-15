@@ -9,9 +9,10 @@ using namespace std;
 int main()
 {	
 	int Deg = 5;
-	MonteCarlo* M = new MonteCarlo(Deg, 1, 0);
+	MonteCarlo* M = new MonteCarlo(Deg, 1, 0, 0);
+	M->printout("1");
 	M->run_algorithm();
-	M->printout("33");
+	M->printout("2");
 	cout << "Printout complete" << endl;
 	/*
 	// SpinLattice Test;

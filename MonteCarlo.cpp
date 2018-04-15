@@ -8,14 +8,14 @@
 #include "MonteCarlo.h"
 using namespace std;
 
-MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo)
+MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3)
 	: worm_(), N_thermal_(N_thermal),
 	  N_algo_(N_algo),
 	  mt(rd()),
 	  dist_2(std::uniform_int_distribution<>(0, 1)),
 	  dist_3(std::uniform_int_distribution<>(0, 2))
 {
-	S_ = new SpinLattice(Deg);
+	S_ = new SpinLattice(Deg, J1, J2, J3);
 	D_ = new DualLattice(Deg, S_);
 	dist_N = std::uniform_int_distribution<>(0, S_->get_N() -  2);
 	dist_2N = std::uniform_int_distribution<>(0, 2 * (S_->get_N() - 1) - 1);
@@ -119,54 +119,45 @@ void MonteCarlo::map_dimer_to_spin() {
 			this->update_spin_neighbor_dir(i, j, 4);
 		}
 	}
-	for (int j = Deg_; j < N_ - 1; j++) {
+	for (int j = Deg_; j < N_ - 2; j++) {
 		i = 0;
 		this->update_spin_neighbor_dir(i, j, 5);
 	}
 	// update horizontal Spins
+
 	double dimer = 0;
 	double val = 0;
 	for (int j = Deg_; j >= 0; j--) {
-		for (int i = Deg_ - j; i < N_; i++){
+		for (int i = Deg_ - j; i < N_ - 1; i++){
 			if(S_->ifInsideLattice(i, j)) {
 				this->update_spin_neighbor_dir(i, j, 0);
 			}
 		}
 	}
-	for (int j = Deg_ + 1; j < N_; j++) {
-		for (int i = 0; i < N_ + Deg_ - j; i++){
+
+	for (int j = Deg_ + 1; j < N_ - 1; j++) {
+		for (int i = 0; i < N_ + Deg_ - j - 1; i++){
 			if(S_->ifInsideLattice(i, j)) {
 				this->update_spin_neighbor_dir(i, j, 0);
 			}
 		}
 	}
+
 }
 
 // Update the neighbor of a Spin from a dimer configuration.
 void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
-	int dir2 = (dir + 1) % 6;
 	double val = 0;
-	std::vector<int> coord1 = D_->SpinDirDualNode(i, j, dir);
-	std::vector<int> coord2 = D_->SpinDirDualNode(i, j, dir2);
-	DimerNode* start = D_->getDimerNode(coord1[0], coord1[1]);
-	DimerNode* end = D_->getDimerNode(coord2[0], coord2[1]);
-	double dimer = start->getEdge(end)->getDimer();
-
-	coord1 = S_->step_dir(i, j, dir);
-	if (dimer == 1) {
-		val = S_->get_Spin(i, j);
-		S_->set_Spin(coord1[0], coord1[1], val);
-	} else if (dimer == -1) {
-		val = (-1) * S_->get_Spin(i, j);
-		S_->set_Spin(coord1[0], coord1[1], val);
-	}
+	DimerEdge* dimer = S_->get_Spin_pointer(i, j)->getDimer(dir);
+	double d = dimer->getDimer();
+	val = d * S_->get_Spin(i, j);
+	dimer->getSpin_left()->setSpin(val);
 }
 
 void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
-
 	do {
 		this->myopic_step();
 		this->proba_step();
@@ -181,9 +172,8 @@ void MonteCarlo::create_update() {
 		winding_number_horizontal = 0;
 		winding_number_vertical = 0;
 	}
-	else if ((std::abs(winding_number_horizontal) % 2 == 1)
-			&& (std::abs(winding_number_vertical) % 2 == 1)) {
-		this->create_update(); // not ideal
+	else {
+		this->create_update();
 	}
 }
 

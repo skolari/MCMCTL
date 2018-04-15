@@ -15,6 +15,7 @@
 // always from entry true to false
 
 class DimerNode;
+class Spin;
 
 class DimerEdge {
 public:
@@ -41,7 +42,7 @@ public:
 	}
 
 	inline Spin* getSpin_left() {
-		return Spin_right_;
+		return Spin_left_;
 	}
 
 private:

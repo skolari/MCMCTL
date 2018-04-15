@@ -44,7 +44,7 @@ DualLattice::DualLattice(int Deg, SpinLattice* S)
 
 					DimerEdge* edge = new DimerEdge(start, end, Spin_right, Spin_left);
 					Dual_[coord[0]][coord[1]]->addEdge(edge);
-
+					Spin_right->setDimer(edge, dir);
 				}
 			}
 		}
@@ -201,7 +201,7 @@ vector< DimerEdge* > DualLattice::get_d1_d2(DimerEdge* d0)
 
 	vector <DimerEdge*> edges = pc->getEdges();
 	for (auto edge : edges) {
-		if (e != edge->getStart()) {
+		if (e != edge->getEnd()) {
 			if ( edge->getSpin_right()  == d0->getSpin_right() ) {
 				d1 = edge;
 			}
@@ -210,6 +210,11 @@ vector< DimerEdge* > DualLattice::get_d1_d2(DimerEdge* d0)
 			}
 			else {
 				cerr << "edge is not connected" << endl;
+				cerr << "d0 left p_0: " << d0->getSpin_left()->getPos(0) << ", " << d0->getSpin_left()->getPos(1) << endl;
+				cerr << "d0 right p_0: " << d0->getSpin_right()->getPos(0) << ", " << d0->getSpin_right()->getPos(1) << endl;
+				cerr << "edge left p_0: " << edge->getSpin_left()->getPos(0) << ", " << edge->getSpin_left()->getPos(1) << endl;
+				cerr << "edge right p_0: " << edge->getSpin_right()->getPos(0) << ", " << edge->getSpin_right()->getPos(1) << endl;
+
 			}
 		}
 	}

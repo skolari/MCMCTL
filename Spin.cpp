@@ -8,7 +8,7 @@
 #include "Spin.h"
 
 Spin::Spin(int i, int j, double Spin)
-	: Spin_(Spin), Pos_(2, 0), Neighbor_(6, NULL)
+	: Spin_(Spin), Pos_(2, 0), Neighbor_(6, NULL), Dimer_(6, NULL)
 {
 	Pos_[0] = i;
 	Pos_[1] = j;
@@ -23,10 +23,16 @@ void Spin::setSpin(double newSpin)
 	Spin_ = newSpin;
 }
 
+
+
 // direction dir goes from 0 to 5
 void Spin::addNeighbor(Spin* newNeigh, int dir){
 	if(newNeigh == NULL) std::cerr << "newNeigh must not be empty" << std::endl;
 	Neighbor_[dir] = newNeigh;
 }
 
+void Spin::setDimer(DimerEdge* newDimer, int dir){
+	if(newDimer == NULL) std::cerr << "newDimer must not be empty" << std::endl;
+	Dimer_[dir] = newDimer;
+}
 

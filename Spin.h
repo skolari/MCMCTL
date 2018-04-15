@@ -10,7 +10,9 @@
 
 #include <vector>
 #include <iostream>
+#include "DimerEdge.h"
 
+class DimerEdge;
 
 class Spin {
 public:
@@ -28,11 +30,17 @@ public:
 	}
 
 	void addNeighbor(Spin* newNeigh, int dir);
+	void setDimer(DimerEdge* newDimer, int dir);
 
 	inline Spin* getNeighbor(int dir) {
 		//assert(Neighbor_[dir] != NULL);
 		return Neighbor_[dir];
 	}
+
+	inline DimerEdge* getDimer(int dir) {
+			return Dimer_[dir];
+	}
+
 	bool operator == (const Spin *other) {
 	    return ((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
 	}
@@ -40,11 +48,12 @@ public:
 	bool operator != (const Spin *other) {
 		return !((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
 	}
+
 private:
 	double Spin_;
 	std::vector<int> Pos_; // maybe add const
 	std::vector<Spin*> Neighbor_;
-
+	std::vector<DimerEdge*> Dimer_;
 };
 
 #endif /* SPIN_H_ */
