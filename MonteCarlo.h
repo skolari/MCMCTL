@@ -32,6 +32,8 @@ public:
 	void map_dimer_to_spin();
 	void create_update();
 	void run_algorithm();
+	void run_parallel_step(int N_temp);
+
 
 	// Printout
 	void printout(std::string suppl);
@@ -47,7 +49,12 @@ public:
 
 	inline int get_winding_number_horizontal() const {
 			return winding_number_horizontal;
-		}
+	}
+
+	inline double get_energy() const {
+		S_->update_Energy(); // should update after every probastep...
+		return S_->get_Energy();
+	}
 
 	// Probastep matrixes
 	std::vector< std::vector<double>> get_M(std::vector <double> W);

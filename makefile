@@ -1,9 +1,9 @@
 CC = g++
-CFLAGS = -std=c++11 -g -O0
+CFLAGS = -std=c++11 -g -O0 -pthread
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
 LIBS =
-OBJ_FILES = MCMCTest.o Lattice.o SpinLattice.o DualLattice.o Spin.o DimerEdge.o DimerNode.o MonteCarlo.o
+OBJ_FILES = MCMCTest.o Lattice.o SpinLattice.o DualLattice.o Spin.o DimerEdge.o DimerNode.o MonteCarlo.o ParallelTempering.h
 
 all : $(EXEC_NAME)
 

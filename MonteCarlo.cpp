@@ -143,6 +143,12 @@ void MonteCarlo::run_algorithm() {
 
 }
 
+void MonteCarlo::run_parallel_step(int N_temp) {
+	for ( int i = 0; i < N_temp; i++ ) {
+		this->create_update();
+	}
+}
+
 void MonteCarlo::update_winding_number() {
 	DimerEdge* last_edge = worm_.back();
 
