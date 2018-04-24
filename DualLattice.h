@@ -23,7 +23,7 @@ public:
 	DualLattice(int Deg, SpinLattice* S);
 	virtual ~DualLattice();
 
-	void Printout(std::string suppl) const;
+	void Printout(std::string outputPath) const;
 	// Getters and Setters
 
 	// Changes the dimer value of both edges

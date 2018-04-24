@@ -23,7 +23,7 @@ public:
 	SpinLattice(int Deg, double J1 = 0, double J2 = 0, double J3 = 0 );
 	virtual ~SpinLattice();
 
-	void Printout(std::string suppl) const;
+	void Printout(std::string outputPath) const;
 
 	// Getters and Setters
 	inline double get_Energy() { return Energy_; }

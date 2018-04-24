@@ -161,9 +161,9 @@ void DualLattice::switchDimer(DimerEdge* edge) {
 }
 
 
-void DualLattice::Printout(string suppl) const
+void DualLattice::Printout(string outputPath) const
 {
-	string path = "./Outputfiles/DimerAdj" + suppl + ".dat";
+	string path = outputPath + "_DimerAdj.dat";
 
 	ofstream *outputFileSpin = new ofstream();
 	outputFileSpin->open(path.c_str());

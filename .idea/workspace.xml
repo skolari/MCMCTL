@@ -2,20 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/.settings/language.settings.xml" afterPath="$PROJECT_DIR$/.settings/language.settings.xml" />
+      <change beforePath="$PROJECT_DIR$/Analysis_Triangular.py" afterPath="$PROJECT_DIR$/Analysis_Triangular.py" />
       <change beforePath="$PROJECT_DIR$/DualLattice.cpp" afterPath="$PROJECT_DIR$/DualLattice.cpp" />
+      <change beforePath="$PROJECT_DIR$/DualLattice.h" afterPath="$PROJECT_DIR$/DualLattice.h" />
       <change beforePath="$PROJECT_DIR$/DualLattice.o" afterPath="$PROJECT_DIR$/DualLattice.o" />
       <change beforePath="$PROJECT_DIR$/MCMCIsingTri.exe" afterPath="$PROJECT_DIR$/MCMCIsingTri.exe" />
       <change beforePath="$PROJECT_DIR$/MCMCTest.cpp" afterPath="$PROJECT_DIR$/MCMCTest.cpp" />
       <change beforePath="$PROJECT_DIR$/MCMCTest.o" afterPath="$PROJECT_DIR$/MCMCTest.o" />
-      <change beforePath="$PROJECT_DIR$/MonteCarlo.cpp" afterPath="$PROJECT_DIR$/MonteCarlo.cpp" />
-      <change beforePath="$PROJECT_DIR$/MonteCarlo.o" afterPath="$PROJECT_DIR$/MonteCarlo.o" />
-      <change beforePath="$PROJECT_DIR$/OutputFiles/DimerAdj1.dat" afterPath="$PROJECT_DIR$/OutputFiles/DimerAdj1.dat" />
-      <change beforePath="$PROJECT_DIR$/OutputFiles/DimerAdj2.dat" afterPath="$PROJECT_DIR$/OutputFiles/DimerAdj2.dat" />
-      <change beforePath="$PROJECT_DIR$/OutputFiles/Spin1.dat" afterPath="$PROJECT_DIR$/OutputFiles/Spin1.dat" />
-      <change beforePath="$PROJECT_DIR$/OutputFiles/Spin2.dat" afterPath="$PROJECT_DIR$/OutputFiles/Spin2.dat" />
-      <change beforePath="$PROJECT_DIR$/TriangularLattice.py" afterPath="$PROJECT_DIR$/TriangularLattice.py" />
+      <change beforePath="$PROJECT_DIR$/SpinLattice.cpp" afterPath="$PROJECT_DIR$/SpinLattice.cpp" />
+      <change beforePath="$PROJECT_DIR$/SpinLattice.h" afterPath="$PROJECT_DIR$/SpinLattice.h" />
+      <change beforePath="$PROJECT_DIR$/SpinLattice.o" afterPath="$PROJECT_DIR$/SpinLattice.o" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -29,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="Analysis_Triangular.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Analysis_Triangular.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="28" />
+            <state relative-caret-position="225">
+              <caret line="9" column="39" lean-forward="false" selection-start-line="9" selection-start-column="39" selection-end-line="9" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -49,10 +45,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TriangularLattice.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TriangularLattice.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TriangularLattice.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1475">
+            <state relative-caret-position="759">
               <caret line="69" column="0" lean-forward="false" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
               <folding />
             </state>
@@ -114,8 +110,8 @@
         <option value="$PROJECT_DIR$/DrawPlot.py" />
         <option value="$PROJECT_DIR$/delphine.py" />
         <option value="$PROJECT_DIR$/DualLattice.py" />
-        <option value="$PROJECT_DIR$/Analysis_Triangular.py" />
         <option value="$PROJECT_DIR$/TriangularLattice.py" />
+        <option value="$PROJECT_DIR$/Analysis_Triangular.py" />
       </list>
     </option>
   </component>
@@ -744,18 +740,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
+    <entry file="file://$PROJECT_DIR$/TriangularLattice.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="28" />
+        <state relative-caret-position="759">
+          <caret line="69" column="0" lean-forward="false" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TriangularLattice.py">
+    <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1475">
-          <caret line="69" column="0" lean-forward="false" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+        <state relative-caret-position="225">
+          <caret line="9" column="39" lean-forward="false" selection-start-line="9" selection-start-column="39" selection-end-line="9" selection-end-column="39" />
           <folding />
         </state>
       </provider>
