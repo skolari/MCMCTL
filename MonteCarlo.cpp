@@ -43,8 +43,7 @@ void MonteCarlo::init_update() {
 	int rnd = 0;
 
 	do {
-		rnd_i = 2 * dist_N(mt);
-		// rnd_i = dist_2N(mt);
+		rnd_i = dist_2N(mt);
 		rnd_j = dist_N(mt);
 	} while(D_->getDimerNode(rnd_i, rnd_j)->numberEdges() == 0);
 

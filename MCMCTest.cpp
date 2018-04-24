@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {	
 	int Deg = 5;
-	MonteCarlo* M = new MonteCarlo(Deg, 1000, 1000, 10);
+	MonteCarlo* M = new MonteCarlo(Deg, 1000, 1000, 2);
 	M->printout("1");
 	M->run_algorithm();
 	M->printout("2");
