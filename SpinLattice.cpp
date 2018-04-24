@@ -51,9 +51,9 @@ SpinLattice::~SpinLattice()
 	// TODO Auto-generated constructor stub
 }
 
-void SpinLattice::Printout(string suppl) const
+void SpinLattice::Printout(string outputPath) const
 {
-	string path = "./Outputfiles/Spin" + suppl + ".dat";
+	string path = outputPath + "_Spin.dat";
 
 	ofstream *outputFileSpin = new ofstream();
 	outputFileSpin->open(path.c_str());

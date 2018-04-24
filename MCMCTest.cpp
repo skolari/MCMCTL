@@ -4,15 +4,29 @@
 #include "Spin.h"
 #include "DualLattice.h"
 #include "MonteCarlo.h"
+#include "ConfigFile.hpp"
+#include "ConfigFile.tpp"
+
+
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {	
-	int Deg = 5;
+	std::string inputPath = "configuration.in";
+	if(argc>1){
+	    inputPath=argv[1];
+	}
+
+	ConfigFile configFile(inputPath);
+	int Deg = configFile.get<int>("Deg");
+	string outputPath = configFile.get<std::string>("outputPath");
+
 	MonteCarlo* M = new MonteCarlo(Deg, 1000, 1000, 2);
-	M->printout("1");
+
+	M->printout(outputPath);
 	M->run_algorithm();
-	M->printout("2");
+	M->printout(outputPath);
+
 	cout << "Printout complete" << endl;
 	/*
 	// SpinLattice Test;
