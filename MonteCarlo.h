@@ -56,6 +56,19 @@ public:
 		return S_->get_Energy();
 	}
 
+	inline double get_Ji(int i) {
+		if ( i == 1 ) return S_->get_Ji(1);
+		if ( i == 2 ) return S_->get_Ji(2);
+		if ( i == 3 ) return S_->get_Ji(3);
+		else return 0;
+	}
+
+	inline void set_Ji(int i, double val) {
+		if ( i == 1 ) return S_->set_Ji(1, val);
+		if ( i == 2 ) return S_->set_Ji(2, val);
+		if ( i == 3 ) return S_->set_Ji(3, val);
+	}
+
 	// Probastep matrixes
 	std::vector< std::vector<double>> get_M(std::vector <double> W);
 

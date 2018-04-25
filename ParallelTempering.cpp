@@ -78,15 +78,25 @@ void ParallelTempering::tempering_switch(int i, int j) {
 	MonteCarlo* M2 = Simulations_[j];
 	double E1 = M1->get_energy();
 	double E2 = M2->get_energy();
+
 	if (E1 > E2) {
-		this->J_switch(M1, M2);
+		this->J_swap(i, j);
 	} else {
 		// use random device,, update all constructors with random device.
 	}
+
 }
 
-void ParallelTempering::J_switch(MonteCarlo* M1, MonteCarlo* M2) {
+void ParallelTempering::J_swap(int i, int j) {
+	double J_temp;
 
+	for ( int k = 0; k < 3; k++) {
+		J_temp = Simulations_[i]->get_Ji(k);
+		Simulations_[i]->set_Ji(k, Simulations_[j]->get_Ji(k));
+		Simulations_[j]->set_Ji(k, J_temp);
+	}
+
+	std::swap(Simulations_[i],Simulations_[j]);
 }
 
 } /* namespace std */

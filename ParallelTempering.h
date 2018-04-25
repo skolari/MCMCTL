@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <thread>
+#include <algorithm>
 #include "MonteCarlo.h"
 
 class ParallelTempering {
@@ -23,7 +24,7 @@ public:
 	void run();
 	void algorithm_step();
 	void tempering_switch(int i, int j);
-	void J_switch(MonteCarlo* M1, MonteCarlo* M2);
+	void J_swap(int i, int j);
 
 private:
 	std::vector J1_;
