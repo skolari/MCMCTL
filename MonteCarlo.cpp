@@ -230,8 +230,6 @@ std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
 }
 
 void MonteCarlo::map_dimer_to_spin() {
-	std::vector<int> coord1(2);
-	std::vector<int> coord2(2);
 	// update vertical Spins
 	int i = 0;
 	for (int j = 0; j < Deg_; j++) {

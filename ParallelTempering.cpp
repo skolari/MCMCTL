@@ -22,9 +22,12 @@ ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_
 	}
 
 	for (int i = 0; i < N_simul; i++) {
-		J1_[i] = beta_start + (i - 1) * (beta_end - beta_start) / (N_s - 1) * J1_const_;
-		J2_[i] = beta_start + (i - 1) * (beta_end - beta_start) / (N_s - 1) * J2_const_;
-		J3_[i] = beta_start + (i - 1) * (beta_end - beta_start) / (N_s - 1) * J3_const_;
+		beta_[i] = beta_start + (i - 1) * (beta_end - beta_start) / (N_s - 1);
+	}
+	for (int i = 0; i < N_simul; i++) {
+		J1_[i] = beta_[i] * J1_const_;
+		J2_[i] = beta_[i] * J2_const_;
+		J3_[i] = beta_[i] * J3_const_;
 	}
 
 	for (int i = 0; i < N_simul; i++) {
@@ -39,15 +42,12 @@ ParallelTempering::~ParallelTempering() {
 void ParallelTempering::run() {
 
 	// thermalisation
-	int N = (int) N_thermal_/10;
-
-	for ( int i = 0; i < N; i++ ) {
+	for ( int i = 0; i < N_thermal_; i++ ) {
 		this->algorithm_step();
 	}
 
 	// algorithm
-	N = (int) N_algo_/10;
-	for ( int i = 0; i < N; i++ ) {
+	for ( int i = 0; i < N_algo_; i++ ) {
 		this->algorithm_step();
 	}
 }
@@ -58,8 +58,6 @@ void ParallelTempering::algorithm_step() {
 
 	#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
-        const int id = omp_get_thread_num();
-
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}
 
@@ -105,5 +103,27 @@ void ParallelTempering::printout(std::string OutputPath) {
 		OutputPath_new  = OutputPath + s;
 		Simulations_[i]->printout(OutputPath_new);
 	}
+	this->PrintoutEnergy(OutputPath);
 }
 
+void ParallelTempering::PrintoutEnergy(std::string OutputPath) const
+{
+	string path = OutputPath + "_Energy.dat";
+
+	ofstream *outputFileSpin = new ofstream();
+	outputFileSpin->open(path.c_str());
+
+	if (!outputFileSpin->is_open())
+	{
+		delete outputFileSpin;
+		outputFileSpin = NULL;
+	}
+
+	double E = 0;
+	for (int i = 0; i < N_simul_; ++i) {
+		E = Simulations_[i]->get_S()->get_Energy();
+		*outputFileSpin << beta_[i] << "\t" << E << endl;
+	}
+	outputFileSpin->close();
+	delete outputFileSpin;
+}

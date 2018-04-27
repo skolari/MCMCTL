@@ -70,6 +70,10 @@ public:
 		if ( i == 3 ) return S_->set_Ji(3, val);
 	}
 
+	inline SpinLattice* get_S() {
+		return S_;
+	}
+
 	// Probastep matrixes
 	std::vector< std::vector<double>> get_M(std::vector <double> W);
 

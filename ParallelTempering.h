@@ -17,7 +17,7 @@
 class ParallelTempering {
 public:
 	ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp,
-			double J1_, double J2_, double J3_,
+			double J1, double J2, double J3,
 			double beta_start, double beta_end);
 
 	virtual ~ParallelTempering();
@@ -29,6 +29,8 @@ public:
 
 	// Printout
 	void printout(std::string OutputPath);
+	void PrintoutEnergy(std::string OutputPath) const;
+
 private:
 
 	int Deg_;
