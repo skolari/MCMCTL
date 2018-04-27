@@ -17,8 +17,8 @@
 class ParallelTempering {
 public:
 	ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp,
-			double J1_start, double J2_start, double J3_start,
-			double J1_end, double J2_end, double J3_end);
+			double J1_, double J2_, double J3_,
+			double beta_start, double beta_end);
 
 	virtual ~ParallelTempering();
 
@@ -27,6 +27,8 @@ public:
 	void tempering_switch(int i, int j);
 	void J_swap(int i, int j);
 
+	// Printout
+	void printout(std::string OutputPath);
 private:
 
 	int Deg_;
@@ -34,7 +36,12 @@ private:
 	int N_thermal_;
 	int N_algo_;
 	int N_temp_;
+	double J1_const_;
+	double J2_const_;
+	double J3_const_;
 
+
+	std::vector<double> beta_;
 	std::vector<double> J1_;
 	std::vector<double> J2_;
 	std::vector<double> J3_;

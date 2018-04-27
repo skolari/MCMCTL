@@ -9,8 +9,10 @@
 
 using namespace std;
 
-ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, double J1_start, double J2_start, double J3_start, double J1_end, double J2_end, double J3_end)
-	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), J1_(N_simul, 0), J2_(N_simul, 0), J3_(N_simul, 0), Simulations_(N_simul, NULL)
+ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp,
+		double J1, double J2, double J3,
+		double beta_start, double beta_end)
+	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), J1_const_(J1), J2_const_(J2), J3_const_(J3), beta_(N_simul, 0), J1_(N_simul, 0), J2_(N_simul, 0), J3_(N_simul, 0), Simulations_(N_simul, NULL)
 {
 	// TODO Auto-generated constructor stub
 	int N_s = N_simul;
@@ -20,17 +22,13 @@ ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_
 	}
 
 	for (int i = 0; i < N_simul; i++) {
-		J1_[i] = J1_start + (i - 1) * (J1_end - J1_start) / (N_s - 1);
-		J2_[i] = J2_start + (i - 1) * (J2_end - J2_start) / (N_s - 1);
-		J3_[i] = J3_start + (i - 1) * (J3_end - J3_start) / (N_s - 1);
+		J1_[i] = beta_start + (i - 1) * (beta_end - beta_start) / (N_s - 1) * J1_const_;
+		J2_[i] = beta_start + (i - 1) * (beta_end - beta_start) / (N_s - 1) * J2_const_;
+		J3_[i] = beta_start + (i - 1) * (beta_end - beta_start) / (N_s - 1) * J3_const_;
 	}
 
-	double J1, J2, J3;
 	for (int i = 0; i < N_simul; i++) {
-		J1 = J1_[i];
-		J2 = J2_[i];
-		J3 = J3_[i];
-		Simulations_[i] = new MonteCarlo(Deg_, N_thermal, N_algo, J1, J2, J3);
+		Simulations_[i] = new MonteCarlo(Deg_, N_thermal, N_algo, J1_[i], J2_[i], J3_[i]);
 	}
 }
 
@@ -60,6 +58,8 @@ void ParallelTempering::algorithm_step() {
 
 	#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
+        const int id = omp_get_thread_num();
+
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}
 
@@ -93,3 +93,17 @@ void ParallelTempering::J_swap(int i, int j) {
 
 	std::swap(Simulations_[i],Simulations_[j]);
 }
+
+void ParallelTempering::printout(std::string OutputPath) {
+	std::string s = "";
+	std::string OutputPath_new = "";
+	omp_set_num_threads(N_simul_);
+
+	#pragma omp parallel for
+	for (int i = 0; i < N_simul_; i++) {
+		s = std::to_string(i);
+		OutputPath_new  = OutputPath + s;
+		Simulations_[i]->printout(OutputPath_new);
+	}
+}
+

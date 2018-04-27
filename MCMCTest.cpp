@@ -6,9 +6,10 @@
 #include "MonteCarlo.h"
 #include "ConfigFile.hpp"
 #include "ConfigFile.tpp"
+#include "ParallelTempering.h"
 
 
-using namespace std;
+
 
 int main(int argc, char* argv[])
 {	
@@ -19,13 +20,15 @@ int main(int argc, char* argv[])
 
 	ConfigFile configFile(inputPath);
 	int Deg = configFile.get<int>("Deg");
-	string outputPath = configFile.get<std::string>("outputPath");
+	std::string outputPath = configFile.get<std::string>("outputPath");
 
-	MonteCarlo* M = new MonteCarlo(Deg, 1000, 1000, 2);
-
-	M->printout(outputPath);
-	M->run_algorithm();
-	M->printout(outputPath);
+	//MonteCarlo* M = new MonteCarlo(Deg, 1000, 1000, 2);
+	ParallelTempering* P = new ParallelTempering(Deg, 5, 10, 0, 3,
+			0.5, 0, 0,
+			5, 0.5);
+	P->printout(outputPath);
+	P->run();
+	P->printout(outputPath);
 
 	cout << "Printout complete" << endl;
 	return 0;

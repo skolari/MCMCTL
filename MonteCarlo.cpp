@@ -177,9 +177,9 @@ void MonteCarlo::update_winding_number() {
 	}
 }
 
-void MonteCarlo::printout(std::string suppl){
-	S_->Printout(suppl);
-	D_->Printout(suppl);
+void MonteCarlo::printout(std::string OutputPath){
+	S_->Printout(OutputPath);
+	D_->Printout(OutputPath);
 }
 
 std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
