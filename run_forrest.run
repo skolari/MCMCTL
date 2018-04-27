@@ -1,0 +1,44 @@
+#SBATCH --output="MCMCTL.out"
+#SBATCH --error="MCMCTL.err"
+#SBATCH --nodes 1
+#SBATCH --ntasks 1
+#SBATCH --cpus-per-task 28
+#SBATCH --mem 50GB
+#SBATCH --account=fsl
+
+#SBATCH --mail-type ALL
+#SBATCH --mail-user manuel.stathis@epfl.ch
+#SBATCH --time 12:00:00
+
+#working directory
+SCRGD="/scratch/$USER/Runs_MCMCTL"
+SCR="/scratch/$USER/Runs_MCMCTL"
+
+#home directory
+HD="/home/$USER/2018-Ising_triangular/"
+HDR="/home/$USER/2018-Ising_triangular/"
+
+#create the scratch directories to work
+mkdir $SCRGD
+mkdir $SCR
+#copy data from HD to SCR
+cp $HD/*.py $SCR
+
+#go to scratch and run code
+cd $SCR
+
+module load gcc
+
+make
+
+MCMCIsingTri.exe
+
+#create the results directory in home
+mkdir $HDR
+#copy the results to the results directory
+cp $SCR/*.pkl $HDR
+cp $SCR/*.out $HDR
+cp $SCR/*.err $HDR
+#remove the files
+cd $SCRGD
+rm -r $SCR

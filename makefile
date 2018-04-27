@@ -1,8 +1,8 @@
 CC = g++
-CFLAGS = -Wall -std=c++11 -g -O2 -fopenmp
+CFLAGS = -Wall -std=c++11 -O2 -fopenmp -march=haswell
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
-LIBS = C:\MinGW\lib\gcc\mingw32\6.3.0\libgomp.dll.a
+LIBS =
 OBJ_FILES = MCMCTest.o Lattice.o SpinLattice.o DualLattice.o Spin.o DimerEdge.o DimerNode.o MonteCarlo.o ParallelTempering.o
 
 all : $(EXEC_NAME)
