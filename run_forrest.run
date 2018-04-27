@@ -1,3 +1,4 @@
+#!/bin/bash
 #SBATCH --output="MCMCTL.out"
 #SBATCH --error="MCMCTL.err"
 #SBATCH --nodes 1
