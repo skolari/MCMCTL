@@ -128,7 +128,6 @@ vector< vector<double> > DualLattice::getDadj() const{
 	vector<int> coord(2, 0);
 	vector<int> coord2(2, 0);
 	int dir2 = 0;
-	double dimer = 0;
 	int k = 0;
 	int l = 0;
 	for (int j = 0; j < N_; ++j) {

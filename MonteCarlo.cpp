@@ -246,8 +246,6 @@ void MonteCarlo::map_dimer_to_spin() {
 	}
 	// update horizontal Spins
 
-	double dimer = 0;
-	double val = 0;
 	for (int j = Deg_; j >= 0; j--) {
 		for (int i = Deg_ - j; i < N_ - 2; i++){
 			if(S_->ifInsideLattice(i, j)) {

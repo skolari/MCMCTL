@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <iterator>
 #include <cmath>
+#include <random>
 
 #include "SpinLattice.h"
 #include "DualLattice.h"

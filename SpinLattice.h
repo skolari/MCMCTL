@@ -50,7 +50,6 @@ public:
 	std::vector<int> step_dir(int i, int j, int d);
 	std::vector<int> fix_bc(int i, int j) const;
 
-protected:
 	// Energy methods
 	double calculate_Energy();
 	void update_Energy();

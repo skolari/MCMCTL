@@ -8,7 +8,6 @@ Lattice::Lattice(int Deg)
 	// Initialization S_
 	Nc_ = N_ - Deg_;
 	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
-	double rnd = 0;
 }
 
 Lattice::~Lattice()

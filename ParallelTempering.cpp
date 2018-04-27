@@ -7,18 +7,16 @@
 
 #include "ParallelTempering.h"
 
-namespace std {
+using namespace std;
 
-ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp,
-		double J1_start, double J2_start, double J3_start,
-		double J1_end, double J2_end, double J3_end)
-	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), J1_(N_simul), J2_(N_simul), J3_(N_simul), Simulations_(N_simul, NULL)
+ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, double J1_start, double J2_start, double J3_start, double J1_end, double J2_end, double J3_end)
+	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), J1_(N_simul, 0), J2_(N_simul, 0), J3_(N_simul, 0), Simulations_(N_simul, NULL)
 {
 	// TODO Auto-generated constructor stub
 	int N_s = N_simul;
 
 	if (N_simul == 1) {
-		int N_s = 2;
+		N_s = 2;
 	}
 
 	for (int i = 0; i < N_simul; i++) {
@@ -41,7 +39,6 @@ ParallelTempering::~ParallelTempering() {
 }
 
 void ParallelTempering::run() {
-	std::vector<std::thread> threads;
 
 	// thermalisation
 	int N = (int) N_thermal_/10;
@@ -58,15 +55,13 @@ void ParallelTempering::run() {
 }
 
 void ParallelTempering::algorithm_step() {
-	for (int j = 0 ; j < N_simul_ ; j ++) {
-	    threads.push_back(Simulations_[j]->run_parallel_step, N_temp_);
-	}
 
-	for(auto&& i : threads) {
-		i.join();
-	}
+	omp_set_num_threads(N_simul_);
 
-	threads.clear();
+	#pragma omp parallel for
+	for(int i = 0; i < N_simul_; i++) {
+		Simulations_[i]->run_parallel_step(N_temp_);
+	}
 
 	for ( int i = 0 ; i < N_simul_ - 1; i++) {
 		this->tempering_switch(i, i + 1);
@@ -98,5 +93,3 @@ void ParallelTempering::J_swap(int i, int j) {
 
 	std::swap(Simulations_[i],Simulations_[j]);
 }
-
-} /* namespace std */
