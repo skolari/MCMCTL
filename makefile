@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -g -O0 -fopenmp
+CFLAGS = -Wall -std=c++11 -g -O2 -fopenmp
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
 LIBS = C:\MinGW\lib\gcc\mingw32\6.3.0\libgomp.dll.a

@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
 	double J1 = 				configFile.get<double>("J1");
 	double J2 = 				configFile.get<double>("J2");
 	double J3 = 				configFile.get<double>("J3");
-	double beta_start = configFile.get<double>("beta_start");
-	double beta_end = configFile.get<double>("beta_end");
+	double beta_start = 		configFile.get<double>("beta_start");
+	double beta_end = 			configFile.get<double>("beta_end");
 
 	ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, J1, J2, J3, beta_start, beta_end);
 	P->run();

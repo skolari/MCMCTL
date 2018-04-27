@@ -49,8 +49,8 @@ protected:
 	std::vector< std::vector<double> > getDadj() const;
 
 private:
-	std::vector< std::vector< DimerNode* > > Dual_;
 	SpinLattice* S_;
+	std::vector< std::vector< DimerNode* > > Dual_;
 	double Energy_;
 };
 
