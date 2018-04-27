@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -std=c++11 -O2 -fopenmp -march=haswell
+CFLAGS = -Wall -std=c++11 -O2 -fopenmp
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
 LIBS =
