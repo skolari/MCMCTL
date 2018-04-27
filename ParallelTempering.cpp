@@ -121,6 +121,7 @@ void ParallelTempering::PrintoutEnergy(std::string OutputPath) const
 
 	double E = 0;
 	for (int i = 0; i < N_simul_; ++i) {
+		Simulations_[i]->get_S()->update_Energy();
 		E = Simulations_[i]->get_S()->get_Energy();
 		*outputFileSpin << beta_[i] << "\t" << E << endl;
 	}
