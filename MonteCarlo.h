@@ -38,7 +38,7 @@ public:
 
 
 	// Printout
-	void printout(std::string OutputPath);
+	void Printout(std::string OutputPath);
 
 	// getters and setters
 	inline DimerNode* get_entry_node() const {

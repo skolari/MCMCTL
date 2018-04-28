@@ -5,7 +5,6 @@
 #include "ConfigFile.tpp"
 #include "ParallelTempering.h"
 
-
 int main(int argc, char* argv[])
 {	
 	std::string inputPath = "configuration.in";
@@ -29,7 +28,7 @@ int main(int argc, char* argv[])
 
 	ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, J1, J2, J3, beta_start, beta_end);
 	P->run();
-	P->printout(outputPath);
+	P->Printout(outputPath);
 
 	cout << "Printout complete" << endl;
 	return 0;

@@ -10,7 +10,9 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <omp.h>
+#include <random>
 #include <algorithm>
 #include "MonteCarlo.h"
 
@@ -28,11 +30,10 @@ public:
 	void J_swap(int i, int j);
 
 	// Printout
-	void printout(std::string OutputPath);
+	void Printout(std::string OutputPath);
 	void PrintoutEnergy(std::string OutputPath) const;
 
 private:
-
 	int Deg_;
 	int N_simul_;
 	int N_thermal_;
@@ -49,6 +50,12 @@ private:
 	std::vector<double> J3_;
 
 	std::vector<MonteCarlo*> Simulations_;
+
+	// random
+	std::random_device rd;							// Random device // @suppress("Type cannot be resolved")
+	std::mt19937 mt;									// mt19937 // @suppress("Type cannot be resolved")
+	std::uniform_real_distribution<double> dist;		// Uniform real distribution // @suppress("Type cannot be resolved") // @suppress("Symbol is not resolved")
+
 };
 
 

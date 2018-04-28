@@ -177,7 +177,7 @@ void MonteCarlo::update_winding_number() {
 	}
 }
 
-void MonteCarlo::printout(std::string OutputPath){
+void MonteCarlo::Printout(std::string OutputPath){
 	S_->Printout(OutputPath);
 	D_->Printout(OutputPath);
 }
