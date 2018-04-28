@@ -6,8 +6,6 @@
 #include "ParallelTempering.h"
 
 
-
-
 int main(int argc, char* argv[])
 {	
 	std::string inputPath = "configuration.in";

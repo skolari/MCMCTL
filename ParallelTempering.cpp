@@ -95,9 +95,7 @@ void ParallelTempering::J_swap(int i, int j) {
 void ParallelTempering::printout(std::string OutputPath) {
 	std::string s = "";
 	std::string OutputPath_new = "";
-	omp_set_num_threads(N_simul_);
 
-	#pragma omp parallel for
 	for (int i = 0; i < N_simul_; i++) {
 		s = std::to_string(i);
 		OutputPath_new  = OutputPath + s;
