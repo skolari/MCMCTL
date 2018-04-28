@@ -1,7 +1,8 @@
 CC = g++
-CFLAGS = -Wall -std=c++11 -O2 -fopenmp -lgomp
+CFLAGS = -Wall -std=c++11 -O2 -fopenmp
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
+LDFLAGS=-fopenmp 
 LIBS =
 OBJ_FILES = MCMCTest.o Lattice.o SpinLattice.o DualLattice.o Spin.o DimerEdge.o DimerNode.o MonteCarlo.o ParallelTempering.o
 
