@@ -100,10 +100,10 @@ void ParallelTempering::J_swap(int i, int j) {
 void ParallelTempering::Printout(std::string OutputPath) {
 	std::string s = "";
 	std::string OutputPath_new = "";
-
 	for (int i = 0; i < N_simul_; i++) {
 		s = std::to_string(i);
-		OutputPath_new  = OutputPath + s;
+		OutputPath_new  = OutputPath + "nr_" + s + "_";
+		cout << OutputPath_new << endl;
 		Simulations_[i]->Printout(OutputPath_new);
 	}
 	this->PrintoutEnergy(OutputPath);
@@ -112,7 +112,7 @@ void ParallelTempering::Printout(std::string OutputPath) {
 
 void ParallelTempering::PrintoutEnergy(std::string OutputPath) const
 {
-	string path = OutputPath + "_Energy.dat";
+	string path = OutputPath + "Energy.dat";
 
 	ofstream *outputFileSpin = new ofstream();
 	outputFileSpin->open(path.c_str());
@@ -134,7 +134,7 @@ void ParallelTempering::PrintoutEnergy(std::string OutputPath) const
 
 void ParallelTempering::PrintoutMagnetisation(std::string OutputPath) const
 {
-	string path = OutputPath + "_Magnetisation.dat";
+	string path = OutputPath + "Magnetisation.dat";
 
 	ofstream *outputFileSpin = new ofstream();
 	outputFileSpin->open(path.c_str());

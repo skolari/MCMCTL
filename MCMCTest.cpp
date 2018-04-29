@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <ctime>
+#include <boost/filesystem.hpp>
 #include <fstream>
 #include "inc\tinyxml.h"
 #include "ConfigFile.hpp"
@@ -8,10 +10,21 @@
 
 void add_element_to_xml(TiXmlElement * chain, const char * in_value, double val );
 void add_element_to_xml(TiXmlElement * chain, const char * in_value, int val );
-void create_xml(std::string inputPath);
+void add_element_to_xml(TiXmlElement * chain, const char * in_value, std::string s );
+void add_element_to_xml(TiXmlElement * chain, const char * in_value, char* c );
+void create_xml(std::string inputPath, char* time_normal, std::string time_sec);
+
+std::string time_t_to_string(time_t t);
 
 int main(int argc, char* argv[])
 {	
+	// get time
+    std::time_t result = std::time(nullptr);
+	char* time_normal = std::asctime(std::localtime(&result));
+	std::string time_sec = time_t_to_string(result);
+
+
+
 	std::string inputPath = "configuration.in";
 	if(argc>1){
 	    inputPath=argv[1];
@@ -32,11 +45,20 @@ int main(int argc, char* argv[])
 	double beta_end = 			configFile.get<double>("beta_end");
 
 	// create xml
-	create_xml(inputPath);
+	create_xml(inputPath, time_normal, time_sec);
+
 	// run algorithm
 
     //ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, J1, J2, J3, beta_start, beta_end);
 	//P->run();
+	outputPath = outputPath + time_sec;
+	const char* path = outputPath.c_str();
+	boost::filesystem::path dir(path);
+	if(boost::filesystem::create_directory(dir))
+	{
+	    std::cerr<< "Directory Created: "<< outputPath <<std::endl;
+	}
+
 	//P->Printout(outputPath);
 
 	cout << "Printout complete" << endl;
@@ -69,7 +91,14 @@ void add_element_to_xml(TiXmlElement * chain, const char * in_value, std::string
 	chain->LinkEndChild( elem );
 }
 
-void create_xml(std::string inputPath) {
+void add_element_to_xml(TiXmlElement * chain, const char * in_value, char* c ){
+	TiXmlElement* elem = new TiXmlElement( in_value );
+	TiXmlText * text = new TiXmlText( c );
+	elem->LinkEndChild( text );
+	chain->LinkEndChild( elem );
+}
+
+void create_xml(std::string inputPath, char* time_normal, std::string time_sec) {
 	ConfigFile configFile(inputPath);
 
 	int Deg = 					configFile.get<int>("Deg");
@@ -93,8 +122,7 @@ void create_xml(std::string inputPath) {
 	doc.LinkEndChild( param );
 
 	// general
-	//git
-	//time
+	add_element_to_xml(general, "Time", time_normal);
 
 	// param
 	add_element_to_xml(param, "Deg", Deg);
@@ -109,6 +137,14 @@ void create_xml(std::string inputPath) {
 	add_element_to_xml(param, "Beta_end", beta_end);
 
 	// save
-	doc.SaveFile( "madeByHand.xml" );
+	outputPath = outputPath + time_sec +".xml";
+	const char* charray = outputPath.c_str();
+	doc.SaveFile( charray );
+}
 
+std::string time_t_to_string(time_t t)
+{
+    std::stringstream sstr;
+    sstr << t;
+    return sstr.str();
 }

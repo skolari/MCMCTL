@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
-<General />
+<General>
+    <Time>Sun Apr 29 21:42:00 2018&#x0A;</Time>
+</General>
 <Simulation_Parameters>
     <Deg>5</Deg>
     <N_simul>40</N_simul>
