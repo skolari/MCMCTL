@@ -211,3 +211,37 @@ void SpinLattice::update_Energy(double val)
 {
 	Energy_ = Energy_ + val;
 }
+
+double SpinLattice::get_magnetisation_per_spin() {
+	double M  = 0;
+	int count = 0;
+	for (int i = 0; i < N_; i++) {
+		for (int j = 0; j < N_; j++) {
+			if (this->ifInsideLattice(i, j)) {
+				count += 1;
+				M += this->get_Spin(i, j);
+			}
+		}
+	}
+	M = M / count;
+	return M;
+}
+
+int SpinLattice::number_spin() {
+	int count = 0;
+	for (int i = 0; i < N_; i++) {
+		for (int j = 0; j < N_; j++) {
+			if (this->ifInsideLattice(i, j)) {
+				count += 1;
+			}
+		}
+	}
+	return count;
+}
+
+double SpinLattice::get_energy_per_spin() {
+	this->update_Energy();
+	double E = this->get_Energy();
+	int N = this->number_spin();
+	return E / N;
+}

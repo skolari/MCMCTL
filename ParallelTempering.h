@@ -9,6 +9,7 @@
 #define PARALLELTEMPERING_H_
 
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <string>
 #include <omp.h>
@@ -32,6 +33,7 @@ public:
 	// Printout
 	void Printout(std::string OutputPath);
 	void PrintoutEnergy(std::string OutputPath) const;
+	void PrintoutMagnetisation(std::string OutputPath) const;
 
 private:
 	int Deg_;

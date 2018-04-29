@@ -107,6 +107,7 @@ void ParallelTempering::Printout(std::string OutputPath) {
 		Simulations_[i]->Printout(OutputPath_new);
 	}
 	this->PrintoutEnergy(OutputPath);
+	this->PrintoutMagnetisation(OutputPath);
 }
 
 void ParallelTempering::PrintoutEnergy(std::string OutputPath) const
@@ -124,10 +125,32 @@ void ParallelTempering::PrintoutEnergy(std::string OutputPath) const
 
 	double E = 0;
 	for (int i = 0; i < N_simul_; ++i) {
-		Simulations_[i]->get_S()->update_Energy();
-		E = Simulations_[i]->get_S()->get_Energy() / (( 2 * Deg_ + 1) * ( 2 * Deg_ + 1) - Deg_ * (Deg_ + 1) - 2 * (Deg_ + 1) - (Deg_ - 1));
-		*outputFileSpin << beta_[i] << "\t" << E << endl;
+		E = Simulations_[i]->get_S()->get_energy_per_spin();
+		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(3) << beta_[i] << "\t" << E << endl;
 	}
 	outputFileSpin->close();
 	delete outputFileSpin;
 }
+
+void ParallelTempering::PrintoutMagnetisation(std::string OutputPath) const
+{
+	string path = OutputPath + "_Magnetisation.dat";
+
+	ofstream *outputFileSpin = new ofstream();
+	outputFileSpin->open(path.c_str());
+
+	if (!outputFileSpin->is_open())
+	{
+		delete outputFileSpin;
+		outputFileSpin = NULL;
+	}
+
+	double M = 0;
+	for (int i = 0; i < N_simul_; ++i) {
+		M = Simulations_[i]->get_S()->get_magnetisation_per_spin();
+		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(3) << beta_[i] << "\t" << M << endl;
+	}
+	outputFileSpin->close();
+	delete outputFileSpin;
+}
+

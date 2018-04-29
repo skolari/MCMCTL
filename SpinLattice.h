@@ -52,8 +52,12 @@ public:
 
 	// Energy methods
 	double calculate_Energy();
+	double get_energy_per_spin();
+	double get_magnetisation_per_spin();
 	void update_Energy();
 	void update_Energy(double val);
+
+	int number_spin();
 
 private:
 	std::vector< std::vector<Spin*> > S_;

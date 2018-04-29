@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<Parameter>
+    <Deg>5</Deg>
+    <N_simul>40</N_simul>
+</Parameter>
