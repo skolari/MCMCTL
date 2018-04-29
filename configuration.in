@@ -1,12 +1,12 @@
-Deg=5
+Deg=6
 outputPath=./Outputfiles/
 date=26.04.2018
 N_simul=40
-N_thermal=1
-N_algo=1
+N_thermal=200
+N_algo=200
 N_temp=20
 J1=1
 J2=0
 J3=0
 beta_start=0.2
-beta_end=5
+beta_end=7

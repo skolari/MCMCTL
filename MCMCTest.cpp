@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-#include <boost/filesystem.hpp>
 #include <fstream>
 #include "inc\tinyxml.h"
 #include "ConfigFile.hpp"
@@ -49,17 +48,9 @@ int main(int argc, char* argv[])
 
 	// run algorithm
 
-    //ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, J1, J2, J3, beta_start, beta_end);
-	//P->run();
-	outputPath = outputPath + time_sec;
-	const char* path = outputPath.c_str();
-	boost::filesystem::path dir(path);
-	if(boost::filesystem::create_directory(dir))
-	{
-	    std::cerr<< "Directory Created: "<< outputPath <<std::endl;
-	}
-
-	//P->Printout(outputPath);
+    ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, J1, J2, J3, beta_start, beta_end);
+	P->run();
+	P->Printout(outputPath);
 
 	cout << "Printout complete" << endl;
 	return 0;
@@ -123,6 +114,7 @@ void create_xml(std::string inputPath, char* time_normal, std::string time_sec) 
 
 	// general
 	add_element_to_xml(general, "Time", time_normal);
+	add_element_to_xml(general, "Timestamp", time_sec);
 
 	// param
 	add_element_to_xml(param, "Deg", Deg);

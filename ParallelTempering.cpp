@@ -102,8 +102,7 @@ void ParallelTempering::Printout(std::string OutputPath) {
 	std::string OutputPath_new = "";
 	for (int i = 0; i < N_simul_; i++) {
 		s = std::to_string(i);
-		OutputPath_new  = OutputPath + "nr_" + s + "_";
-		cout << OutputPath_new << endl;
+		OutputPath_new  = OutputPath + "nr_" + s;
 		Simulations_[i]->Printout(OutputPath_new);
 	}
 	this->PrintoutEnergy(OutputPath);
