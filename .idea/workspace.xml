@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Analysis_Triangular.py" afterPath="$PROJECT_DIR$/Analysis_Triangular.py" />
-      <change beforePath="$PROJECT_DIR$/DrawPlot.py" afterPath="$PROJECT_DIR$/DrawPlot.py" />
-      <change beforePath="$PROJECT_DIR$/MCMCIsingTri.exe" afterPath="$PROJECT_DIR$/MCMCIsingTri.exe" />
-      <change beforePath="$PROJECT_DIR$/ParallelTempering.cpp" afterPath="$PROJECT_DIR$/ParallelTempering.cpp" />
-      <change beforePath="$PROJECT_DIR$/ParallelTempering.h" afterPath="$PROJECT_DIR$/ParallelTempering.h" />
-      <change beforePath="$PROJECT_DIR$/configuration.in" afterPath="$PROJECT_DIR$/configuration.in" />
-    </list>
+    <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
