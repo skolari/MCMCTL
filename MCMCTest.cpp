@@ -2,7 +2,7 @@
 #include <string>
 #include <ctime>
 #include <fstream>
-#include "inc\tinyxml.h"
+#include "inc/tinyxml.h"
 #include "ConfigFile.hpp"
 #include "ConfigFile.tpp"
 #include "ParallelTempering.h"

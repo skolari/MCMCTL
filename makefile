@@ -3,7 +3,7 @@ CFLAGS = -Wall -std=c++11 -O2 -fopenmp
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
 LDFLAGS= -lgomp
-OBJ_FILES = MCMCTest.o Lattice.o SpinLattice.o DualLattice.o Spin.o DimerEdge.o DimerNode.o MonteCarlo.o ParallelTempering.o inc\tinyxmlerror.o inc\tinyxmlparser.o inc\tinyxml.o inc\tinystr.o  
+OBJ_FILES = MCMCTest.o Lattice.o SpinLattice.o DualLattice.o Spin.o DimerEdge.o DimerNode.o MonteCarlo.o ParallelTempering.o inc/tinyxmlerror.o inc/tinyxmlparser.o inc/tinyxml.o inc/tinystr.o  
 
 all : $(EXEC_NAME) 
 
