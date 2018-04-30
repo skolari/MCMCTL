@@ -33,7 +33,7 @@ public:
 
 	// Printout
 	void Printout(std::string OutputPath);
-	void PrintoutEnergy(std::string OutputPath) const;
+	void Printout_Energy_and_Cv(std::string OutputPath) const;
 	void PrintoutMagnetisation(std::string OutputPath) const;
 
 private:
