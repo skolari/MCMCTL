@@ -8,14 +8,14 @@
 #include "MonteCarlo.h"
 using namespace std;
 
-MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3)
+MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
 	: worm_(), N_thermal_(N_thermal),
 	  N_algo_(N_algo),
 	  mt(rd()),
 	  dist_2(std::uniform_int_distribution<>(0, 1)),
 	  dist_3(std::uniform_int_distribution<>(0, 2))
 {
-	S_ = new SpinLattice(Deg, J1, J2, J3);
+	S_ = new SpinLattice(Deg, J1, J2, J3, Beta);
 	D_ = new DualLattice(Deg, S_);
 	dist_N = std::uniform_int_distribution<>(0, S_->get_N() -  2);
 	dist_2N = std::uniform_int_distribution<>(0, 2 * (S_->get_N() - 1) - 1);

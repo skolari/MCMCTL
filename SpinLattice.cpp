@@ -12,8 +12,8 @@ using namespace std;
 #define R 1
 
 
-SpinLattice::SpinLattice(int Deg, double J1, double J2, double J3)
-	: Lattice(Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3)
+SpinLattice::SpinLattice(int Deg, double J1, double J2, double J3, double Beta)
+	: Lattice(Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3), Beta_(Beta)
 {
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
@@ -42,6 +42,7 @@ SpinLattice::SpinLattice(int Deg, double J1, double J2, double J3)
 			}
 		}
 	}
+	Number_spin_ = this->SpinLattice::number_spin();
 	Energy_ = this->calculate_Energy();
 
 }
@@ -214,19 +215,18 @@ void SpinLattice::update_Energy(double val)
 
 double SpinLattice::get_magnetisation_per_spin() {
 	double M  = 0;
-	int count = 0;
 	for (int i = 0; i < N_; i++) {
 		for (int j = 0; j < N_; j++) {
 			if (this->ifInsideLattice(i, j)) {
-				count += 1;
 				M += this->get_Spin(i, j);
 			}
 		}
 	}
-	M = M / count;
+	M = M / Number_spin_;
 	return M;
 }
 
+// can be optimized
 int SpinLattice::number_spin() {
 	int count = 0;
 	for (int i = 0; i < N_; i++) {
@@ -242,6 +242,5 @@ int SpinLattice::number_spin() {
 double SpinLattice::get_energy_per_spin() {
 	this->update_Energy();
 	double E = this->get_Energy();
-	int N = this->number_spin();
-	return E / N;
+	return E / Number_spin_;
 }

@@ -20,13 +20,17 @@ class Lattice;
 
 class SpinLattice: public Lattice {
 public:
-	SpinLattice(int Deg, double J1 = 0, double J2 = 0, double J3 = 0 );
+	SpinLattice(int Deg, double J1, double J2, double J3, double Beta );
 	virtual ~SpinLattice();
 
 	void Printout(std::string outputPath) const;
 
 	// Getters and Setters
 	inline double get_Energy() { return Energy_; }
+	inline double get_Beta() { return Beta_; }
+	inline void set_Beta(double val) {
+		Beta_ = val;
+	}
 
 	inline double get_Ji(int i) {
 		if ( i == 1 ) return J1_;
@@ -65,7 +69,8 @@ private:
 	double J1_;
 	double J2_;
 	double J3_;
-
+	double Beta_;
+	int Number_spin_;
 };
 
 

@@ -21,13 +21,7 @@ ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_
 	}
 
 	for (int i = 0; i < N_simul; i++) {
-		J1_[i] = beta_[i] * J1_const_;
-		J2_[i] = beta_[i] * J2_const_;
-		J3_[i] = beta_[i] * J3_const_;
-	}
-
-	for (int i = 0; i < N_simul; i++) {
-		Simulations_[i] = new MonteCarlo(Deg_, N_thermal, N_algo, J1_[i], J2_[i], J3_[i]);
+		Simulations_[i] = new MonteCarlo(Deg_, N_thermal, N_algo, J1_const_, J2_const_, J3_const_, beta_[i]);
 	}
 }
 
@@ -93,6 +87,9 @@ void ParallelTempering::J_swap(int i, int j) {
 		Simulations_[i]->set_Ji(k, Simulations_[j]->get_Ji(k));
 		Simulations_[j]->set_Ji(k, J_temp);
 	}
+	double Beta_temp = Simulations_[i]->get_S()->get_Beta();
+	Simulations_[i]->get_S()->set_Beta(Simulations_[j]->get_S()->get_Beta());
+	Simulations_[j]->get_S()->set_Beta(Beta_temp);
 
 	std::swap(Simulations_[i],Simulations_[j]);
 }
