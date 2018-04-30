@@ -29,6 +29,7 @@ public:
 	void algorithm_step();
 	void tempering_switch(int i, int j);
 	void J_swap(int i, int j);
+	void mesure_energy();
 
 	// Printout
 	void Printout(std::string OutputPath);
@@ -44,7 +45,6 @@ private:
 	double J1_const_;
 	double J2_const_;
 	double J3_const_;
-
 
 	std::vector<double> beta_;
 	std::vector<double> J1_;

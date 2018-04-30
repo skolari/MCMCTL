@@ -28,6 +28,8 @@ public:
 	// Getters and Setters
 	inline double get_Energy() { return Energy_; }
 	inline double get_Beta() { return Beta_; }
+	inline int get_Number_spin() { return Number_spin_; }
+
 	inline void set_Beta(double val) {
 		Beta_ = val;
 	}

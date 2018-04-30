@@ -43,6 +43,7 @@ void ParallelTempering::run() {
 	for ( int i = 0; i < N_algo_; i++ ) {
 		this->algorithm_step();
 		if (i % 10 == 0) {
+			this->mesure_energy();
 			std::cout << i << " out of " << N_thermal_ << " algo steps done." << std::endl;
 		}
 	}
@@ -148,5 +149,11 @@ void ParallelTempering::PrintoutMagnetisation(std::string OutputPath) const
 	}
 	outputFileSpin->close();
 	delete outputFileSpin;
+}
+
+void ParallelTempering::mesure_energy() {
+	for(int i = 0; i < N_simul_; i++) {
+		Simulations_[i]->mesure_energy();
+	}
 }
 

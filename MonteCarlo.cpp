@@ -9,7 +9,7 @@
 using namespace std;
 
 MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
-	: worm_(), N_thermal_(N_thermal),
+	: worm_(), energy_mesures_(), N_thermal_(N_thermal),
 	  N_algo_(N_algo),
 	  mt(rd()),
 	  dist_2(std::uniform_int_distribution<>(0, 1)),
@@ -270,3 +270,33 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
 	val = d * S_->get_Spin(i, j);
 	dimer->getSpin_left()->setSpin(val);
 }
+
+void MonteCarlo::mesure_energy() {
+	double E = S_->get_energy_per_spin();
+	energy_mesures_.push_back(E);
+}
+
+double MonteCarlo::first_moment_energy() {
+	double energy_sum = 0;
+	int N = energy_mesures_.size();
+	for (auto& n : energy_mesures_)
+	    energy_sum += n;
+	return energy_sum / N;
+}
+
+double MonteCarlo::second_moment_energy() {
+	double energy_sum = 0;
+	int N = energy_mesures_.size();
+	for (auto& n : energy_mesures_)
+	    energy_sum += n*n;
+	return energy_sum / N;
+}
+
+double MonteCarlo::calculate_cv() {
+	int Number_sites = S_->get_Number_spin();
+	double first_moment_energy  = this->first_moment_energy();
+	double second_moment_energy = this->second_moment_energy();
+	double cv = Number_sites * (second_moment_energy - first_moment_energy * first_moment_energy) * S_->get_Beta() * S_->get_Beta();
+	return cv;
+}
+
