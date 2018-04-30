@@ -32,7 +32,7 @@ module load gcc
 
 make
 
-MCMCIsingTri.exe
+./MCMCIsingTri
 
 #create the results directory in home
 mkdir $HDR

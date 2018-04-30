@@ -2,3 +2,5 @@ Triangular_Lattice_py/
 *.dat
 *.o
 *.xml
+*.in
+*.exe
