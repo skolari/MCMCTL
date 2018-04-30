@@ -28,9 +28,11 @@ public:
 
 	// Changes the dimer value of both edges
 	void switchDimer(DimerEdge* edge);
+
 	inline DimerNode* getDimerNode(int i, int j) const {
 		return Dual_[i][j];
 	}
+
 	std::vector<int> SpinDirDualNode(int i, int j, int dir) const;
 	std::vector< DimerEdge* > get_d1_d2(DimerEdge* d0);
 	std::vector< DimerEdge* > get_s_dimer(std::vector<DimerEdge*> d);

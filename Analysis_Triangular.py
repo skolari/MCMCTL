@@ -3,7 +3,7 @@ from DrawPlot import DrawPlot
 
 filename_s = 'Outputfiles/nr_20_Spin.dat'
 filename_d = 'Outputfiles/nr_20_DimerAdj.dat'
-filename_e = 'Outputfiles/Energy.dat'
+filename_e = 'Outputfiles/Energy_and_Cv.dat'
 draw_plot = DrawPlot(filename_s, filename_d, filename_e)
 draw_plot.draw_spin_and_dual_lattice()
 draw_plot.draw_cv()

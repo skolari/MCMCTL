@@ -24,7 +24,7 @@
 
 class MonteCarlo {
 public:
-	MonteCarlo(int Deg, int N_thermal, int N_algo = 0, double J1 = 0, double J2 = 0, double J3 = 0);
+	MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta);
 	virtual ~MonteCarlo();
 
 	// Algorithm methods
@@ -45,12 +45,16 @@ public:
 		return entry_node_;
 	}
 
+	inline std::vector<double> get_energy_mesures_() {
+		return energy_mesures_;
+	}
+
 	inline int get_winding_number_vertical() const {
 		return winding_number_vertical;
 	}
 
 	inline int get_winding_number_horizontal() const {
-			return winding_number_horizontal;
+		return winding_number_horizontal;
 	}
 
 	inline double get_energy() const {
@@ -80,6 +84,14 @@ public:
 
 	void update_spin_neighbor_dir(int i, int j, int dir);
 	void update_winding_number();
+
+	// Mesures
+	void mesure_energy();
+
+	double first_moment_energy();
+	double second_moment_energy();
+	double calculate_cv();
+
 private:
 	SpinLattice* S_;
 	DualLattice* D_;
@@ -89,6 +101,8 @@ private:
 
 	int winding_number_horizontal;
 	int winding_number_vertical;
+
+	std::vector<double> energy_mesures_;
 	// Deg_, N_
 	int Deg_;
 	int N_;
@@ -103,7 +117,6 @@ private:
 	std::uniform_int_distribution<int> dist_3; // chooses randomly 0 to 2
 	std::uniform_int_distribution<int> dist_N; // chooses randomly 0 to N-1, N size of spin lattice.
 	std::uniform_int_distribution<int> dist_2N; // chooses randomly 0 to N-1, N size of spin lattice.
-
 
 };
 

@@ -29,10 +29,11 @@ public:
 	void algorithm_step();
 	void tempering_switch(int i, int j);
 	void J_swap(int i, int j);
+	void mesure_energy();
 
 	// Printout
 	void Printout(std::string OutputPath);
-	void PrintoutEnergy(std::string OutputPath) const;
+	void Printout_Energy_and_Cv(std::string OutputPath) const;
 	void PrintoutMagnetisation(std::string OutputPath) const;
 
 private:
@@ -44,7 +45,6 @@ private:
 	double J1_const_;
 	double J2_const_;
 	double J3_const_;
-
 
 	std::vector<double> beta_;
 	std::vector<double> J1_;
