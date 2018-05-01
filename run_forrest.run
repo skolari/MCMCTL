@@ -21,8 +21,11 @@ HDR="/home/$USER/MCMCTL/"
 #create the scratch directories to work
 mkdir $SCRGD
 mkdir $SCR
+mkdir $SCR/Outputfiles
+
+
 #copy data from HD to SCR
-cp $HD/*.py $SCR
+cp $HD/MCMCIsingTri $SCR
 
 #go to scratch and run code
 cd $SCR
@@ -36,7 +39,7 @@ make
 #create the results directory in home
 mkdir $HDR
 #copy the results to the results directory
-cp $SCR/*.dat $HDR
+cp $SCR/Outputfiles/*.dat $HDR/Outputfiles
 cp $SCR/*.out $HDR
 cp $SCR/*.err $HDR
 #remove the files
