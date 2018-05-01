@@ -44,16 +44,16 @@ void ParallelTempering::run() {
 		this->algorithm_step();
 		if (i % 10 == 0) {
 			this->mesure_energy();
-			std::cout << i << " out of " << N_thermal_ << " algo steps done." << std::endl;
+			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 		}
 	}
 }
 
 void ParallelTempering::algorithm_step() {
 
-	omp_set_num_threads(N_simul_);
+	//omp_set_num_threads(N_simul_);
 
-	#pragma omp parallel for
+	//#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}

@@ -50,5 +50,5 @@ class DrawPlot:
         plt.show()
 
     def get_entropy(self):
-        entropy = log(2) - np.trapz(self.cv/self.T, x=self.T)
+        entropy = log(2) - np.trapz(self.cv * self.beta, x=self.T)
         print(entropy)

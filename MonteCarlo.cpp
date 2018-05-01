@@ -77,12 +77,12 @@ void MonteCarlo::myopic_step() {
 void MonteCarlo::proba_step() {
 	DimerEdge* d0 = worm_.back();
 	DimerEdge* next_edge = d0;
-
 	std::vector< DimerEdge* > d = D_->get_d1_d2(d0);
 	std::vector <double> W = D_->get_local_weight(d0);
 	std::vector< std::vector<double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
 	std::vector<double> w{M[0][0], M[0][1], M[0][2]};
+	//std::cout << "M[0][0]: " << M[0][0] << ", M[0][1]: " << M[0][1] << ", M[0][2]: " << M[0][2] << ",sum: "<< M[0][0] + M[0][1] + M[0][2] << std::endl;
 	std::piecewise_constant_distribution<> dist(i.begin(), i.end(), w.begin());
 
 	int next_index = (int) dist(mt);
@@ -92,11 +92,13 @@ void MonteCarlo::proba_step() {
 		DimerNode* n_start = d0->getStart();
 		next_edge = v->getEdge(n_start);
 	}
+
 	else if (next_index == 1) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
 	}
+
 	else if (next_index == 2) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[2]);
@@ -112,14 +114,25 @@ void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
+	int count = 0;
+	int count_max = 10*S_->get_Number_spin();
 
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
+		count += 1;
 	}
-	while(end_node != entry_node_);
+	while(end_node != entry_node_ && count < count_max);
+
+	if(count_max == count) {
+		worm_.clear();
+		winding_number_horizontal = 0;
+		winding_number_vertical = 0;
+		cerr << "Too long worm." << endl;
+		this->create_update();
+	}
 
 	if ((std::abs(winding_number_horizontal) % 2 == 0)
 			&& (std::abs(winding_number_vertical) % 2 == 0)) {
@@ -225,7 +238,6 @@ std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
 			M[i][j] = A[i][j] / W[i];
 		}
 	}
-
 	return M;
 }
 
@@ -299,4 +311,3 @@ double MonteCarlo::calculate_cv() {
 	double cv = Number_sites * (second_moment_energy - first_moment_energy * first_moment_energy) * S_->get_Beta() * S_->get_Beta();
 	return cv;
 }
-

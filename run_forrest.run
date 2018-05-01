@@ -37,7 +37,7 @@ make
 #create the results directory in home
 mkdir $HDR
 #copy the results to the results directory
-cp $SCR/*.pkl $HDR
+cp $SCR/*.dat $HDR
 cp $SCR/*.out $HDR
 cp $SCR/*.err $HDR
 #remove the files

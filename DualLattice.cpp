@@ -308,6 +308,8 @@ std::vector< double > DualLattice::get_local_weight(DimerEdge* d0)
 	W[1] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * d[2]->getDimer());
 	W[2] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * (-1) * d[2]->getDimer());
 
+	//std::cout << "1. w1: " << W[0] << ", w2: " << W[1] << ", w3: " << W[2] << std::endl;
+	//cout << "beta: "<<S_->get_Beta() << ", d0: " << d[0]->getDimer() << ", d1: " << d[1]->getDimer() << ", d2: " << d[2]->getDimer() << endl;
 	return W;
 }
 
