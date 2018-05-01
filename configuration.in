@@ -1,8 +1,8 @@
 Deg=5
 outputPath=./Outputfiles/
-N_simul=10
-N_thermal=200
-N_algo=200
+N_simul=50
+N_thermal=100
+N_algo=100
 N_temp=20
 J1=1
 J2=0

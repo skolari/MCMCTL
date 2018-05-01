@@ -12,36 +12,33 @@
 
 #working directory
 SCRGD="/scratch/$USER/Runs_MCMCTL"
-SCR="/scratch/$USER/Runs_MCMCTL"
+SCR="/scratch/$USER/Runs_MCMCTL/Outputfiles"
 
 #home directory
 HD="/home/$USER/MCMCTL/"
-HDR="/home/$USER/MCMCTL/"
+HDR="/home/$USER/MCMCTL/Outputfiles"
 
 #create the scratch directories to work
 mkdir $SCRGD
 mkdir $SCR
-mkdir $SCR/Outputfiles
-
+mkdir $SCR
 
 #copy data from HD to SCR
-cp $HD/MCMCIsingTri $SCR
+cp $HD/MCMCIsingTri $SCRGD
 
 #go to scratch and run code
-cd $SCR
-
-module load gcc
-
-make
+cd $SCRGD
 
 ./MCMCIsingTri
 
 #create the results directory in home
 mkdir $HDR
+
 #copy the results to the results directory
-cp $SCR/Outputfiles/*.dat $HDR/Outputfiles
+cp $SCR/*.dat $HDR
 cp $SCR/*.out $HDR
 cp $SCR/*.err $HDR
 #remove the files
 cd $SCRGD
 rm -r $SCR
+rm -r MCMCIsingTri
