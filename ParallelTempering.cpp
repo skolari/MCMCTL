@@ -51,9 +51,9 @@ void ParallelTempering::run() {
 
 void ParallelTempering::algorithm_step() {
 
-	//omp_set_num_threads(N_simul_);
+	omp_set_num_threads(N_simul_);
 
-	//#pragma omp parallel for
+	#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}
