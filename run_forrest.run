@@ -41,6 +41,6 @@ cp $SCR/*.dat $HDR
 cp $SCR/*.out $HDR
 cp $SCR/*.err $HDR
 #remove the files
-cd $SCRGD
-rm -r $SCR
-rm -r MCMCIsingTri
+# cd $SCRGD
+# rm -r $SCR
+# rm -r MCMCIsingTri
