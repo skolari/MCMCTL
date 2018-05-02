@@ -15,12 +15,14 @@ SCRGD="/scratch/$USER/Runs_MCMCTL"
 SCR="/scratch/$USER/Runs_MCMCTL/Outputfiles"
 
 #home directory
-HD="/home/$USER/MCMCTL/"
+HD="/home/$USER/MCMCTL"
 HDR="/home/$USER/MCMCTL/Outputfiles"
+# compile code
+cd $HD
+make
 
 #create the scratch directories to work
 mkdir $SCRGD
-mkdir $SCR
 mkdir $SCR
 
 #copy data from HD to SCR
