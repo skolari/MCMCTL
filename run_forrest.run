@@ -27,6 +27,7 @@ mkdir $SCR
 
 #copy data from HD to SCR
 cp $HD/MCMCIsingTri $SCRGD
+cp $HD/configuration.in $SCRGD
 
 #go to scratch and run code
 cd $SCRGD
@@ -41,6 +42,6 @@ cp $SCR/*.dat $HDR
 cp $SCR/*.out $HDR
 cp $SCR/*.err $HDR
 #remove the files
-# cd $SCRGD
-# rm -r $SCR
-# rm -r MCMCIsingTri
+cd $SCRGD
+rm -r $SCR
+rm -r MCMCIsingTri
