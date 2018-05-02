@@ -87,22 +87,29 @@ void MonteCarlo::proba_step() {
 
 	int next_index = (int) dist(mt);
 
+	//cout << "start: x= " << d0->getStart()->getPos(0) << ", y = " << d0->getStart()->getPos(1) <<endl;
 	if (next_index == 0) {
 		DimerNode* v = d0->getEnd();
 		DimerNode* n_start = d0->getStart();
 		next_edge = v->getEdge(n_start);
+		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
+		//cout << 0 << endl;
 	}
 
 	else if (next_index == 1) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
+		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
+		//cout << 1 << endl;
 	}
 
 	else if (next_index == 2) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[2]);
 		next_edge = d[2];
+		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
+		//cout << 2 << endl;
 	}
 
 	worm_.push_back(next_edge);

@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
 	int N_thermal = 			configFile.get<int>("N_thermal");
 	int N_algo = 				configFile.get<int>("N_algo");
 	int N_temp = 				configFile.get<int>("N_temp");
+	int N_mesure =				configFile.get<int>("N_mesure");
 	double J1 = 				configFile.get<double>("J1");
 	double J2 = 				configFile.get<double>("J2");
 	double J3 = 				configFile.get<double>("J3");
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
 
 	// run algorithm
 
-    ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, J1, J2, J3, beta_start, beta_end);
+    ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, N_mesure, J1, J2, J3, beta_start, beta_end);
 	P->run();
 	P->Printout(outputPath);
 
@@ -98,6 +99,7 @@ void create_xml(std::string inputPath, char* time_normal, std::string time_sec) 
 	int N_thermal = 			configFile.get<int>("N_thermal");
 	int N_algo = 				configFile.get<int>("N_algo");
 	int N_temp = 				configFile.get<int>("N_temp");
+	int N_mesure =				configFile.get<int>("N_mesure");
 	double J1 = 				configFile.get<double>("J1");
 	double J2 = 				configFile.get<double>("J2");
 	double J3 = 				configFile.get<double>("J3");
@@ -122,6 +124,7 @@ void create_xml(std::string inputPath, char* time_normal, std::string time_sec) 
 	add_element_to_xml(param, "N_thermal", N_thermal);
 	add_element_to_xml(param, "N_algo", N_algo);
 	add_element_to_xml(param, "N_temp", N_temp);
+	add_element_to_xml(param, "N_mesure", N_mesure);
 	add_element_to_xml(param, "J1", J1);
 	add_element_to_xml(param, "J2", J2);
 	add_element_to_xml(param, "J3", J3);

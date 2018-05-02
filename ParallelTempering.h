@@ -19,7 +19,7 @@
 
 class ParallelTempering {
 public:
-	ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp,
+	ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_mesure, int N_temp,
 			double J1, double J2, double J3,
 			double beta_start, double beta_end);
 
@@ -42,6 +42,7 @@ private:
 	int N_thermal_;
 	int N_algo_;
 	int N_temp_;
+	int N_mesure_;
 	double J1_const_;
 	double J2_const_;
 	double J3_const_;

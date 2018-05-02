@@ -9,10 +9,10 @@
 
 using namespace std;
 
-ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp,
+ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, int N_mesure,
 		double J1, double J2, double J3,
 		double beta_start, double beta_end)
-	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), J1_const_(J1), J2_const_(J2), J3_const_(J3),
+	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), N_mesure_(N_mesure), J1_const_(J1), J2_const_(J2), J3_const_(J3),
 	  beta_(N_simul, 0), J1_(N_simul, 0), J2_(N_simul, 0), J3_(N_simul, 0), Simulations_(N_simul, NULL), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0))
 {
 
@@ -25,12 +25,18 @@ ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_
 	}
 }
 
+
 ParallelTempering::~ParallelTempering() {
 	// TODO Auto-generated destructor stub
 }
 
+/**
+ * Runs the algorithm steps.
+ * First the N_thremal_ times thermalisation and then
+ * N_algo_ times the algogrithm step where all N_mesure_ steps the energy is mesured.
+ */
 void ParallelTempering::run() {
-
+	this->Printout("./Outputfiles/");
 	// thermalisation
 	for ( int i = 0; i < N_thermal_; i++ ) {
 		this->algorithm_step();
@@ -42,13 +48,17 @@ void ParallelTempering::run() {
 	// algorithm
 	for ( int i = 0; i < N_algo_; i++ ) {
 		this->algorithm_step();
-		if (i % 10 == 0) {
+		if (i % N_mesure_ == 0) {
 			this->mesure_energy();
 			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 		}
 	}
 }
 
+/**
+ * This is runs in parallel all MonteCarlo systems with different Temperatures.
+ * In the end the parallel tempering will be executed.
+ */
 void ParallelTempering::algorithm_step() {
 
 	omp_set_num_threads(N_simul_);
@@ -63,6 +73,12 @@ void ParallelTempering::algorithm_step() {
 	}
 }
 
+/**
+ * If the energy of two systems is not raising the two systems are exchanged and is exchanged too.
+ * Else the systems are swaped with a certain probability.
+ * @param i index of the ith MonteCarlo system in Simulations_
+ * @param j index of the jth MonteCarlo system in Simulations_
+ */
 void ParallelTempering::tempering_switch(int i, int j) {
 	MonteCarlo* M1 = Simulations_[i];
 	MonteCarlo* M2 = Simulations_[j];
@@ -73,6 +89,7 @@ void ParallelTempering::tempering_switch(int i, int j) {
 		this->J_swap(i, j);
 	} else {
 		double rnd = dist(mt);
+		cout << ref << endl;
 		if (rnd < ref) {
 			this->J_swap(i, j);
 		}
@@ -80,14 +97,12 @@ void ParallelTempering::tempering_switch(int i, int j) {
 
 }
 
+/**
+ * Swap the temperature of two systems.
+ * @param i index of the ith MonteCarlo system in Simulations_
+ * @param j index of the jth MonteCarlo system in Simulations_
+ */
 void ParallelTempering::J_swap(int i, int j) {
-	double J_temp;
-
-	for ( int k = 0; k < 3; k++) {
-		J_temp = Simulations_[i]->get_Ji(k);
-		Simulations_[i]->set_Ji(k, Simulations_[j]->get_Ji(k));
-		Simulations_[j]->set_Ji(k, J_temp);
-	}
 	double Beta_temp = Simulations_[i]->get_S()->get_Beta();
 	Simulations_[i]->get_S()->set_Beta(Simulations_[j]->get_S()->get_Beta());
 	Simulations_[j]->get_S()->set_Beta(Beta_temp);
@@ -95,6 +110,11 @@ void ParallelTempering::J_swap(int i, int j) {
 	std::swap(Simulations_[i],Simulations_[j]);
 }
 
+
+/**
+ * Print out the mean energy per spin and Cv and the last spin and dual configuration of the system.
+ * @param OutputPath outputpath of the output .dat files.
+ */
 void ParallelTempering::Printout(std::string OutputPath) {
 	std::string s = "";
 	std::string OutputPath_new = "";
@@ -107,6 +127,10 @@ void ParallelTempering::Printout(std::string OutputPath) {
 	this->PrintoutMagnetisation(OutputPath);
 }
 
+/**
+ * create a printout .dat file where the mean energy and cv of all systems in Simulations_ is saved.
+ * @param OutputPath outputpath of the output .dat files.
+ */
 void ParallelTempering::Printout_Energy_and_Cv(std::string OutputPath) const
 {
 	string path = OutputPath + "Energy_and_Cv.dat";
@@ -131,6 +155,10 @@ void ParallelTempering::Printout_Energy_and_Cv(std::string OutputPath) const
 	delete outputFileSpin;
 }
 
+/**
+ * create a printout .dat file where the magnetisation of the last configurations of all systems in Simulations_ is saved.
+ * @param OutputPath outputpath of the output .dat files.
+ */
 void ParallelTempering::PrintoutMagnetisation(std::string OutputPath) const
 {
 	string path = OutputPath + "Magnetisation.dat";
@@ -153,6 +181,9 @@ void ParallelTempering::PrintoutMagnetisation(std::string OutputPath) const
 	delete outputFileSpin;
 }
 
+/**
+ * calls the MonteCarlo::mesure_energy() for all systems in Simulations_
+ */
 void ParallelTempering::mesure_energy() {
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->mesure_energy();
