@@ -45,6 +45,8 @@ public:
 		return Spin_left_;
 	}
 
+	DimerEdge* getOppositeEdge();
+	void switchDimer();
 private:
 	double Dimer_; // if 1 both Spin_right and Spin_left are equal, else -1.
 	DimerNode* start_;

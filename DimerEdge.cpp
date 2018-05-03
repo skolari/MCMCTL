@@ -22,3 +22,13 @@ DimerEdge::~DimerEdge() {
 void DimerEdge::setDimer(double val) {
 	Dimer_ = val;
 }
+
+DimerEdge* DimerEdge::getOppositeEdge() {
+	return end_->getEdge(start_);
+}
+
+void DimerEdge::switchDimer() {
+	double dimer = (-1) * this->getDimer();
+	this->setDimer(dimer);
+	this->getOppositeEdge()->setDimer(dimer);
+}

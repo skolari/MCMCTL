@@ -33,7 +33,7 @@ public:
 	void proba_step();
 	void map_dimer_to_spin();
 	void create_update();
-	void run_algorithm();
+	void run_algorithm_single();
 	void run_parallel_step(int N_temp);
 
 
@@ -45,8 +45,8 @@ public:
 		return entry_node_;
 	}
 
-	inline std::vector<double> get_energy_mesures_() {
-		return energy_mesures_;
+	inline std::vector<double> get_energy_measures_() {
+		return energy_measures_;
 	}
 
 	inline int get_winding_number_vertical() const {
@@ -79,6 +79,7 @@ public:
 	double second_moment_energy();
 	double calculate_cv();
 
+	void delete_worm();
 private:
 	SpinLattice* S_;
 	DualLattice* D_;

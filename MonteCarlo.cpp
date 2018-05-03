@@ -7,6 +7,7 @@
 
 #include "MonteCarlo.h"
 using namespace std;
+int check_if_correct_update(std::vector<DimerEdge*> d);
 
 MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
 	: worm_(), energy_measures_(), N_thermal_(N_thermal),
@@ -28,6 +29,8 @@ MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2,
 
 	Deg_ = S_->Lattice::get_Deg();
 	N_ = S_->Lattice::get_N();
+	this->Printout("./Debugg/start");
+
 }
 
 MonteCarlo::~MonteCarlo() {
@@ -56,8 +59,9 @@ void MonteCarlo::init_update() {
 
 // maybe there is a more efficient way.
 void MonteCarlo::myopic_step() {
-
 	DimerEdge* last_edge = worm_.back();
+	vector<DimerEdge*> d = D_->get_local_dimer(last_edge);
+
 	DimerNode* end_node = last_edge->getEnd();
 	DimerNode* start_node = last_edge->getStart();
 	DimerNode* new_end = end_node;
@@ -77,14 +81,23 @@ void MonteCarlo::myopic_step() {
 void MonteCarlo::proba_step() {
 	DimerEdge* d0 = worm_.back();
 	DimerEdge* next_edge = d0;
+	//cout << "starti="<<d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
+	//cout << "endi="<<d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
+
 	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
+/*
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
+				this->Printout("./Debugg/");
+				cout << "starti="<<d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
+				cout << "endi="<<d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
+				cout << "dimer: " << d0->getDimer() << ", Dimer opp: " << d0->getOppositeEdge()->getDimer() << endl;
 				cerr << "this is not a spin configuration" << endl;
 			}
 		}
 	}
+	*/
 	std::vector <double> W = D_->get_local_weight(d0);
 	std::vector< std::vector<double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
@@ -96,27 +109,19 @@ void MonteCarlo::proba_step() {
 
 	//cout << "start: x= " << d0->getStart()->getPos(0) << ", y = " << d0->getStart()->getPos(1) <<endl;
 	if (next_index == 0) {
-		DimerNode* v = d[0]->getEnd();
-		DimerNode* n_start = d[0]->getStart();
-		next_edge = v->getEdge(n_start);
-		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
-		cout << 0 << endl;
+		next_edge = d[0]->getOppositeEdge();
 	}
 
 	else if (next_index == 1) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
-		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
-		cout << 1 << endl;
 	}
 
 	else if (next_index == 2) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[2]);
 		next_edge = d[2];
-		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
-		cout << 2 << endl;
 	}
 
 	worm_.push_back(next_edge);
@@ -128,81 +133,90 @@ void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
-	//int count = 0;
-	//int count_max = 20*S_->get_Number_spin();
+	int count = 0;
+	int count_max = 20*S_->get_Number_spin();
 
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
-		//count += 1;
-	} 	while(end_node != entry_node_);
+		count += 1;
+	} while(end_node != entry_node_);
 	//while(end_node != entry_node_ && count < count_max);
 
 	/*
 	if(count_max == count) {
-		worm_.clear();
+		this->delete_worm();
 		winding_number_horizontal = 0;
 		winding_number_vertical = 0;
-		//cerr << "Too long worm." << endl;
+		cerr << "Too long worm." << endl;
 		this->create_update();
 	}
 	*/
 
-	if ((std::abs(winding_number_horizontal) % 2 == 0)
-			&& (std::abs(winding_number_vertical) % 2 == 0)) {
+	if ((winding_number_horizontal % 2 == 0)
+			&& (winding_number_vertical % 2 == 0)) {
 		this->map_dimer_to_spin();
 		winding_number_horizontal = 0;
 		winding_number_vertical = 0;
+		worm_.clear();
 	}
 	else {
 		this->create_update();
 	}
 }
 
-// nicht sicher ob gut
-void MonteCarlo::run_algorithm() {
+/*
+ * runs the simulation without parallel tempering and measures the energy every 20 steps during the N_algo_ loop.
+ */
+void MonteCarlo::run_algorithm_single() {
+	// N_thermal_ loop, thermalisation
 	for ( int i = 0; i < N_thermal_; i++ ) {
 		this->create_update();
 	}
+
+	// N_algo_ loop
 	for ( int i = 0; i < N_algo_; i++ ) {
 		this->create_update();
+		if (i % 20 == 0){
+			this->measure_energy();
+		}
 	}
-
 }
 
+/*
+ * creates N_temp updates, used during parallel tempering.
+ * @param N_temp number uf updates
+ */
 void MonteCarlo::run_parallel_step(int N_temp) {
 	for ( int i = 0; i < N_temp; i++ ) {
 		this->create_update();
 	}
 }
 
+/*
+ * Updates the winding number in function the last edge of the worm_.
+ */
 void MonteCarlo::update_winding_number() {
 	DimerEdge* last_edge = worm_.back();
 
 	int j_last_edge_start = last_edge->getStart()->getPos(1);
 	int j_last_edge_end = last_edge->getEnd()->getPos(1);
-	int delta_j = j_last_edge_start - j_last_edge_end;
+	int delta_j = std::abs(j_last_edge_start - j_last_edge_end);
 
 	int i_last_edge_start = last_edge->getStart()->getPos(0);
 	int i_last_edge_end = last_edge->getEnd()->getPos(0);
-	int delta_i = i_last_edge_start - i_last_edge_end;
+	int delta_i = std::abs(i_last_edge_start - i_last_edge_end);
 
 	//horizontal update
-	if ( delta_i >= Deg_) {
-			winding_number_horizontal += 1;
-	}
-	if ( delta_i >= -Deg_){
-		winding_number_horizontal -= 1;
+	if ( delta_i >= 2) {
+		winding_number_horizontal += 1;
 	}
 
 	// vertical uptdate
 	if ( delta_j == (N_ - 2 )) {
 		winding_number_vertical += 1;
-	}
-	if ( delta_j == -(N_- 2)){
-		winding_number_vertical -= 1;
 	}
 }
 
@@ -257,6 +271,9 @@ std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
 	return M;
 }
 
+/*
+ * This maps a dimer configuration of the dual lattice to a spin configuration of the spin lattice.
+ */
 void MonteCarlo::map_dimer_to_spin() {
 	// update vertical Spins
 	int i = 0;
@@ -270,8 +287,8 @@ void MonteCarlo::map_dimer_to_spin() {
 		i = 0;
 		this->update_spin_neighbor_dir(i, j, 5);
 	}
-	// update horizontal Spins
 
+	// update horizontal Spins
 	for (int j = Deg_; j >= 0; j--) {
 		for (int i = Deg_ - j; i < N_ - 2; i++){
 			if(S_->ifInsideLattice(i, j)) {
@@ -290,7 +307,12 @@ void MonteCarlo::map_dimer_to_spin() {
 
 }
 
-// Update the neighbor of a Spin from a dimer configuration.
+/*
+ * Changes the spin value of a neighbor spin in a certain direction in function of the dimer between them.
+ * @param i i-index of origin spin
+ * @param j j-index of origin spin
+ * @param dir direction of neighbor which will be updated
+ */
 void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
 	double val = 0;
 	DimerEdge* dimer = S_->get_Spin_pointer(i, j)->getDimer(dir);
@@ -341,4 +363,32 @@ double MonteCarlo::calculate_cv() {
 	double second_moment_energy = this->second_moment_energy();
 	double cv = Number_sites * (second_moment_energy - first_moment_energy * first_moment_energy) * S_->get_Beta() * S_->get_Beta();
 	return cv;
+}
+
+int check_if_correct_update(std::vector<DimerEdge*> d) {
+	// case 1: no correct configuration.
+	if(d[0]->getDimer() == -1) {
+		if(d[1]->getDimer() == -1 ) {
+			if(d[2]->getDimer() == -1) {
+				return 1;
+			}
+		}
+	}
+
+	//case 2: no correct connection
+	DimerNode* d0end = d[0]->getEnd();
+	DimerNode* d1start = d[1]->getStart();
+	DimerNode* d2start = d[2]->getStart();
+	if((d0end->getPos(0) != d1start->getPos(0)) || (d0end->getPos(1) != d1start->getPos(1)) || (d0end->getPos(0) != d2start->getPos(0)) || (d0end->getPos(1) != d2start->getPos(1)) ) {
+		return 2;
+	}
+	return 0;
+}
+
+void MonteCarlo::delete_worm() {
+	int N = worm_.size();
+	for (int i = 0; i < N; i++ ) {
+		worm_[i]->switchDimer();
+	}
+	worm_.clear();
 }

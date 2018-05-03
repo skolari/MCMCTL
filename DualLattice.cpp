@@ -156,9 +156,7 @@ vector< vector<double> > DualLattice::getDadj() const{
  * @param edge the edge whose dimer has to switch
  */
 void DualLattice::switchDimer(DimerEdge* edge) {
-	DimerNode* start = edge->getStart();
-	DimerNode* end = edge->getEnd();
-	DimerEdge* opposite = end->getEdge(start);
+	DimerEdge* opposite = edge->getOppositeEdge();
 
 	//tests for debugging
 	if (edge->getDimer() != opposite->getDimer()) {
