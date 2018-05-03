@@ -9,7 +9,7 @@
 using namespace std;
 
 MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
-	: worm_(), energy_mesures_(), N_thermal_(N_thermal),
+	: worm_(), energy_measures_(), N_thermal_(N_thermal),
 	  N_algo_(N_algo),
 	  mt(rd()),
 	  dist_2(std::uniform_int_distribution<>(0, 1)),
@@ -77,7 +77,14 @@ void MonteCarlo::myopic_step() {
 void MonteCarlo::proba_step() {
 	DimerEdge* d0 = worm_.back();
 	DimerEdge* next_edge = d0;
-	std::vector< DimerEdge* > d = D_->get_d1_d2(d0);
+	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
+	if (d[0]->getDimer() == -1) {
+		if (d[1]->getDimer() == -1) {
+			if (d[2]->getDimer() == -1) {
+				cerr << "this is not a spin configuration" << endl;
+			}
+		}
+	}
 	std::vector <double> W = D_->get_local_weight(d0);
 	std::vector< std::vector<double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
@@ -89,11 +96,11 @@ void MonteCarlo::proba_step() {
 
 	//cout << "start: x= " << d0->getStart()->getPos(0) << ", y = " << d0->getStart()->getPos(1) <<endl;
 	if (next_index == 0) {
-		DimerNode* v = d0->getEnd();
-		DimerNode* n_start = d0->getStart();
+		DimerNode* v = d[0]->getEnd();
+		DimerNode* n_start = d[0]->getStart();
 		next_edge = v->getEdge(n_start);
 		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
-		//cout << 0 << endl;
+		cout << 0 << endl;
 	}
 
 	else if (next_index == 1) {
@@ -101,7 +108,7 @@ void MonteCarlo::proba_step() {
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
 		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
-		//cout << 1 << endl;
+		cout << 1 << endl;
 	}
 
 	else if (next_index == 2) {
@@ -109,7 +116,7 @@ void MonteCarlo::proba_step() {
 		D_->switchDimer(d[2]);
 		next_edge = d[2];
 		//cout << "end: x= " << next_edge->getEnd()->getPos(0) << ", y = " << d0->getEnd()->getPos(1) <<endl;
-		//cout << 2 << endl;
+		cout << 2 << endl;
 	}
 
 	worm_.push_back(next_edge);
@@ -121,18 +128,19 @@ void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
-	int count = 0;
-	int count_max = 20*S_->get_Number_spin();
+	//int count = 0;
+	//int count_max = 20*S_->get_Number_spin();
 
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
-		count += 1;
-	}
-	while(end_node != entry_node_ && count < count_max);
+		//count += 1;
+	} 	while(end_node != entry_node_);
+	//while(end_node != entry_node_ && count < count_max);
 
+	/*
 	if(count_max == count) {
 		worm_.clear();
 		winding_number_horizontal = 0;
@@ -140,6 +148,7 @@ void MonteCarlo::create_update() {
 		//cerr << "Too long worm." << endl;
 		this->create_update();
 	}
+	*/
 
 	if ((std::abs(winding_number_horizontal) % 2 == 0)
 			&& (std::abs(winding_number_vertical) % 2 == 0)) {
@@ -290,27 +299,42 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
 	dimer->getSpin_left()->setSpin(val);
 }
 
-void MonteCarlo::mesure_energy() {
+/*
+ * adds a new measure to the energy_measures_ vector
+ */
+void MonteCarlo::measure_energy() {
 	double E = S_->get_energy_per_spin();
-	energy_mesures_.push_back(E);
+	energy_measures_.push_back(E);
 }
 
+/*
+ * the first moment of the energy over all measurements (till now) of this simulation
+ * @return first moment of the energy
+ */
 double MonteCarlo::first_moment_energy() {
 	double energy_sum = 0;
-	int N = energy_mesures_.size();
-	for (auto& n : energy_mesures_)
+	int N = energy_measures_.size();
+	for (auto& n : energy_measures_)
 	    energy_sum += n;
 	return energy_sum / N;
 }
 
+/*
+ * the second moment of the energy over all measurements (till now) of this simulation
+ * @return second moment of the energy
+ */
 double MonteCarlo::second_moment_energy() {
 	double energy_sum = 0;
-	int N = energy_mesures_.size();
-	for (auto& n : energy_mesures_)
+	int N = energy_measures_.size();
+	for (auto& n : energy_measures_)
 	    energy_sum += n*n;
 	return energy_sum / N;
 }
 
+/*
+ * Calculates the heat capacity (Cv) calculated wtih the first and second moment of the energy.
+ * @return Cv
+ */
 double MonteCarlo::calculate_cv() {
 	int Number_sites = S_->get_Number_spin();
 	double first_moment_energy  = this->first_moment_energy();

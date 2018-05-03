@@ -1,12 +1,12 @@
 Deg=5
 outputPath=./Outputfiles/
-N_simul=100
-N_thermal=100000
-N_algo=10000
-N_temp=20
+N_simul=10
+N_thermal=10
+N_algo=10
+N_temp=10
 N_mesure=10
 J1=1
 J2=0
 J3=0
-beta_start=0.1
+beta_start=10
 beta_end=15

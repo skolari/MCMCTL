@@ -9,10 +9,10 @@
 
 using namespace std;
 
-ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, int N_mesure,
+ParallelTempering::ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, int N_measure,
 		double J1, double J2, double J3,
 		double beta_start, double beta_end)
-	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), N_mesure_(N_mesure), J1_const_(J1), J2_const_(J2), J3_const_(J3),
+	: Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), N_measure_(N_measure), J1_const_(J1), J2_const_(J2), J3_const_(J3),
 	  beta_(N_simul, 0), J1_(N_simul, 0), J2_(N_simul, 0), J3_(N_simul, 0), Simulations_(N_simul, NULL), mt(rd()), dist(uniform_real_distribution<>(0.0, 1.0))
 {
 
@@ -33,7 +33,7 @@ ParallelTempering::~ParallelTempering() {
 /**
  * Runs the algorithm steps.
  * First the N_thremal_ times thermalisation and then
- * N_algo_ times the algogrithm step where all N_mesure_ steps the energy is mesured.
+ * N_algo_ times the algogrithm step where all N_measure_ steps the energy is mesured.
  */
 void ParallelTempering::run() {
 	this->Printout("./Outputfiles/");
@@ -48,8 +48,8 @@ void ParallelTempering::run() {
 	// algorithm
 	for ( int i = 0; i < N_algo_; i++ ) {
 		this->algorithm_step();
-		if (i % N_mesure_ == 0) {
-			this->mesure_energy();
+		if (i % N_measure_ == 0) {
+			this->measure_energy();
 			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 		}
 	}
@@ -61,9 +61,9 @@ void ParallelTempering::run() {
  */
 void ParallelTempering::algorithm_step() {
 
-	omp_set_num_threads(N_simul_);
+	//omp_set_num_threads(N_simul_);
 
-	#pragma omp parallel for
+	//#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}
@@ -182,11 +182,11 @@ void ParallelTempering::PrintoutMagnetisation(std::string OutputPath) const
 }
 
 /**
- * calls the MonteCarlo::mesure_energy() for all systems in Simulations_
+ * calls the MonteCarlo::measure_energy() for all systems in Simulations_
  */
-void ParallelTempering::mesure_energy() {
+void ParallelTempering::measure_energy() {
 	for(int i = 0; i < N_simul_; i++) {
-		Simulations_[i]->mesure_energy();
+		Simulations_[i]->measure_energy();
 	}
 }
 

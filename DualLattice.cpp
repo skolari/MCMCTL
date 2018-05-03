@@ -56,8 +56,7 @@ DualLattice::~DualLattice() {
 	// TODO Auto-generated destructor stub
 }
 
-
-vector<int> DualLattice::fix_bc(int i, int j) const{
+vector<int> DualLattice::fix_bc(int i, int j) const {
 
 	if ( j == -1 && i >= 2 * Deg_) {
 		i = i - 2 * Deg_;
@@ -67,13 +66,11 @@ vector<int> DualLattice::fix_bc(int i, int j) const{
 	if (i == -1 && j >= Deg_) {
 		i = 2 * (N_ - 1) - 1;
 		j = j - Deg_;
-
 	}
 
 	if (i == -2 && j >= Deg_) {
 		i = 2 * (N_ - 1) - 2;
 		j = j - Deg_;
-
 	}
 
 	if (i % 2 == 0) {
@@ -122,6 +119,10 @@ vector<int> DualLattice::SpinDirDualNode(int i, int j, int dir) const
 	return coord;
 }
 
+/*
+ * calculates the adjacency matrix of the dual lattice. the values corresponds to the dimer = {-1, 1}
+ * @return adjacency matrix
+ */
 vector< vector<double> > DualLattice::getDadj() const{
 	vector< vector<double> > Dadj(2 * (N_ - 1) * (N_ - 1), vector<double>(2 * (N_ - 1) * (N_ - 1), 0));
 
@@ -150,10 +151,28 @@ vector< vector<double> > DualLattice::getDadj() const{
 	return Dadj;
 }
 
+/*
+ * switch the dimer of an edge between two nodes in both directions
+ * @param edge the edge whose dimer has to switch
+ */
 void DualLattice::switchDimer(DimerEdge* edge) {
 	DimerNode* start = edge->getStart();
 	DimerNode* end = edge->getEnd();
 	DimerEdge* opposite = end->getEdge(start);
+
+	//tests for debugging
+	if (edge->getDimer() != opposite->getDimer()) {
+			cerr << "the dimer is not the same in both directions." << endl;
+	}
+
+	if ((edge->getEnd()->getPos(0) != opposite->getStart()->getPos(0)) ||
+			(edge->getEnd()->getPos(1) != opposite->getStart()->getPos(1)) ||
+			(edge->getStart()->getPos(0) != opposite->getEnd()->getPos(0)) ||
+			(edge->getStart()->getPos(1) != opposite->getEnd()->getPos(1))) {
+			cerr << "this are not opposite directions edges." << endl;
+	}
+
+	// switch dimer
 	double dimer = (-1) * edge->getDimer();
 	edge->setDimer(dimer);
 	opposite->setDimer(dimer);
@@ -189,40 +208,42 @@ void DualLattice::Printout(string outputPath) const
 }
 
 /*
- * get d1 and d2 like in the figure see rakala
+ * get the local dimer configuration from d0 like in figures from rakala's article
+ * @param d0 the d0 defined like in rakala, oriented from n(l) to v(l)
+ * @return vector with d0, d1 and d2
  */
-vector< DimerEdge* > DualLattice::get_d1_d2(DimerEdge* d0)
+vector< DimerEdge* > DualLattice::get_local_dimer(DimerEdge* d0)
 {
-	DimerNode* e = d0->getStart();
-	DimerNode* pc = d0->getEnd();
+	DimerNode* n = d0->getStart();
+	DimerNode* v = d0->getEnd();
 	DimerEdge* d1 = NULL;
 	DimerEdge* d2 = NULL;
 
-	vector <DimerEdge*> edges = pc->getEdges();
-	for (auto edge : edges) {
-		if (e != edge->getEnd()) {
-			if ( edge->getSpin_right()  == d0->getSpin_right() ) {
-				d1 = edge;
+	vector <DimerEdge*> edges = v->getEdges();
+	for (unsigned int i = 0; i < edges.size(); i++) {
+		if (n != edges[i]->getEnd()) {
+			if ( edges[i]->getSpin_right()  == d0->getSpin_right() ) {
+				d1 = edges[i];
 			}
-			else if( edge->getSpin_left()  == d0->getSpin_left() ) {
-				d2 = edge;
+			else if( edges[i]->getSpin_left()  == d0->getSpin_left() ) {
+				d2 = edges[i];
 			}
 			else {
 				cerr << "edge is not connected" << endl;
 				cerr << "d0 left p_0: " << d0->getSpin_left()->getPos(0) << ", " << d0->getSpin_left()->getPos(1) << endl;
-				cerr << "d0 right p_0: " << d0->getSpin_right()->getPos(0) << ", " << d0->getSpin_right()->getPos(1) << endl;
-				cerr << "edge left p_0: " << edge->getSpin_left()->getPos(0) << ", " << edge->getSpin_left()->getPos(1) << endl;
-				cerr << "edge right p_0: " << edge->getSpin_right()->getPos(0) << ", " << edge->getSpin_right()->getPos(1) << endl;
-
+				cerr << "edge left p_0: " << edges[i]->getSpin_left()->getPos(0) << ", " << edges[i]->getSpin_left()->getPos(1) << endl;
 			}
 		}
 	}
+
 	return {d0, d1, d2};
 }
 
 /*
- * get s1 to s11 like in the figure see rakala
- */
+ * get the local dimer configuration of s0 to s11 like in figures from rakala's article
+ * @param d a vector of the three dimers d0, d1 and d2
+ * @return vector with s0 to s11
+*/
 vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d)
 {
 	vector< DimerEdge*> s(12, NULL);
@@ -288,15 +309,20 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d)
 	return s;
 }
 
+/*
+ * the local weight configuration, if nothing is changed (bounce): W0, if we switch d0 and d1: W1, and if we switch d0 and d2: W2
+ * @param d0 the configuration around d0 is considered
+ * @return a vecotor with the three weights W0, W1 and W2
+ */
 std::vector< double > DualLattice::get_local_weight(DimerEdge* d0)
 {
 	vector<double> W(3, 1);
-	vector< DimerEdge* > d = this->get_d1_d2(d0);
+	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
 
 	// J1
 	for ( int i = 0; i < 3; i++ ) {
-		W[0] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * d[i]->getDimer());
+		W[0] *= std::exp(- S_->get_Ji(1) * S_->get_Beta() * d[i]->getDimer());
 	}
 
 	W[1] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() *(-1) * d[0]->getDimer());
@@ -308,8 +334,6 @@ std::vector< double > DualLattice::get_local_weight(DimerEdge* d0)
 	W[1] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * d[2]->getDimer());
 	W[2] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * (-1) * d[2]->getDimer());
 
-	//std::cout << "1. w1: " << W[0] << ", w2: " << W[1] << ", w3: " << W[2] << std::endl;
-	//cout << "beta: "<<S_->get_Beta() << ", d0: " << d[0]->getDimer() << ", d1: " << d[1]->getDimer() << ", d2: " << d[2]->getDimer() << endl;
 	return W;
 }
 

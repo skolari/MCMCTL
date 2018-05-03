@@ -39,8 +39,8 @@ mkdir $HDR
 
 #copy the results to the results directory
 cp $SCR/*.dat $HDR
-cp $SCR/*.out $HDR
-cp $SCR/*.err $HDR
+cp $SCRGD/*.out $HDR
+cp $SCRGD/*.err $HDR
 #remove the files
 cd $SCRGD
 rm -r $SCR

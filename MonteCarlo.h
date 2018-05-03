@@ -73,7 +73,7 @@ public:
 	void update_winding_number();
 
 	// Mesures
-	void mesure_energy();
+	void measure_energy();
 
 	double first_moment_energy();
 	double second_moment_energy();
@@ -89,7 +89,7 @@ private:
 	int winding_number_horizontal;
 	int winding_number_vertical;
 
-	std::vector<double> energy_mesures_;
+	std::vector<double> energy_measures_;
 	// Deg_, N_
 	int Deg_;
 	int N_;

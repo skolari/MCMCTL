@@ -3,14 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="72ae13c4-9955-40e1-82df-6f3fb0803b44" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/Analysis_Triangular.py" afterPath="$PROJECT_DIR$/Analysis_Triangular.py" />
-      <change beforePath="$PROJECT_DIR$/MCMCIsingTri.exe" afterPath="$PROJECT_DIR$/MCMCIsingTri.exe" />
-      <change beforePath="$PROJECT_DIR$/MCMCTest.cpp" afterPath="$PROJECT_DIR$/MCMCTest.cpp" />
-      <change beforePath="$PROJECT_DIR$/MonteCarlo.cpp" afterPath="$PROJECT_DIR$/MonteCarlo.cpp" />
-      <change beforePath="$PROJECT_DIR$/MonteCarlo.h" afterPath="$PROJECT_DIR$/MonteCarlo.h" />
-      <change beforePath="$PROJECT_DIR$/ParallelTempering.cpp" afterPath="$PROJECT_DIR$/ParallelTempering.cpp" />
+      <change beforePath="$PROJECT_DIR$/DualLattice.cpp" afterPath="$PROJECT_DIR$/DualLattice.cpp" />
+      <change beforePath="$PROJECT_DIR$/Lattice.h" afterPath="$PROJECT_DIR$/Lattice.h" />
       <change beforePath="$PROJECT_DIR$/ParallelTempering.h" afterPath="$PROJECT_DIR$/ParallelTempering.h" />
-      <change beforePath="$PROJECT_DIR$/configuration.in" afterPath="$PROJECT_DIR$/configuration.in" />
-      <change beforePath="$PROJECT_DIR$/makefile" afterPath="$PROJECT_DIR$/makefile" />
+      <change beforePath="$PROJECT_DIR$/run_forrest.run" afterPath="$PROJECT_DIR$/run_forrest.run" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="Analysis_Triangular.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Analysis_Triangular.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="4" column="30" lean-forward="false" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
+            <state relative-caret-position="75">
+              <caret line="3" column="27" lean-forward="false" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -44,10 +40,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DrawPlot.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DrawPlot.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DrawPlot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="609">
+            <state relative-caret-position="606">
               <caret line="52" column="66" lean-forward="false" selection-start-line="52" selection-start-column="66" selection-end-line="52" selection-end-column="66" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
@@ -223,7 +219,7 @@
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30989584" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="0" y="0" width="300" height="780" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30619267" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33027524" sideWeight="0.903125" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33027524" sideWeight="0.903125" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20729166" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -648,21 +644,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="3" column="27" lean-forward="false" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DrawPlot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
+        <state relative-caret-position="606">
           <caret line="52" column="66" lean-forward="false" selection-start-line="52" selection-start-column="66" selection-end-line="52" selection-end-column="66" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Analysis_Triangular.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="4" column="30" lean-forward="false" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>

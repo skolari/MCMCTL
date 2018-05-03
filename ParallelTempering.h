@@ -19,7 +19,7 @@
 
 class ParallelTempering {
 public:
-	ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_mesure, int N_temp,
+	ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_measure, int N_temp,
 			double J1, double J2, double J3,
 			double beta_start, double beta_end);
 
@@ -29,7 +29,7 @@ public:
 	void algorithm_step();
 	void tempering_switch(int i, int j);
 	void J_swap(int i, int j);
-	void mesure_energy();
+	void measure_energy();
 
 	// Printout
 	void Printout(std::string OutputPath);
@@ -42,7 +42,7 @@ private:
 	int N_thermal_;
 	int N_algo_;
 	int N_temp_;
-	int N_mesure_;
+	int N_measure_;
 	double J1_const_;
 	double J2_const_;
 	double J3_const_;
@@ -55,7 +55,7 @@ private:
 	std::vector<MonteCarlo*> Simulations_;
 
 	// random
-	std::random_device rd;							// Random device // @suppress("Type cannot be resolved")
+	std::random_device rd;								// Random device // @suppress("Type cannot be resolved")
 	std::mt19937 mt;									// mt19937 // @suppress("Type cannot be resolved")
 	std::uniform_real_distribution<double> dist;		// Uniform real distribution // @suppress("Type cannot be resolved") // @suppress("Symbol is not resolved")
 

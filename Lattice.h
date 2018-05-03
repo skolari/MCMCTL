@@ -23,6 +23,5 @@ protected:
 	std::random_device rd;							// Random device // @suppress("Type cannot be resolved")
 	std::mt19937 mt;									// mt19937 // @suppress("Type cannot be resolved")
 	std::uniform_real_distribution<double> dist;		// Uniform real distribution // @suppress("Type cannot be resolved") // @suppress("Symbol is not resolved")
-
 };
 
