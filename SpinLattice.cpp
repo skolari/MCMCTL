@@ -12,15 +12,15 @@ using namespace std;
 #define R 1
 
 
-SpinLattice::SpinLattice(int Deg, double J1, double J2, double J3, double Beta)
-	: Lattice(Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3), Beta_(Beta)
+SpinLattice::SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double Beta)
+	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3), Beta_(Beta)
 {
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
 			S_[i][j] = new Spin(i, j);
 			if (this->ifInsideLattice(i, j)) {
-				rnd = dist(mt);
+				rnd = Rnd_->dist();
 				if (rnd < 0.5) {
 					S_[i][j]->Spin::setSpin(1);
 				}
@@ -136,7 +136,7 @@ bool SpinLattice::ifInsideLattice(int i, int j) {
 // Clockwise starting from 3 o'clock == 0
 vector<int> SpinLattice::step_dir(int i, int j, int d) {
 	if(!(d < 6 && d >= 0)) cerr << "dir index not in range" << endl;
-	vector<int> step(2);
+	vector<int> step(2, 0);
 	if (d == 0) { // before d = 1
 		i = i + 1;
 		step = this->fix_bc(i, j);

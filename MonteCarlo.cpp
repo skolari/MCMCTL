@@ -9,23 +9,14 @@
 using namespace std;
 int check_if_correct_update(std::vector<DimerEdge*> d);
 
-MonteCarlo::MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
-	: worm_(), energy_measures_(), N_thermal_(N_thermal),
-	  N_algo_(N_algo),
-	  mt(rd()),
-	  dist_2(std::uniform_int_distribution<>(0, 1)),
-	  dist_3(std::uniform_int_distribution<>(0, 2))
+MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
+	: Rnd_(Rnd), worm_(), energy_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
 {
-	S_ = new SpinLattice(Deg, J1, J2, J3, Beta);
-	D_ = new DualLattice(Deg, S_);
-	dist_N = std::uniform_int_distribution<>(0, S_->get_N() -  2);
-	dist_2N = std::uniform_int_distribution<>(0, 2 * (S_->get_N() - 1) - 1);
+	S_ = new SpinLattice(Rnd, Deg, J1, J2, J3, Beta);
+	D_ = new DualLattice(Rnd, Deg, S_);
 	entry_node_ = NULL;
 	winding_number_horizontal = 0;
 	winding_number_vertical = 0;
-
-	// random
-	mt.seed(::time(NULL)); // @suppress("Method cannot be resolved")
 
 	Deg_ = S_->Lattice::get_Deg();
 	N_ = S_->Lattice::get_N();
@@ -46,12 +37,12 @@ void MonteCarlo::init_update() {
 	int rnd = 0;
 
 	do {
-		rnd_i = dist_2N(mt);
-		rnd_j = dist_N(mt);
+		rnd_i = Rnd_->dist_dual_n_horizontal();
+		rnd_j = Rnd_->dist_dual_n_vertical();
 	} while(D_->getDimerNode(rnd_i, rnd_j)->numberEdges() == 0);
 
 	entry_node_ = D_->getDimerNode(rnd_i, rnd_j);
-	rnd = dist_3(mt);
+	rnd = Rnd_->dist_3();
 	worm_.push_back(entry_node_->getEdge(rnd));
 	this->update_winding_number();
 	this->proba_step();
@@ -69,7 +60,7 @@ void MonteCarlo::myopic_step() {
 	double rnd = 0;
 
 	do{ // maybe create function, edges_without(dimerEdge*)
-		rnd = dist_3(mt);
+		rnd = Rnd_->dist_3();
 		next_edge = end_node->getEdge(rnd);
 		new_end = next_edge->getEnd();
 	} while(new_end == start_node);
@@ -105,7 +96,7 @@ void MonteCarlo::proba_step() {
 	//std::cout << "M[0][0]: " << M[0][0] << ", M[0][1]: " << M[0][1] << ", M[0][2]: " << M[0][2] << ",sum: "<< M[0][0] + M[0][1] + M[0][2] << std::endl;
 	std::piecewise_constant_distribution<> dist(i.begin(), i.end(), w.begin());
 
-	int next_index = (int) dist(mt);
+	int next_index = Rnd_->piecewise_constant_distribution(dist);
 
 	//cout << "start: x= " << d0->getStart()->getPos(0) << ", y = " << d0->getStart()->getPos(1) <<endl;
 	if (next_index == 0) {

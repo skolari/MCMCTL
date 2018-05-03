@@ -6,6 +6,7 @@
 #include "ConfigFile.hpp"
 #include "ConfigFile.tpp"
 #include "ParallelTempering.h"
+#include "Random.h"
 
 void add_element_to_xml(TiXmlElement * chain, const char * in_value, double val );
 void add_element_to_xml(TiXmlElement * chain, const char * in_value, int val );
@@ -48,8 +49,9 @@ int main(int argc, char* argv[])
 	create_xml(inputPath, time_normal, time_sec);
 
 	// run algorithm
-
-    ParallelTempering* P = new ParallelTempering(Deg, N_simul, N_thermal, N_algo, N_temp, N_mesure, J1, J2, J3, beta_start, beta_end);
+	int N = 2 * Deg + 1;
+	Random* Rnd = new Random(N);
+    ParallelTempering* P = new ParallelTempering(Rnd, Deg, N_simul, N_thermal, N_algo, N_temp, N_mesure, J1, J2, J3, beta_start, beta_end);
 	P->run();
 	P->Printout(outputPath);
 
