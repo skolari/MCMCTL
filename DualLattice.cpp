@@ -12,8 +12,8 @@
 
 using namespace std;
 
-DualLattice::DualLattice(int Deg, SpinLattice* S)
-	: Lattice(Deg), S_(S), Dual_(2 * (N_ - 1), vector<DimerNode*>(N_ - 1, NULL))
+DualLattice::DualLattice(Random* Rnd, int Deg, SpinLattice* S)
+	: Lattice(Rnd, Deg), S_(S), Dual_(2 * (N_ - 1), vector<DimerNode*>(N_ - 1, NULL))
 {
 	int i_len = 2 * (N_ - 1);
 	int j_len = N_ - 1;

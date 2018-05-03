@@ -15,12 +15,13 @@
 #include <cmath>
 #include "Lattice.h"
 #include "Spin.h"
+#include "Random.h"
 
 class Lattice;
 
 class SpinLattice: public Lattice {
 public:
-	SpinLattice(int Deg, double J1, double J2, double J3, double Beta );
+	SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double Beta );
 	virtual ~SpinLattice();
 
 	void Printout(std::string outputPath) const;

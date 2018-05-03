@@ -16,10 +16,11 @@
 #include <random>
 #include <algorithm>
 #include "MonteCarlo.h"
+#include "Random.h"
 
 class ParallelTempering {
 public:
-	ParallelTempering(int Deg, int N_simul, int N_thermal, int N_algo, int N_measure, int N_temp,
+	ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_thermal, int N_algo, int N_measure, int N_temp,
 			double J1, double J2, double J3,
 			double beta_start, double beta_end);
 
@@ -37,6 +38,7 @@ public:
 	void PrintoutMagnetisation(std::string OutputPath) const;
 
 private:
+	Random* Rnd_;
 	int Deg_;
 	int N_simul_;
 	int N_thermal_;
@@ -53,12 +55,6 @@ private:
 	std::vector<double> J3_;
 
 	std::vector<MonteCarlo*> Simulations_;
-
-	// random
-	std::random_device rd;								// Random device // @suppress("Type cannot be resolved")
-	std::mt19937 mt;									// mt19937 // @suppress("Type cannot be resolved")
-	std::uniform_real_distribution<double> dist;		// Uniform real distribution // @suppress("Type cannot be resolved") // @suppress("Symbol is not resolved")
-
 };
 
 

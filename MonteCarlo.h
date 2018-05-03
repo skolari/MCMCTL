@@ -20,11 +20,11 @@
 #include "DualLattice.h"
 #include "DimerEdge.h"
 #include "DimerNode.h"
-
+#include "Random.h"
 
 class MonteCarlo {
 public:
-	MonteCarlo(int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta);
+	MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta);
 	virtual ~MonteCarlo();
 
 	// Algorithm methods
@@ -81,6 +81,7 @@ public:
 
 	void delete_worm();
 private:
+	Random* Rnd_;
 	SpinLattice* S_;
 	DualLattice* D_;
 

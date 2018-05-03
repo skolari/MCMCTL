@@ -16,11 +16,11 @@
 #include "SpinLattice.h"
 #include "DimerNode.h"
 #include "DimerEdge.h"
-
+#include "Random.h"
 
 class DualLattice: protected Lattice {
 public:
-	DualLattice(int Deg, SpinLattice* S);
+	DualLattice(Random* Rnd, int Deg, SpinLattice* S);
 	virtual ~DualLattice();
 
 	void Printout(std::string outputPath) const;
