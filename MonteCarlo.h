@@ -67,7 +67,7 @@ public:
 	}
 
 	// Probastep matrixes
-	std::vector< std::vector<double>> get_M(std::vector <double> W);
+	std::vector< std::vector<long double>> get_M(std::vector <long double> W);
 
 	void update_spin_neighbor_dir(int i, int j, int dir);
 	void update_winding_number();

@@ -21,7 +21,6 @@ MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J
 	Deg_ = S_->Lattice::get_Deg();
 	N_ = S_->Lattice::get_N();
 	this->Printout("./Debugg/start");
-	this->testwindingnumber();
 }
 
 MonteCarlo::~MonteCarlo() {
@@ -42,13 +41,15 @@ void MonteCarlo::init_update() {
 	} while(D_->getDimerNode(rnd_i, rnd_j)->numberEdges() == 0);
 
 	entry_node_ = D_->getDimerNode(rnd_i, rnd_j);
-
+	cout << "entry:" << endl;
+	entry_node_->printoutPos();
 	rnd = Rnd_->dist_3();
 	worm_.push_back(entry_node_->getEdge(rnd));
 
 	if (entry_node_->getEdge(rnd)->getDimer() == 0) {
 			cerr <<"entry_node has dimer0" << endl;
 	}
+
 	this->update_winding_number();
 	this->proba_step();
 }
@@ -56,6 +57,8 @@ void MonteCarlo::init_update() {
 // maybe there is a more efficient way.
 void MonteCarlo::myopic_step() {
 	DimerEdge* last_edge = worm_.back();
+	cout << "myto start (end of last edge);" << endl;
+	last_edge->getEnd()->printoutPos();
 	vector<DimerEdge*> d = D_->get_local_dimer(last_edge);
 
 	DimerNode* end_node = last_edge->getEnd();
@@ -72,47 +75,51 @@ void MonteCarlo::myopic_step() {
 
 	worm_.push_back(next_edge);
 	this->update_winding_number();
+
 }
 
 void MonteCarlo::proba_step() {
-	DimerEdge* d0 = worm_.back();
-	DimerEdge* next_edge = d0;
-	//cout << "starti="<<d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
-	//cout << "endi="<<d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
 
+	DimerEdge* d0 = worm_.back();
+	DimerEdge* next_edge = NULL;
+	cout << "p:myto start (d0 start);" << endl;
+	d0->getStart()->printoutPos();
+
+	cout << "proba start (d0 end);" << endl;
+	d0->getEnd()->printoutPos();
 	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
 
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
-				//cout << "starti="<< d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
-				//cout << "endi="<< d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
-				cout << "start: " << endl;
+				this->Printout("./Debugg/");
+				/*
+				cout << "positions:"<< endl;
+				for (int k = 0; k<3 ; k++ ) {
+					cout << "start: ";
+					d[k]->getStart()->printoutPos();
+					cout << "end: ";
+					d[k]->getEnd()->printoutPos();
+				}
+				*/
 				cerr << "this is not a spin configuration" << endl;
 			}
 		}
 	}
 
-	if (d[0]->getDimer() + d[1]->getDimer() + d[2]->getDimer()== 1) {
-
-		this->Printout("./Debugg/");
-		cout << "starti="<< d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
-		cout << "endi="<< d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
-		cout << "start: " << endl;
-		cerr << "this is not a spin configuration" << endl;
-
-	}
-
-	std::vector <double> W = D_->get_local_weight(d0);
-	std::vector< std::vector<double>> M = this->get_M(W);
+	std::vector <long double> W = D_->get_local_weight(d0);
+	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
-	std::vector<double> w{M[0][0], M[0][1], M[0][2]};
-	//std::cout << "M[0][0]: " << M[0][0] << ", M[0][1]: " << M[0][1] << ", M[0][2]: " << M[0][2] << ",sum: "<< M[0][0] + M[0][1] + M[0][2] << std::endl;
-	std::piecewise_constant_distribution<> dist(i.begin(), i.end(), w.begin());
+	std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
+	std::cout << "M[0][0]: " << M[0][0] << ", M[0][1]: " << M[0][1] << ", M[0][2]: " << M[0][2] << ",sum: "<< M[0][0] + M[0][1] + M[0][2] << std::endl;
+	std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
 
 	int next_index = Rnd_->piecewise_constant_distribution(dist);
+	if (next_index != 0 || next_index != 1 || next_index != 2) {
+		cout << "next_index : "<< next_index << endl;
+		cout << "next_idendex is not int between 0 and 2" << endl;
+	}
 
-	//cout << "start: x= " << d0->getStart()->getPos(0) << ", y = " << d0->getStart()->getPos(1) <<endl;
 	if (next_index == 0) {
 		next_edge = d[0]->getOppositeEdge();
 	}
@@ -132,16 +139,9 @@ void MonteCarlo::proba_step() {
 	worm_.push_back(next_edge);
 	this->update_winding_number();
 
-	d = D_->get_local_dimer(d0);
-	if (d[0]->getDimer() + d[1]->getDimer() + d[2]->getDimer()== 1) {
-
-			this->Printout("./Debugg/");
-			//cout << "starti="<< d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
-			//cout << "endi="<< d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
-			cout << "end: " << endl;
-			cerr << "this is not a spin configuration" << endl;
-
-	}
+/*
+ * 	d = D_->get_local_dimer(d0);
+ *
 		if (d[0]->getDimer() == -1) {
 			if (d[1]->getDimer() == -1) {
 				if (d[2]->getDimer() == -1) {
@@ -153,6 +153,7 @@ void MonteCarlo::proba_step() {
 				}
 			}
 		}
+		*/
 }
 
 
@@ -170,9 +171,10 @@ void MonteCarlo::create_update() {
 		end_node = last_edge->getEnd();
 		//count += 1;
 	} while(end_node != entry_node_);
+
 	//while(end_node != entry_node_ && count < count_max);
 
-	/*
+		/*
 	if(count_max == count) {
 		this->delete_worm();
 		winding_number_horizontal = 0;
@@ -227,14 +229,14 @@ void MonteCarlo::Printout(std::string OutputPath){
 	D_->Printout(OutputPath);
 }
 
-std::vector< std::vector<double>> MonteCarlo::get_M(std::vector <double> W)
+std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long double> W)
 {
-	std::vector< std::vector<double>> M(3, std::vector<double>(3, 0));
-	std::vector< std::vector<double>> A(3, std::vector<double>(3, 0));
-
-	double W_max = *std::max_element(W.begin(), W.end()); // max of W
+	std::vector< std::vector<long double>> M(3, std::vector<long double>(3, 0));
+	std::vector< std::vector<long double>> A(3, std::vector<long double>(3, 0));
+	long double W_max = *std::max_element(W.begin(), W.end()); // max of W
 	int i_max = std::distance(std::begin(W), std::max_element(W.begin(), W.end())); // index of max element
-	double W_other = 0;
+
+	long double W_other = 0;
 	vector<int> m(2,0);
 	int j = 0;
 
@@ -405,12 +407,9 @@ void MonteCarlo::update_winding_number() {
 	int j_last_edge_start = last_edge->getStart()->getPos(1);
 	int j_last_edge_end = last_edge->getEnd()->getPos(1);
 	int delta_j = std::abs(j_last_edge_start - j_last_edge_end);
-	cout << "dj" << delta_j << endl;
 	int i_last_edge_start = last_edge->getStart()->getPos(0);
 	int i_last_edge_end = last_edge->getEnd()->getPos(0);
 	int delta_i = std::abs(i_last_edge_start - i_last_edge_end);
-
-
 
 	// vertical uptdate
 	if ( delta_j >= (N_ - 2 )) {
@@ -499,6 +498,7 @@ void MonteCarlo::testwindingnumber() {
 	}
 	winding_number_horizontal = 0;
 	winding_number_vertical = 0;
+
 	for (int i = 0; i < 3; i++) {
 		DimerNode* start = D_->getDimerNode(0, Deg_ + i);
 		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 1, i);
@@ -509,6 +509,33 @@ void MonteCarlo::testwindingnumber() {
 		this->update_winding_number();
 		cout << "windingnumber down right to up left ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
 	}
+
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
+
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
+	for (int i = 0; i < 3; i++) {
+		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 2, i);
+		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 1, i);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber down right side (0,0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+	for (int i = 0; i < 3; i++) {
+		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 1, i);
+		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 2, i + 1);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber down right side (0,0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+
 	cout << "test finished"<< endl;
 }
 
