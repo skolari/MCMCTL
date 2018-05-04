@@ -134,7 +134,6 @@ void MonteCarlo::proba_step() {
 
 /*
  * 	d = D_->get_local_dimer(d0);
- *
 		if (d[0]->getDimer() == -1) {
 			if (d[1]->getDimer() == -1) {
 				if (d[2]->getDimer() == -1) {
