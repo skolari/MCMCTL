@@ -85,8 +85,12 @@ void MonteCarlo::proba_step() {
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
+<<<<<<< HEAD
 				this->Printout("./Debugg/");
 
+=======
+				/*
+>>>>>>> new_try_server
 				cout << "positions:"<< endl;
 				for (int k = 0; k<3 ; k++ ) {
 					cout << "start: ";
@@ -104,15 +108,27 @@ void MonteCarlo::proba_step() {
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
 	std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
+<<<<<<< HEAD
 	//std::cout << "M[0][0]: " << M[0][0] << ", M[0][1]: " << M[0][1] << ", M[0][2]: " << M[0][2] << ",sum: "<< M[0][0] + M[0][1] + M[0][2] << std::endl;
 	std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
 
 	int next_index = Rnd_->piecewise_constant_distribution(dist); /*
+=======
+	std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
+
+	int next_index = Rnd_->piecewise_constant_distribution(dist);
+	/*
+>>>>>>> new_try_server
 	if (next_index != 0 || next_index != 1 || next_index != 2) {
 		cout << "next_index : "<< next_index << endl;
 		cout << "next_idendex is not int between 0 and 2" << endl;
 	}
+<<<<<<< HEAD
 */
+=======
+	*/
+
+>>>>>>> new_try_server
 	if (next_index == 0) {
 		next_edge = d[0]->getOppositeEdge();
 	}
