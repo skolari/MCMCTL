@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -std=c++11 -O0 -g -fopenmp 
+CFLAGS = -Wall -std=c++11 -O3 -fopenmp 
 EXEC_NAME = MCMCIsingTri
 INCLUDES =
 LDFLAGS= -lgomp
