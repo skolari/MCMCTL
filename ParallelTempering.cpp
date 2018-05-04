@@ -36,7 +36,6 @@ ParallelTempering::~ParallelTempering() {
  * N_algo_ times the algogrithm step where all N_measure_ steps the energy is mesured.
  */
 void ParallelTempering::run() {
-	this->Printout("./Outputfiles/");
 	// thermalisation
 	for ( int i = 0; i < N_thermal_; i++ ) {
 		this->algorithm_step();
@@ -61,9 +60,9 @@ void ParallelTempering::run() {
  */
 void ParallelTempering::algorithm_step() {
 
-	//omp_set_num_threads(N_simul_);
+	omp_set_num_threads(N_simul_);
 
-	//#pragma omp parallel for
+	#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}

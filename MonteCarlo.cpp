@@ -20,7 +20,6 @@ MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J
 
 	Deg_ = S_->Lattice::get_Deg();
 	N_ = S_->Lattice::get_N();
-	this->Printout("./Debugg/start");
 }
 
 MonteCarlo::~MonteCarlo() {
@@ -41,8 +40,7 @@ void MonteCarlo::init_update() {
 	} while(D_->getDimerNode(rnd_i, rnd_j)->numberEdges() == 0);
 
 	entry_node_ = D_->getDimerNode(rnd_i, rnd_j);
-	cout << "entry:" << endl;
-	entry_node_->printoutPos();
+
 	rnd = Rnd_->dist_3();
 	worm_.push_back(entry_node_->getEdge(rnd));
 
@@ -57,8 +55,7 @@ void MonteCarlo::init_update() {
 // maybe there is a more efficient way.
 void MonteCarlo::myopic_step() {
 	DimerEdge* last_edge = worm_.back();
-	cout << "myto start (end of last edge);" << endl;
-	last_edge->getEnd()->printoutPos();
+
 	vector<DimerEdge*> d = D_->get_local_dimer(last_edge);
 
 	DimerNode* end_node = last_edge->getEnd();
@@ -82,17 +79,12 @@ void MonteCarlo::proba_step() {
 
 	DimerEdge* d0 = worm_.back();
 	DimerEdge* next_edge = NULL;
-	cout << "p:myto start (d0 start);" << endl;
-	d0->getStart()->printoutPos();
 
-	cout << "proba start (d0 end);" << endl;
-	d0->getEnd()->printoutPos();
 	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
 
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
-				this->Printout("./Debugg/");
 				/*
 				cout << "positions:"<< endl;
 				for (int k = 0; k<3 ; k++ ) {
@@ -111,14 +103,15 @@ void MonteCarlo::proba_step() {
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
 	std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
-	std::cout << "M[0][0]: " << M[0][0] << ", M[0][1]: " << M[0][1] << ", M[0][2]: " << M[0][2] << ",sum: "<< M[0][0] + M[0][1] + M[0][2] << std::endl;
 	std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
 
 	int next_index = Rnd_->piecewise_constant_distribution(dist);
+	/*
 	if (next_index != 0 || next_index != 1 || next_index != 2) {
 		cout << "next_index : "<< next_index << endl;
 		cout << "next_idendex is not int between 0 and 2" << endl;
 	}
+	*/
 
 	if (next_index == 0) {
 		next_edge = d[0]->getOppositeEdge();
