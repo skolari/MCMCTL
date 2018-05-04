@@ -86,7 +86,7 @@ void MonteCarlo::proba_step() {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
 				this->Printout("./Debugg/");
-				/*
+
 				cout << "positions:"<< endl;
 				for (int k = 0; k<3 ; k++ ) {
 					cout << "start: ";
