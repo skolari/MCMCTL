@@ -80,6 +80,10 @@ public:
 	double calculate_cv();
 
 	void delete_worm();
+
+	//test function
+	void testwindingnumber();
+
 private:
 	Random* Rnd_;
 	SpinLattice* S_;

@@ -56,6 +56,10 @@ public:
 	bool operator != (const DimerNode *other) {
 		return !((this->getPos(0) == other->getPos(0)) && (this->getPos(1) == other->getPos(1)));
 	}
+
+	inline void printoutPos() {
+		std::cout << "i = " << this->getPos(0) << ", j = " << this->getPos(1) << std::endl;
+	}
 private:
 	std::vector<int> Pos_;
 	std::vector<DimerEdge*> Edges_;

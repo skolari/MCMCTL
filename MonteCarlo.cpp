@@ -21,7 +21,7 @@ MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J
 	Deg_ = S_->Lattice::get_Deg();
 	N_ = S_->Lattice::get_N();
 	this->Printout("./Debugg/start");
-
+	this->testwindingnumber();
 }
 
 MonteCarlo::~MonteCarlo() {
@@ -42,8 +42,13 @@ void MonteCarlo::init_update() {
 	} while(D_->getDimerNode(rnd_i, rnd_j)->numberEdges() == 0);
 
 	entry_node_ = D_->getDimerNode(rnd_i, rnd_j);
+
 	rnd = Rnd_->dist_3();
 	worm_.push_back(entry_node_->getEdge(rnd));
+
+	if (entry_node_->getEdge(rnd)->getDimer() == 0) {
+			cerr <<"entry_node has dimer0" << endl;
+	}
 	this->update_winding_number();
 	this->proba_step();
 }
@@ -76,19 +81,28 @@ void MonteCarlo::proba_step() {
 	//cout << "endi="<<d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
 
 	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
-/*
+
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
-				this->Printout("./Debugg/");
-				cout << "starti="<<d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
-				cout << "endi="<<d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
-				cout << "dimer: " << d0->getDimer() << ", Dimer opp: " << d0->getOppositeEdge()->getDimer() << endl;
+				//cout << "starti="<< d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
+				//cout << "endi="<< d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
+				cout << "start: " << endl;
 				cerr << "this is not a spin configuration" << endl;
 			}
 		}
 	}
-	*/
+
+	if (d[0]->getDimer() + d[1]->getDimer() + d[2]->getDimer()== 1) {
+
+		this->Printout("./Debugg/");
+		cout << "starti="<< d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
+		cout << "endi="<< d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
+		cout << "start: " << endl;
+		cerr << "this is not a spin configuration" << endl;
+
+	}
+
 	std::vector <double> W = D_->get_local_weight(d0);
 	std::vector< std::vector<double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
@@ -117,6 +131,28 @@ void MonteCarlo::proba_step() {
 
 	worm_.push_back(next_edge);
 	this->update_winding_number();
+
+	d = D_->get_local_dimer(d0);
+	if (d[0]->getDimer() + d[1]->getDimer() + d[2]->getDimer()== 1) {
+
+			this->Printout("./Debugg/");
+			//cout << "starti="<< d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
+			//cout << "endi="<< d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
+			cout << "end: " << endl;
+			cerr << "this is not a spin configuration" << endl;
+
+	}
+		if (d[0]->getDimer() == -1) {
+			if (d[1]->getDimer() == -1) {
+				if (d[2]->getDimer() == -1) {
+					this->Printout("./Debugg/");
+					cout << "starti="<< d0->getStart()->getPos(0) << ", j ="<< d0->getStart()->getPos(1)<< endl;
+					cout << "endi="<< d0->getEnd()->getPos(0) << ", j ="<< d0->getEnd()->getPos(1)<< endl;
+					cout << "end: " << endl;
+					cerr << "this is not a spin configuration" << endl;
+				}
+			}
+		}
 }
 
 
@@ -124,15 +160,15 @@ void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
-	int count = 0;
-	int count_max = 20*S_->get_Number_spin();
+	//int count = 0;
+	//int count_max = 20*S_->get_Number_spin();
 
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
-		count += 1;
+		//count += 1;
 	} while(end_node != entry_node_);
 	//while(end_node != entry_node_ && count < count_max);
 
@@ -183,31 +219,6 @@ void MonteCarlo::run_algorithm_single() {
 void MonteCarlo::run_parallel_step(int N_temp) {
 	for ( int i = 0; i < N_temp; i++ ) {
 		this->create_update();
-	}
-}
-
-/*
- * Updates the winding number in function the last edge of the worm_.
- */
-void MonteCarlo::update_winding_number() {
-	DimerEdge* last_edge = worm_.back();
-
-	int j_last_edge_start = last_edge->getStart()->getPos(1);
-	int j_last_edge_end = last_edge->getEnd()->getPos(1);
-	int delta_j = std::abs(j_last_edge_start - j_last_edge_end);
-
-	int i_last_edge_start = last_edge->getStart()->getPos(0);
-	int i_last_edge_end = last_edge->getEnd()->getPos(0);
-	int delta_i = std::abs(i_last_edge_start - i_last_edge_end);
-
-	//horizontal update
-	if ( delta_i >= 2) {
-		winding_number_horizontal += 1;
-	}
-
-	// vertical uptdate
-	if ( delta_j == (N_ - 2 )) {
-		winding_number_vertical += 1;
 	}
 }
 
@@ -361,7 +372,7 @@ int check_if_correct_update(std::vector<DimerEdge*> d) {
 	if(d[0]->getDimer() == -1) {
 		if(d[1]->getDimer() == -1 ) {
 			if(d[2]->getDimer() == -1) {
-				return 1;
+				//return 1;
 			}
 		}
 	}
@@ -383,3 +394,122 @@ void MonteCarlo::delete_worm() {
 	}
 	worm_.clear();
 }
+
+
+/*
+ * Updates the winding number in function the last edge of the worm_.
+ */
+void MonteCarlo::update_winding_number() {
+	DimerEdge* last_edge = worm_.back();
+
+	int j_last_edge_start = last_edge->getStart()->getPos(1);
+	int j_last_edge_end = last_edge->getEnd()->getPos(1);
+	int delta_j = std::abs(j_last_edge_start - j_last_edge_end);
+	cout << "dj" << delta_j << endl;
+	int i_last_edge_start = last_edge->getStart()->getPos(0);
+	int i_last_edge_end = last_edge->getEnd()->getPos(0);
+	int delta_i = std::abs(i_last_edge_start - i_last_edge_end);
+
+
+
+	// vertical uptdate
+	if ( delta_j >= (N_ - 2 )) {
+		winding_number_vertical += 1;
+	}
+	//horizontal update
+	else if ( delta_i >= 2 * Deg_ - 1) {
+		winding_number_horizontal += 1;
+	}
+}
+
+
+/*
+ * this function can be used to test the winding number for Deg_ = 3
+ */
+void MonteCarlo::testwindingnumber() {
+	for (int i = 0; i < N_ - 1; i++) {
+		DimerNode* start = D_->getDimerNode(i , N_ - 2);
+		DimerNode* end = D_->getDimerNode(i+1, N_ - 2);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber upperline (0,0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+	for (int i = 0; i < 3; i++) {
+		DimerNode* start = D_->getDimerNode(2*i + 1, 5);
+		DimerNode* end = D_->getDimerNode(2*i + 6, 0);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber up to down (0," << i+1 <<"):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
+	for (int i = 0; i < 3; i++) {
+		DimerNode* end = D_->getDimerNode(2*i + 1, 5);
+		DimerNode* start = D_->getDimerNode(2*i + 6, 0);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber down to up (0," << i+1 <<"):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
+	for (int i = 0; i < 3; i++) {
+		DimerNode* start = D_->getDimerNode(6 + 2* i, 5 - i);
+		DimerNode* end = D_->getDimerNode(1 + 2 * i, 2 - i);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber up right to down left ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
+	for (int i = 0; i < 3; i++) {
+		DimerNode* end = D_->getDimerNode(6 + 2* i, 5 - i);
+		DimerNode* start = D_->getDimerNode(1 + 2 * i, 2 - i);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber down left to up right ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
+	for (int i = 0; i < 3; i++) {
+		DimerNode* end = D_->getDimerNode(0, Deg_ + i);
+		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 1, i);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber up left to down right ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+	winding_number_horizontal = 0;
+	winding_number_vertical = 0;
+	for (int i = 0; i < 3; i++) {
+		DimerNode* start = D_->getDimerNode(0, Deg_ + i);
+		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 1, i);
+		start->printoutPos();
+		end->printoutPos();
+		DimerEdge* edge = start->getEdge(end);
+		worm_.push_back(edge);
+		this->update_winding_number();
+		cout << "windingnumber down right to up left ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+	}
+	cout << "test finished"<< endl;
+}
+
+

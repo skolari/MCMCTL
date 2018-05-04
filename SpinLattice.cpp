@@ -8,9 +8,6 @@
 #include "SpinLattice.h"
 using namespace std;
 
-#define Q 0
-#define R 1
-
 
 SpinLattice::SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double Beta)
 	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3), Beta_(Beta)

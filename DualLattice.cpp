@@ -7,9 +7,6 @@
 
 #include "DualLattice.h"
 
-#define I 0
-#define J 1
-
 using namespace std;
 
 DualLattice::DualLattice(Random* Rnd, int Deg, SpinLattice* S)
