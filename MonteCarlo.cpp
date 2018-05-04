@@ -20,7 +20,6 @@ MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J
 
 	Deg_ = S_->Lattice::get_Deg();
 	N_ = S_->Lattice::get_N();
-	this->Printout("./Debugg/start");
 }
 
 MonteCarlo::~MonteCarlo() {
@@ -82,7 +81,7 @@ void MonteCarlo::proba_step() {
 	DimerEdge* next_edge = NULL;
 
 	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
-
+	/*
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
@@ -95,12 +94,12 @@ void MonteCarlo::proba_step() {
 					cout << "end: ";
 					d[k]->getEnd()->printoutPos();
 				}
-				*/
+
 				cerr << "this is not a spin configuration" << endl;
 			}
 		}
 	}
-
+	*/
 	std::vector <long double> W = D_->get_local_weight(d0);
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
