@@ -32,7 +32,7 @@ cp $HD/configuration.in $SCRGD
 #go to scratch and run code
 cd $SCRGD
 
-./MCMCIsingTri
+./MCMCIsingTri > $SCR/file.out
 
 #create the results directory in home
 mkdir $HDR
