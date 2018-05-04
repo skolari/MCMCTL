@@ -83,15 +83,6 @@ void MonteCarlo::proba_step() {
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
-				/*
-				cout << "positions:"<< endl;
-				for (int k = 0; k<3 ; k++ ) {
-					cout << "start: ";
-					d[k]->getStart()->printoutPos();
-					cout << "end: ";
-					d[k]->getEnd()->printoutPos();
-				}
-				*/
 				cerr << "this is not a spin configuration" << endl;
 			}
 		}
