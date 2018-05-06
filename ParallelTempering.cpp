@@ -83,9 +83,10 @@ void ParallelTempering::tempering_switch(int i, int j) {
 	MonteCarlo* Mj = Simulations_[j];
 	double Ei = Mi->get_energy();
 	double Ej = Mj->get_energy();
-	double beta_i = Simulations_[i]->get_S()->get_Beta();
-	double beta_j = Simulations_[j]->get_S()->get_Beta();
-	double ref = std::exp((beta_i - beta_j) * (Ei - Ej));
+	//double beta_i = Simulations_[i]->get_S()->get_Beta();
+	//double beta_j = Simulations_[j]->get_S()->get_Beta();
+	//double ref = std::exp((beta_i - beta_j) * (Ei - Ej));
+	/*
 	if (ref > 1) {
 		this->J_swap(i, j);
 	} else {
@@ -93,6 +94,10 @@ void ParallelTempering::tempering_switch(int i, int j) {
 		if (rnd < ref) {
 			this->J_swap(i, j);
 		}
+	}
+	*/
+	if (Ei - Ej > 0) {
+		this->J_swap(i, j);
 	}
 
 }

@@ -72,13 +72,16 @@ void MonteCarlo::myopic_step() {
 
 }
 
+/*
+ * the probabilistic step of the algorihm.
+ */
 void MonteCarlo::proba_step() {
 
 	DimerEdge* d0 = worm_.back();
 	DimerEdge* next_edge = NULL;
 
 	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
-
+	/*
 	if (d[0]->getDimer() == -1) {
 		if (d[1]->getDimer() == -1) {
 			if (d[2]->getDimer() == -1) {
@@ -86,7 +89,7 @@ void MonteCarlo::proba_step() {
 			}
 		}
 	}
-
+	*/
 	std::vector <long double> W = D_->get_local_weight(d0);
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
