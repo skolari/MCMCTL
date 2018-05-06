@@ -7,7 +7,6 @@
 
 #include "MonteCarlo.h"
 using namespace std;
-int check_if_correct_update(std::vector<DimerEdge*> d);
 
 MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
 	: Rnd_(Rnd), worm_(), energy_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
@@ -320,8 +319,9 @@ void MonteCarlo::measure_energy() {
 double MonteCarlo::first_moment_energy() {
 	double energy_sum = 0;
 	int N = energy_measures_.size();
-	for (auto& n : energy_measures_)
-	    energy_sum += n;
+	for (int i = 0; i < N; i++) {
+	    energy_sum += energy_measures_[i];
+	}
 	return energy_sum / N;
 }
 
@@ -332,8 +332,9 @@ double MonteCarlo::first_moment_energy() {
 double MonteCarlo::second_moment_energy() {
 	double energy_sum = 0;
 	int N = energy_measures_.size();
-	for (auto& n : energy_measures_)
-	    energy_sum += n*n;
+	for (int i = 0; i < N; i++) {
+	    energy_sum += energy_measures_[i]*energy_measures_[i];
+	}
 	return energy_sum / N;
 }
 
@@ -347,26 +348,6 @@ double MonteCarlo::calculate_cv() {
 	double second_moment_energy = this->second_moment_energy();
 	double cv = Number_sites * (second_moment_energy - first_moment_energy * first_moment_energy) * S_->get_Beta() * S_->get_Beta();
 	return cv;
-}
-
-int check_if_correct_update(std::vector<DimerEdge*> d) {
-	// case 1: no correct configuration.
-	if(d[0]->getDimer() == -1) {
-		if(d[1]->getDimer() == -1 ) {
-			if(d[2]->getDimer() == -1) {
-				//return 1;
-			}
-		}
-	}
-
-	//case 2: no correct connection
-	DimerNode* d0end = d[0]->getEnd();
-	DimerNode* d1start = d[1]->getStart();
-	DimerNode* d2start = d[2]->getStart();
-	if((d0end->getPos(0) != d1start->getPos(0)) || (d0end->getPos(1) != d1start->getPos(1)) || (d0end->getPos(0) != d2start->getPos(0)) || (d0end->getPos(1) != d2start->getPos(1)) ) {
-		return 2;
-	}
-	return 0;
 }
 
 void MonteCarlo::delete_worm() {
