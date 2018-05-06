@@ -45,6 +45,7 @@ class TriangularLattice:
 
         remove = [node for node, data in self.S.nodes(data=True) if data['spin'] == 0]
         self.S.remove_nodes_from(remove)
+        # detect triangles cycls_3 = [c for c in nx.cycle_basis(G) if len(c)==3]
 
     def draw_tri_lattice(self):
         positions = nx.get_node_attributes(self.S, 'pos')

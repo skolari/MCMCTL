@@ -79,11 +79,13 @@ void ParallelTempering::algorithm_step() {
  * @param j index of the jth MonteCarlo system in Simulations_
  */
 void ParallelTempering::tempering_switch(int i, int j) {
-	MonteCarlo* M1 = Simulations_[i];
-	MonteCarlo* M2 = Simulations_[j];
-	double E1 = M1->get_energy();
-	double E2 = M2->get_energy();
-	double ref = std::exp((beta_[i] - beta_[j]) * (E1 - E2));
+	MonteCarlo* Mi = Simulations_[i];
+	MonteCarlo* Mj = Simulations_[j];
+	double Ei = Mi->get_energy();
+	double Ej = Mj->get_energy();
+	double beta_i = Simulations_[i]->get_S()->get_Beta();
+	double beta_j = Simulations_[j]->get_S()->get_Beta();
+	double ref = std::exp((beta_i - beta_j) * (Ei - Ej));
 	if (ref > 1) {
 		this->J_swap(i, j);
 	} else {
@@ -144,10 +146,14 @@ void ParallelTempering::Printout_Energy_and_Cv(std::string OutputPath) const
 
 	double E = 0;
 	double Cv = 0;
+	double beta = 0;
+	double variance = 0;
 	for (int i = 0; i < N_simul_; ++i) {
 		E = Simulations_[i]->first_moment_energy();
 		Cv = Simulations_[i]->calculate_cv();
-		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(3) << beta_[i] << "\t" << E << "\t" << Cv << endl;
+		variance  = Simulations_[i]->variance_energy();
+		beta = Simulations_[i]->get_S()->get_Beta();
+		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(3) << beta << "\t" << E << "\t" << Cv << "\t" << variance << endl;
 	}
 	outputFileSpin->close();
 	delete outputFileSpin;

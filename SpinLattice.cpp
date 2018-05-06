@@ -237,7 +237,7 @@ int SpinLattice::number_spin() {
 }
 
 double SpinLattice::get_energy_per_spin() {
-	this->update_Energy();
+	//this->update_Energy();
 	double E = this->get_Energy();
 	return E / Number_spin_;
 }

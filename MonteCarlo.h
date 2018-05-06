@@ -78,7 +78,7 @@ public:
 	double first_moment_energy();
 	double second_moment_energy();
 	double calculate_cv();
-
+	double variance_energy();
 	void delete_worm();
 
 	//test function

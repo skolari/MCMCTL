@@ -119,6 +119,7 @@ void MonteCarlo::proba_step() {
 
 	worm_.push_back(next_edge);
 	this->update_winding_number();
+	this->get_S()->update_Energy();
 }
 
 
@@ -309,6 +310,7 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
  */
 void MonteCarlo::measure_energy() {
 	double E = S_->get_energy_per_spin();
+	cout << "energy: " << E << endl;
 	energy_measures_.push_back(E);
 }
 
@@ -322,7 +324,8 @@ double MonteCarlo::first_moment_energy() {
 	for (int i = 0; i < N; i++) {
 	    energy_sum += energy_measures_[i];
 	}
-	return energy_sum / N;
+	energy_sum  =energy_sum / N;
+	return energy_sum;
 }
 
 /*
@@ -335,7 +338,14 @@ double MonteCarlo::second_moment_energy() {
 	for (int i = 0; i < N; i++) {
 	    energy_sum += energy_measures_[i]*energy_measures_[i];
 	}
-	return energy_sum / N;
+	energy_sum  =energy_sum / N;
+	return energy_sum;
+}
+
+double MonteCarlo::variance_energy() {
+	double energy_first = first_moment_energy();
+	double energy_second = second_moment_energy();
+	return energy_second - energy_first * energy_first;
 }
 
 /*
