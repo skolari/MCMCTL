@@ -11,13 +11,13 @@ using namespace std;
 
 ParallelTempering::ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, int N_measure,
 		double J1, double J2, double J3,
-		double beta_start, double beta_end)
+		double T_start, double T_end)
 	: Rnd_(Rnd), Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), N_measure_(N_measure), J1_const_(J1), J2_const_(J2), J3_const_(J3),
 	  beta_(N_simul, 0), J1_(N_simul, 0), J2_(N_simul, 0), J3_(N_simul, 0), Simulations_(N_simul, NULL)
 {
 
 	for (int i = 0; i < N_simul; i++) {
-		beta_[i] = beta_start + i * (beta_end - beta_start) / N_simul;
+		beta_[i] = 1 / (T_start + i * (T_end - T_start) / N_simul);
 	}
 
 	for (int i = 0; i < N_simul; i++) {

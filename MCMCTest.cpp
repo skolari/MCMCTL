@@ -38,12 +38,12 @@ int main(int argc, char* argv[])
 	int N_thermal = 			configFile.get<int>("N_thermal");
 	int N_algo = 				configFile.get<int>("N_algo");
 	int N_temp = 				configFile.get<int>("N_temp");
-	int N_mesure =				configFile.get<int>("N_mesure");
+	int N_measure =				configFile.get<int>("N_measure");
 	double J1 = 				configFile.get<double>("J1");
 	double J2 = 				configFile.get<double>("J2");
 	double J3 = 				configFile.get<double>("J3");
-	double beta_start = 		configFile.get<double>("beta_start");
-	double beta_end = 			configFile.get<double>("beta_end");
+	double T_start = 		configFile.get<double>("T_start");
+	double T_end = 			configFile.get<double>("T_end");
 
 	// create xml
 	create_xml(inputPath, time_normal, time_sec);
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	// run algorithm
 	int N = 2 * Deg + 1;
 	Random* Rnd = new Random(N);
-    ParallelTempering* P = new ParallelTempering(Rnd, Deg, N_simul, N_thermal, N_algo, N_temp, N_mesure, J1, J2, J3, beta_start, beta_end);
+    ParallelTempering* P = new ParallelTempering(Rnd, Deg, N_simul, N_thermal, N_algo, N_temp, N_measure, J1, J2, J3, T_start, T_end);
 	P->run();
 	P->Printout(outputPath);
 
