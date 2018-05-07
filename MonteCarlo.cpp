@@ -108,19 +108,19 @@ void MonteCarlo::proba_step() {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
-		S_->update_Energy(delta_E[1]);
+		//S_->update_Energy(delta_E[1]);
 	}
 
 	else if (next_index == 2) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[2]);
 		next_edge = d[2];
-		S_->update_Energy(delta_E[0]);
+		//S_->update_Energy(delta_E[0]);
 	}
 
 	worm_.push_back(next_edge);
 	this->update_winding_number();
-	//this->get_S()->update_Energy();
+	this->get_S()->update_Energy();
 }
 
 /*
