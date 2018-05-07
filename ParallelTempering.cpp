@@ -42,6 +42,9 @@ void ParallelTempering::run() {
 		if (i % 100 == 0) {
 			std::cout << i << " out of " << N_thermal_ << " thermal steps done." << std::endl;
 		}
+		for ( int i = 0 ; i < N_simul_ - 1; i++) {
+			this->tempering_switch(i, i + 1);
+		}
 	}
 
 	// algorithm
@@ -67,11 +70,6 @@ void ParallelTempering::algorithm_step() {
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}
-	/*
-	for ( int i = 0 ; i < N_simul_ - 1; i++) {
-		this->tempering_switch(i, i + 1);
-	}
-	*/
 }
 
 /**
@@ -85,10 +83,10 @@ void ParallelTempering::tempering_switch(int i, int j) {
 	MonteCarlo* Mj = Simulations_[j];
 	double Ei = Mi->get_energy();
 	double Ej = Mj->get_energy();
-	//double beta_i = Simulations_[i]->get_S()->get_Beta();
-	//double beta_j = Simulations_[j]->get_S()->get_Beta();
-	//double ref = std::exp((beta_i - beta_j) * (Ei - Ej));
-	/*
+	double beta_i = Simulations_[i]->get_S()->get_Beta();
+	double beta_j = Simulations_[j]->get_S()->get_Beta();
+	double ref = std::exp((beta_i - beta_j) * (Ei - Ej));
+
 	if (ref > 1) {
 		this->J_swap(i, j);
 	} else {
@@ -97,11 +95,6 @@ void ParallelTempering::tempering_switch(int i, int j) {
 			this->J_swap(i, j);
 		}
 	}
-	*/
-	if (Ei - Ej > 0) {
-		this->J_swap(i, j);
-	}
-
 }
 
 /**

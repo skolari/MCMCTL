@@ -1,6 +1,6 @@
-Deg=5
+Deg=3
 outputPath=./Outputfiles/
-N_simul=25
+N_simul=10
 N_thermal=100000
 N_algo=10000
 N_temp=10
