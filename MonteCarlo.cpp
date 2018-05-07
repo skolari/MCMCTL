@@ -136,28 +136,24 @@ void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
-	//int count = 0;
-	//int count_max = 20*S_->get_Number_spin();
+	int count = 0;
+	int count_max = 20*S_->get_Number_spin();
 
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
-		//count += 1;
-	} while(end_node != entry_node_);
+	} while(end_node != entry_node_ && count < count_max);
 
-	//while(end_node != entry_node_ && count < count_max);
 
-		/*
 	if(count_max == count) {
 		this->delete_worm();
 		winding_number_horizontal = 0;
 		winding_number_vertical = 0;
-		cerr << "Too long worm." << endl;
+		//cerr << "Too long worm." << endl;
 		this->create_update();
 	}
-	*/
 
 	if ((winding_number_horizontal % 2 == 0)
 			&& (winding_number_vertical % 2 == 0)) {
