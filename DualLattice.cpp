@@ -337,7 +337,7 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		delta_E[i] = E[i] - E[0];
 		W[i] = std::exp(- S_->get_Beta() * delta_E[i]);
 	}
-
+	//cout << delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
 	tuple<std::vector< long double >, std::vector< double >> foo (W, delta_E);
 	return foo;
 }

@@ -80,19 +80,12 @@ void MonteCarlo::proba_step() {
 	DimerEdge* next_edge = NULL;
 
 	std::vector< DimerEdge* > d = D_->get_local_dimer(d0);
-	/*
-	if (d[0]->getDimer() == -1) {
-		if (d[1]->getDimer() == -1) {
-			if (d[2]->getDimer() == -1) {
-				cerr << "this is not a spin configuration" << endl;
-			}
-		}
-	}
-	*/
+
 	tuple<vector< long double >, vector< double >> foo = D_->get_local_weight(d0);
 	vector< long double > W;
 	vector< double > delta_E;
 	std::tie (W, delta_E) = foo;
+	//cout << delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
 
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
@@ -127,6 +120,7 @@ void MonteCarlo::proba_step() {
 
 	worm_.push_back(next_edge);
 	this->update_winding_number();
+	//this->get_S()->update_Energy();
 }
 
 /*
@@ -141,17 +135,18 @@ void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
-	int count = 0;
-	int count_max = 20*S_->get_Number_spin();
+	//int count = 0;
+	//int count_max = 20*S_->get_Number_spin();
 
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
-	} while(end_node != entry_node_ && count < count_max);
+		//count += 1;
+	} while(end_node != entry_node_ );//&& count < count_max);
 
-
+	/*
 	if(count_max == count) {
 		this->delete_worm();
 		winding_number_horizontal = 0;
@@ -159,7 +154,7 @@ void MonteCarlo::create_update() {
 		//cerr << "Too long worm." << endl;
 		this->create_update();
 	}
-
+	*/
 	if ((winding_number_horizontal % 2 == 0)
 			&& (winding_number_vertical % 2 == 0)) {
 		this->map_dimer_to_spin();

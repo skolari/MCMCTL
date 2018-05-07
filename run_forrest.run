@@ -10,13 +10,16 @@
 #SBATCH --mail-user manuel.stathis@epfl.ch
 #SBATCH --time 12:00:00
 
+#date
+today=`date +%Y-%m-%d.%H:%M:%S`;
+
 #working directory
-SCRGD="/scratch/$USER/Runs_MCMCTL"
-SCR="/scratch/$USER/Runs_MCMCTL/Outputfiles"
+SCRGD="/scratch/$USER/Runs_MCMCTL_$today"
+SCR="/scratch/$USER/Runs_MCMCTL_$today/Outputfiles"
 
 #home directory
 HD="/home/$USER/MCMCTL"
-HDR="/home/$USER/MCMCTL/Outputfiles"
+HDR="/home/$USER/MCMCTL/Outputfiles_$today"
 # compile code
 cd $HD
 make
