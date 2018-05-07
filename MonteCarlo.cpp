@@ -211,7 +211,7 @@ std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long doubl
 	std::vector< std::vector<long double>> A(3, std::vector<long double>(3, 0));
 	long double W_max = *std::max_element(W.begin(), W.end()); // max of W
 	int i_max = std::distance(std::begin(W), std::max_element(W.begin(), W.end())); // index of max element
-
+	//std::cout << "W0: " << W[0] << ", W1: " << W[1] << ", W2: " << W[2]<< std::endl;
 	long double W_other = 0;
 	vector<int> m(2,0);
 	int j = 0;
