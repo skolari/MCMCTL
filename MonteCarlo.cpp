@@ -25,6 +25,9 @@ MonteCarlo::~MonteCarlo() {
 	// TODO Auto-generated destructor stub
 }
 
+/**
+ * Initialize the algorithm algorithm.
+ */
 void MonteCarlo::init_update() {
 
 	worm_.clear();
@@ -42,10 +45,6 @@ void MonteCarlo::init_update() {
 	rnd = Rnd_->dist_3();
 	worm_.push_back(entry_node_->getEdge(rnd));
 
-	if (entry_node_->getEdge(rnd)->getDimer() == 0) {
-			cerr <<"entry_node has dimer0" << endl;
-	}
-
 	this->update_winding_number();
 	this->proba_step();
 }
@@ -57,8 +56,8 @@ void MonteCarlo::myopic_step() {
 
 	DimerNode* end_node = last_edge->getEnd();
 	DimerNode* start_node = last_edge->getStart();
-	DimerNode* new_end = end_node;
-	DimerEdge* next_edge = last_edge;
+	DimerNode* new_end = NULL;
+	DimerEdge* next_edge = NULL;
 	double rnd = 0;
 
 	do{ // maybe create function, edges_without(dimerEdge*)
@@ -125,7 +124,14 @@ void MonteCarlo::proba_step() {
 	this->get_S()->update_Energy();
 }
 
-
+/*
+ * create one update
+ * 1. initialize the algorithm
+ * 2. do one myopic step
+ * 3. do one probabilistic step
+ * 4. repeat till worm is closed
+ * 5. check winding number and accept if even else restart.
+ */
 void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
@@ -196,6 +202,7 @@ void MonteCarlo::run_parallel_step(int N_temp) {
 void MonteCarlo::Printout(std::string OutputPath){
 	S_->Printout(OutputPath);
 	D_->Printout(OutputPath);
+	cout << "beta: "<<this->get_S()->get_Beta() << ", e_end: " << energy_measures_.back() << endl;
 }
 
 std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long double> W)
@@ -313,7 +320,6 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
  */
 void MonteCarlo::measure_energy() {
 	double E = S_->get_energy_per_spin();
-	cout << "energy: " << E << endl;
 	energy_measures_.push_back(E);
 }
 
@@ -327,7 +333,7 @@ double MonteCarlo::first_moment_energy() {
 	for (int i = 0; i < N; i++) {
 	    energy_sum += energy_measures_[i];
 	}
-	energy_sum  =energy_sum / N;
+	energy_sum  = energy_sum / N;
 	return energy_sum;
 }
 
