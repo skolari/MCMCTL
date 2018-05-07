@@ -67,10 +67,11 @@ void ParallelTempering::algorithm_step() {
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}
-
+	/*
 	for ( int i = 0 ; i < N_simul_ - 1; i++) {
 		this->tempering_switch(i, i + 1);
 	}
+	*/
 }
 
 /**
