@@ -464,6 +464,7 @@ void MonteCarlo::testwindingnumber() {
 		this->update_winding_number();
 		cout << "windingnumber down left to up right ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
 	}
+
 	winding_number_horizontal = 0;
 	winding_number_vertical = 0;
 	for (int i = 0; i < 3; i++) {
@@ -476,6 +477,7 @@ void MonteCarlo::testwindingnumber() {
 		this->update_winding_number();
 		cout << "windingnumber up left to down right ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
 	}
+
 	winding_number_horizontal = 0;
 	winding_number_vertical = 0;
 

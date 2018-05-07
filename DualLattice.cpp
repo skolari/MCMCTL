@@ -312,22 +312,28 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d)
 std::vector< long double > DualLattice::get_local_weight(DimerEdge* d0)
 {
 	vector<long double> W(3, 1);
+	vector<long double> E(3, 0);
+
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
 
-	// J1
-	for ( int i = 0; i < 3; i++ ) {
-		W[0] *= std::exp(- S_->get_Ji(1) * S_->get_Beta() * d[i]->getDimer());
+	// E0
+	for( auto dimer : d) {
+		E[0] += S_->get_Ji(1) * S_->get_Beta() * dimer->getDimer();
 	}
 
-	W[1] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() *(-1) * d[0]->getDimer());
-	W[2] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * (-1) * d[0]->getDimer());
+	E[1] = S_->get_Ji(1) *(-1) * d[0]->getDimer();
+	E[2] = S_->get_Ji(1) *(-1) * d[0]->getDimer();
 
-	W[1] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * (-1) * d[1]->getDimer());
-	W[2] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * d[1]->getDimer());
+	E[1] += S_->get_Ji(1) * (-1) * d[1]->getDimer();
+	E[2] += S_->get_Ji(1) * d[1]->getDimer();
 
-	W[1] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * d[2]->getDimer());
-	W[2] *= std::exp(-S_->get_Ji(1) * S_->get_Beta() * (-1) * d[2]->getDimer());
+	E[1] += S_->get_Ji(1) * d[2]->getDimer();
+	E[2] += S_->get_Ji(1) * (-1) * d[2]->getDimer();
+
+	for (int i = 0; i < 3 ; i++) {
+		W[i] = std::exp(-S_->get_Beta() * ( E[i] - E[0] ));
+	}
 
 	return W;
 }

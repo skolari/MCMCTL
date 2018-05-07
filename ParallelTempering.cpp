@@ -49,8 +49,9 @@ void ParallelTempering::run() {
 		this->algorithm_step();
 		if (i % N_measure_ == 0) {
 			this->measure_energy();
-			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 		}
+		if (i % 100 == 0)
+			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 	}
 }
 
