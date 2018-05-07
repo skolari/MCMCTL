@@ -56,6 +56,9 @@ void ParallelTempering::run() {
 		if (i % 100 == 0)
 			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 	}
+	double E_step = Simulations_[0]->get_S()->get_Energy();
+	double E_calc = Simulations_[0]->get_S()->calculate_Energy();
+	cout << "delta E = "<< E_step - E_calc << endl;
 }
 
 /**

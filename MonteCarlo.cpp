@@ -89,7 +89,11 @@ void MonteCarlo::proba_step() {
 		}
 	}
 	*/
-	std::vector <long double> W = D_->get_local_weight(d0);
+	tuple<vector< long double >, vector< double >> foo = D_->get_local_weight(d0);
+	vector< long double > W;
+	vector< double > delta_E;
+	std::tie (W, delta_E) = foo;
+
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
 	std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
@@ -111,17 +115,18 @@ void MonteCarlo::proba_step() {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
+		S_->update_Energy(delta_E[1]);
 	}
 
 	else if (next_index == 2) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[2]);
 		next_edge = d[2];
+		S_->update_Energy(delta_E[0]);
 	}
 
 	worm_.push_back(next_edge);
 	this->update_winding_number();
-	this->get_S()->update_Energy();
 }
 
 /*
@@ -198,7 +203,6 @@ void MonteCarlo::run_parallel_step(int N_temp) {
 void MonteCarlo::Printout(std::string OutputPath){
 	S_->Printout(OutputPath);
 	D_->Printout(OutputPath);
-	cout << "beta: "<<this->get_S()->get_Beta() << ", e_end: " << energy_measures_.back() << endl;
 }
 
 std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long double> W)

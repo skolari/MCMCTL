@@ -309,10 +309,11 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d)
  * @param d0 the configuration around d0 is considered
  * @return a vecotor with the three weights W0, W1 and W2
  */
-std::vector< long double > DualLattice::get_local_weight(DimerEdge* d0)
+tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_weight(DimerEdge* d0)
 {
 	vector<long double> W(3, 1);
 	vector<long double> E(3, 0);
+	vector< double > delta_E(3, 0);
 
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
@@ -333,10 +334,10 @@ std::vector< long double > DualLattice::get_local_weight(DimerEdge* d0)
 
 	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;
 	for (int i = 0; i < 3 ; i++) {
-		W[i] = std::exp(-S_->get_Beta() * ( E[i] - E[0] ));
+		delta_E[i] = E[i] - E[0];
+		W[i] = std::exp(- S_->get_Beta() * delta_E[i]);
 	}
 
-	return W;
+	tuple<std::vector< long double >, std::vector< double >> foo (W, delta_E);
+	return foo;
 }
-
-
