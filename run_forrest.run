@@ -23,7 +23,7 @@ make
 
 #create the scratch directories to work
 mkdir $SCRGD
-mkdir $SCRScanc
+mkdir $SCR
 
 #copy data from HD to SCR
 cp $HD/MCMCIsingTri $SCRGD
@@ -40,8 +40,9 @@ mkdir $HDR
 #copy the results to the results directory
 cp $SCR/*.xml $HDR
 cp $SCR/*.dat $HDR
+cp $SCRGD/*.out $HDR
 cp $SCR/*.out $HDR
-cp $SCR/*.err $HDR
+cp $SCRGD/*.err $HDR
 #remove the files
 cd $SCRGD
 rm -r $SCR
