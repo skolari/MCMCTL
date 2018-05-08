@@ -11,7 +11,7 @@
 #SBATCH --time 12:00:00
 
 #date
-today=`date +%Y-%m-%d.%H:%M:%S`;
+today=`date +%Y-%m-%d-%H-%M-%S`;
 
 #working directory
 SCRGD="/scratch/$USER/Runs_MCMCTL_$today"

@@ -18,7 +18,7 @@ class DrawPlot:
         self.T = [1/x for x in self.beta]
         self.E = data[:, 1]
         # self.E = sp.savgol_filter(self.E1, 15, 6)
-        self.cv = data[:, 3] * self.beta
+        self.cv = data[:, 2]
 
     def draw_spin_and_dual_lattice(self):
         self.triangular_lattice.draw_tri_lattice()
