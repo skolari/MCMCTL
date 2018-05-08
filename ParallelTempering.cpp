@@ -42,9 +42,7 @@ void ParallelTempering::run() {
 		if (i % 100 == 0) {
 			std::cout << i << " out of " << N_thermal_ << " thermal steps done." << std::endl;
 		}
-		for ( int i = 0 ; i < N_simul_ - 1; i++) {
-			this->tempering_switch(i, i + 1);
-		}
+
 	}
 
 	// algorithm
@@ -56,9 +54,6 @@ void ParallelTempering::run() {
 		if (i % 100 == 0)
 			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 	}
-	double E_step = Simulations_[0]->get_S()->get_Energy();
-	double E_calc = Simulations_[0]->get_S()->calculate_Energy();
-	cout << "delta E = "<< E_step - E_calc << endl;
 }
 
 /**
@@ -72,6 +67,10 @@ void ParallelTempering::algorithm_step() {
 	#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
+	}
+
+	for ( int i = 0 ; i < N_simul_ - 1; i++) {
+		this->tempering_switch(i, i + 1);
 	}
 }
 
@@ -109,6 +108,10 @@ void ParallelTempering::J_swap(int i, int j) {
 	double Beta_temp = Simulations_[i]->get_S()->get_Beta();
 	Simulations_[i]->get_S()->set_Beta(Simulations_[j]->get_S()->get_Beta());
 	Simulations_[j]->get_S()->set_Beta(Beta_temp);
+
+	vector<double> energy_measures = Simulations_[i]->get_energy_measures_();
+	Simulations_[i]->set_energy_measures_(Simulations_[j]->get_energy_measures_());
+	Simulations_[j]->set_energy_measures_(energy_measures);
 
 	std::swap(Simulations_[i],Simulations_[j]);
 }
@@ -156,7 +159,7 @@ void ParallelTempering::Printout_Energy_and_Cv(std::string OutputPath) const
 		Cv = Simulations_[i]->calculate_cv();
 		variance  = Simulations_[i]->variance_energy();
 		beta = Simulations_[i]->get_S()->get_Beta();
-		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(3) << beta << "\t" << E << "\t" << Cv << "\t" << variance << endl;
+		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(5) << beta << "\t" << E << "\t" << Cv << "\t" << variance << endl;
 	}
 	outputFileSpin->close();
 	delete outputFileSpin;

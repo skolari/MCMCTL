@@ -49,6 +49,10 @@ public:
 		return energy_measures_;
 	}
 
+	inline void set_energy_measures_(std::vector<double> v) {
+		energy_measures_  = v;
+	}
+
 	inline int get_winding_number_vertical() const {
 		return winding_number_vertical;
 	}

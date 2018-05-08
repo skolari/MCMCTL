@@ -1,8 +1,8 @@
 Deg=3
 outputPath=./Outputfiles/
-N_simul=25
+N_simul=20
 N_thermal=10000
-N_algo=10000
+N_algo=1000
 N_temp=10
 N_measure=1
 J1=1
