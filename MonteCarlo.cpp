@@ -91,15 +91,24 @@ void MonteCarlo::proba_step() {
 	std::vector<double> i{0, 1, 2, 3};
 	std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
 	//std::cout << "M_0: " << M[0][0] << ", M_1: " << M[0][1] << ", M_2: " << M[0][2] << ", sum: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
-	std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
+	//std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
 
-	int next_index = int(Rnd_->piecewise_constant_distribution(dist));
-	/*
-	if ((next_index != 0) || (next_index != 1) || (next_index != 2)) {
-		cout << "next_index : "<< next_index << endl;
-		cout << "next_index is not int between 0 and 2" << endl;
+	//int next_index = int(Rnd_->piecewise_constant_distribution(dist));
+	double rnd = Rnd_->dist();
+	int next_index = 4;
+	if (rnd < M[0][0]) {
+		next_index = 0;
 	}
-	*/
+	else if ((rnd >= M[0][0]) && (rnd < M[0][0] + M[0][1])) {
+		next_index = 1;
+	}
+	else {
+		next_index = 2;
+	}
+	if (std::fabs(M[0][0]+ M[0][1]+ M[0][2] - 1) > 1e-10) {
+		cout << "proba_sum is: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
+	}
+
 	if (next_index == 0) {
 		next_edge = d[0]->getOppositeEdge();
 	}
@@ -218,6 +227,7 @@ std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long doubl
 			j += 1;
 		}
 	}
+
 	if (W_max > W_other) {
 		A[i_max][i_max] = W[i_max] - W[m[0]] - W[m[1]];
 
@@ -300,7 +310,8 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
  * adds a new measure to the energy_measures_ vector
  */
 void MonteCarlo::measure_energy() {
-	double E = S_->get_energy_per_spin();
+	//double E = S_->get_energy_per_spin();
+	double E = S_->get_Energy();
 	energy_measures_.push_back(E);
 }
 
@@ -309,12 +320,13 @@ void MonteCarlo::measure_energy() {
  * @return first moment of the energy
  */
 double MonteCarlo::first_moment_energy() {
+	int Number_sites = S_->get_Number_spin();
 	double energy_sum = 0;
 	int N = energy_measures_.size();
 	for (int i = 0; i < N; i++) {
 	    energy_sum += energy_measures_[i];
 	}
-	energy_sum  = energy_sum / N;
+	energy_sum  = energy_sum / (N * Number_sites);
 	return energy_sum;
 }
 
@@ -323,16 +335,18 @@ double MonteCarlo::first_moment_energy() {
  * @return second moment of the energy
  */
 double MonteCarlo::second_moment_energy() {
+	int Number_sites = S_->get_Number_spin();
 	double energy_sum = 0;
 	int N = energy_measures_.size();
 	for (int i = 0; i < N; i++) {
 	    energy_sum = energy_sum + energy_measures_[i] * energy_measures_[i];
 	}
-	energy_sum  = energy_sum / N;
+	energy_sum  = energy_sum / (N * Number_sites);
 	return energy_sum;
 }
 
 double MonteCarlo::variance_energy() {
+
 	double energy_first = this->first_moment_energy();
 	double energy_second = this->second_moment_energy();
 	return energy_second - energy_first * energy_first;
@@ -347,7 +361,7 @@ double MonteCarlo::calculate_cv() {
 	double beta = S_->get_Beta();
 	double first_moment_energy  = this->first_moment_energy();
 	double second_moment_energy = this->second_moment_energy();
-	double cv = Number_sites * (second_moment_energy - first_moment_energy * first_moment_energy) * beta * beta;
+	double cv =  (second_moment_energy - Number_sites * first_moment_energy * first_moment_energy) * beta * beta;
 	return cv;
 }
 
