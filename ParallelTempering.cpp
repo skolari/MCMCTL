@@ -48,6 +48,11 @@ void ParallelTempering::run() {
 	// algorithm
 	for ( int i = 0; i < N_algo_; i++ ) {
 		this->algorithm_step();
+		double E = Simulations_[0]->get_S()->get_Energy();
+		if (E > -27 && E <- 20) {
+			cout << "ener: " << E << endl;
+			Simulations_[0]->Printout("./OutputFiles/funk" + std::to_string(Rnd_->dist()));
+		}
 		if (i % N_measure_ == 0) {
 			this->measure_energy();
 		}

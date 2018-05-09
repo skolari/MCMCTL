@@ -165,11 +165,13 @@ double SpinLattice::calculate_Energy() {
 	double S_o = 0;
 	double S_n = 0;
 	//int dir2 = 0;
+	int count = 0;
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
 			if (this->ifInsideLattice(i, j)) {
 				Spin_origin = this->SpinLattice::get_Spin_pointer(i, j);
 				S_o =  Spin_origin->getSpin();
+				count += 1;
 				// an other possibility is to loop over all dir and divide the final energy by 2
 				for (int dir = 0; dir < 3; dir++) {
 					// nearest neighbor
@@ -192,6 +194,7 @@ double SpinLattice::calculate_Energy() {
 			}
 		}
 	}
+
 	return Energy;
 }
 

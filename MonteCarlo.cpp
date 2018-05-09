@@ -91,10 +91,12 @@ void MonteCarlo::proba_step() {
 	std::vector<double> i{0, 1, 2, 3};
 	std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
 	//std::cout << "M_0: " << M[0][0] << ", M_1: " << M[0][1] << ", M_2: " << M[0][2] << ", sum: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
+
 	//std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
 
 	//int next_index = int(Rnd_->piecewise_constant_distribution(dist));
 	double rnd = Rnd_->dist();
+	//cout << "rnd. " << rnd << endl;
 	int next_index = 4;
 	if (rnd < M[0][0]) {
 		next_index = 0;
@@ -105,6 +107,9 @@ void MonteCarlo::proba_step() {
 	else {
 		next_index = 2;
 	}
+
+	//cout <<"next_index: "<< next_index << endl<< endl;
+
 	if (std::fabs(M[0][0]+ M[0][1]+ M[0][2] - 1) > 1e-10) {
 		cout << "proba_sum is: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
 	}
@@ -130,6 +135,7 @@ void MonteCarlo::proba_step() {
 	worm_.push_back(next_edge);
 	this->update_winding_number();
 	this->get_S()->update_Energy();
+
 }
 
 /*
@@ -219,7 +225,7 @@ std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long doubl
 	long double W_other = 0;
 	vector<int> m(2,0);
 	int j = 0;
-
+	//cout << "W0: " << W[0] << ", W1: " << W[1] << ", W2: " << W[2] << endl;
 	for (int i = 0; i < 3; i ++) {
 		if (i != i_max){
 			W_other += W[i];
@@ -252,7 +258,6 @@ std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long doubl
 			M[i][j] = A[i][j] / W[i];
 		}
 	}
-
 	return M;
 }
 
@@ -311,8 +316,10 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
  */
 void MonteCarlo::measure_energy() {
 	//double E = S_->get_energy_per_spin();
+	S_->update_Energy();
 	double E = S_->get_Energy();
 	energy_measures_.push_back(E);
+	this->Printout("./OutputFiles/funk" +std::to_string(energy_measures_.size()) );
 }
 
 /*
