@@ -398,44 +398,28 @@ void MonteCarlo::update_winding_number() {
 	if (j_end == N_ - 2 && i_end != N_ - 1) {
 		if (j_start == N_ - 3) {
 			winding_number_2 += 1;
-			//cout << "2a)" << endl;
-			//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
-			//cout << "iend: " << i_end << ", j_send: " << j_end<< endl << endl;
 		}
 	}
 	if (j_start == N_ - 2 && i_start != N_ - 1) {
 		if (j_end == N_ - 3) {
 			winding_number_2 += 1;
-			//cout << "2b)" << endl;
-			//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
-			//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
 		}
 	}
 	if ((j_end == j_start) && (j_end != N_ - 2)) {
 		if (2 * j_start == - i_start + 2 *(N_ + Deg_ - 3) ) {
 			if (i_end == i_start + 1) {
 				winding_number_2 += 1;
-				//cout << "2c)" << endl;
-				//cout << "istart: " << i_start << ", j_start: " << j_start<< endl;
-				//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
 			}
 		}
 		if (2 * j_end == - i_end + 2 *(N_ + Deg_ - 3) ) {
 			if (i_start == i_end + 1) {
 				winding_number_2 += 1;
-				//cout << "2d)" << endl;
-				//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
-				//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
 			}
 		}
 	}
 
 	if ( delta_i >= 2 * Deg_ - 1 && delta_j < (N_ - 2 )) {
 		winding_number_1 += 1;
-		//cout << "1)" << endl;
-		//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
-		//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
-
 	}
 
 }
