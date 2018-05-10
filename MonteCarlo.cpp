@@ -14,8 +14,8 @@ MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J
 	S_ = new SpinLattice(Rnd, Deg, J1, J2, J3, Beta);
 	D_ = new DualLattice(Rnd, Deg, S_);
 	entry_node_ = NULL;
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 
 	Deg_ = S_->Lattice::get_Deg();
 	N_ = S_->Lattice::get_N();
@@ -164,17 +164,17 @@ void MonteCarlo::create_update() {
 	/*
 	if(count_max == count) {
 		this->delete_worm();
-		winding_number_horizontal = 0;
-		winding_number_vertical = 0;
+		winding_number_2 = 0;
+		winding_number_1 = 0;
 		//cerr << "Too long worm." << endl;
 		this->create_update();
 	}
 	*/
-	if ((winding_number_horizontal % 2 == 0)
-			&& (winding_number_vertical % 2 == 0)) {
+	if ((winding_number_2 % 2 == 0)
+			&& (winding_number_1 % 2 == 0)) {
 		this->map_dimer_to_spin();
-		winding_number_horizontal = 0;
-		winding_number_vertical = 0;
+		winding_number_2 = 0;
+		winding_number_1 = 0;
 		worm_.clear();
 	}
 	else {
@@ -319,7 +319,6 @@ void MonteCarlo::measure_energy() {
 	S_->update_Energy();
 	double E = S_->get_Energy();
 	energy_measures_.push_back(E);
-	this->Printout("./OutputFiles/funk" +std::to_string(energy_measures_.size()) );
 }
 
 /*
@@ -387,21 +386,58 @@ void MonteCarlo::delete_worm() {
 void MonteCarlo::update_winding_number() {
 	DimerEdge* last_edge = worm_.back();
 
-	int j_last_edge_start = last_edge->getStart()->getPos(1);
-	int j_last_edge_end = last_edge->getEnd()->getPos(1);
-	int delta_j = std::abs(j_last_edge_start - j_last_edge_end);
-	int i_last_edge_start = last_edge->getStart()->getPos(0);
-	int i_last_edge_end = last_edge->getEnd()->getPos(0);
-	int delta_i = std::abs(i_last_edge_start - i_last_edge_end);
+	int j_start = last_edge->getStart()->getPos(1);
+	int j_end = last_edge->getEnd()->getPos(1);
+	int delta_j = std::abs(j_start - j_end);
+	int i_start = last_edge->getStart()->getPos(0);
+	int i_end = last_edge->getEnd()->getPos(0);
+	int delta_i = std::abs(i_start - i_end);
 
-	// vertical uptdate
-	if ( delta_j >= (N_ - 2 )) {
-		winding_number_vertical += 1;
+	// Winding number of horizontal lines lines update
+
+	if (j_end == N_ - 2 && i_end != N_ - 1) {
+		if (j_start == N_ - 3) {
+			winding_number_2 += 1;
+			//cout << "2a)" << endl;
+			//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
+			//cout << "iend: " << i_end << ", j_send: " << j_end<< endl << endl;
+		}
 	}
-	//horizontal update
-	else if ( delta_i >= 2 * Deg_ - 1) {
-		winding_number_horizontal += 1;
+	if (j_start == N_ - 2 && i_start != N_ - 1) {
+		if (j_end == N_ - 3) {
+			winding_number_2 += 1;
+			//cout << "2b)" << endl;
+			//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
+			//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
+		}
 	}
+	if ((j_end == j_start) && (j_end != N_ - 2)) {
+		if (2 * j_start == - i_start + 2 *(N_ + Deg_ - 3) ) {
+			if (i_end == i_start + 1) {
+				winding_number_2 += 1;
+				//cout << "2c)" << endl;
+				//cout << "istart: " << i_start << ", j_start: " << j_start<< endl;
+				//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
+			}
+		}
+		if (2 * j_end == - i_end + 2 *(N_ + Deg_ - 3) ) {
+			if (i_start == i_end + 1) {
+				winding_number_2 += 1;
+				//cout << "2d)" << endl;
+				//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
+				//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
+			}
+		}
+	}
+
+	if ( delta_i >= 2 * Deg_ - 1 && delta_j < (N_ - 2 )) {
+		winding_number_1 += 1;
+		//cout << "1)" << endl;
+		//cout << "iend: " << i_start << ", j_send: " << j_start<< endl;
+		//cout << "iend: " << i_end << ", j_send: " << j_end<< endl<< endl;
+
+	}
+
 }
 
 
@@ -417,7 +453,7 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber upperline (0,0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber upperline (0,0):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 	for (int i = 0; i < 3; i++) {
 		DimerNode* start = D_->getDimerNode(2*i + 1, 5);
@@ -427,11 +463,11 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber up to down (0," << i+1 <<"):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber up to down (0," << i+1 <<"):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 	for (int i = 0; i < 3; i++) {
 		DimerNode* end = D_->getDimerNode(2*i + 1, 5);
 		DimerNode* start = D_->getDimerNode(2*i + 6, 0);
@@ -440,11 +476,11 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber down to up (0," << i+1 <<"):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber down to up (0," << i+1 <<"):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 	for (int i = 0; i < 3; i++) {
 		DimerNode* start = D_->getDimerNode(6 + 2* i, 5 - i);
 		DimerNode* end = D_->getDimerNode(1 + 2 * i, 2 - i);
@@ -453,10 +489,10 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber up right to down left ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber up right to down left ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 	for (int i = 0; i < 3; i++) {
 		DimerNode* end = D_->getDimerNode(6 + 2* i, 5 - i);
 		DimerNode* start = D_->getDimerNode(1 + 2 * i, 2 - i);
@@ -465,11 +501,11 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber down left to up right ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber down left to up right ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 	for (int i = 0; i < 3; i++) {
 		DimerNode* end = D_->getDimerNode(0, Deg_ + i);
 		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 1, i);
@@ -478,11 +514,11 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber up left to down right ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber up left to down right ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 
 	for (int i = 0; i < 3; i++) {
 		DimerNode* start = D_->getDimerNode(0, Deg_ + i);
@@ -492,14 +528,14 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber down right to up left ("<< i+1 <<",0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber down right to up left ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 
-	winding_number_horizontal = 0;
-	winding_number_vertical = 0;
+	winding_number_2 = 0;
+	winding_number_1 = 0;
 	for (int i = 0; i < 3; i++) {
 		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 2, i);
 		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 1, i);
@@ -508,7 +544,7 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber down right side (0,0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber down right side (0,0):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 	for (int i = 0; i < 3; i++) {
 		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 1, i);
@@ -518,7 +554,7 @@ void MonteCarlo::testwindingnumber() {
 		DimerEdge* edge = start->getEdge(end);
 		worm_.push_back(edge);
 		this->update_winding_number();
-		cout << "windingnumber down right side (0,0):" << winding_number_horizontal << ", " << winding_number_vertical << endl;
+		cout << "windingnumber down right side (0,0):" << winding_number_2 << ", " << winding_number_1 << endl;
 	}
 
 	cout << "test finished"<< endl;

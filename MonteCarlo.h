@@ -53,12 +53,12 @@ public:
 		energy_measures_  = v;
 	}
 
-	inline int get_winding_number_vertical() const {
-		return winding_number_vertical;
+	inline int get_winding_number_1() const {
+		return winding_number_1;
 	}
 
-	inline int get_winding_number_horizontal() const {
-		return winding_number_horizontal;
+	inline int get_winding_number_2() const {
+		return winding_number_2;
 	}
 
 	inline double get_energy() const {
@@ -96,8 +96,8 @@ private:
 	DimerNode* entry_node_;
 	std::vector<DimerEdge*> worm_;
 
-	int winding_number_horizontal;
-	int winding_number_vertical;
+	int winding_number_1;
+	int winding_number_2;
 
 	std::vector<double> energy_measures_;
 	// Deg_, N_

@@ -1,8 +1,8 @@
 from DrawPlot import DrawPlot
 
 
-filename_s = 'Outputfiles/funk0.550161_Spin.dat'
-filename_d = 'Outputfiles/funk0.550161_DimerAdj.dat'
+filename_s = 'Outputfiles/funk0.055225_Spin.dat'
+filename_d = 'Outputfiles/funk0.055225_DimerAdj.dat'
 filename_e = 'Outputfiles/Energy_and_Cv.dat'
 draw_plot = DrawPlot(filename_s, filename_d, filename_e)
 draw_plot.draw_spin_and_dual_lattice()
