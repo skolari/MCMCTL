@@ -108,11 +108,7 @@ void MonteCarlo::proba_step() {
 		next_index = 2;
 	}
 
-	//cout <<"next_index: "<< next_index << endl<< endl;
 
-	if (std::fabs(M[0][0]+ M[0][1]+ M[0][2] - 1) > 1e-10) {
-		cout << "proba_sum is: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
-	}
 
 	if (next_index == 0) {
 		next_edge = d[0]->getOppositeEdge();
