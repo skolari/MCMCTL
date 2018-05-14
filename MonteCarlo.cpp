@@ -147,19 +147,20 @@ void MonteCarlo::create_update() {
 	this->init_update();
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
-	//int count = 0;
-	int count_max = 20*S_->get_Number_spin();
-	//cout << "hey" << endl;
+	int count = 0;
+	int count_max = 20 * S_->get_Number_spin();
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
-		//count += 1;
-	} while(end_node != entry_node_ );//&& count < count_max);
+		count += 1;
+	//} while(end_node != entry_node_);
+	} while(end_node != entry_node_ && count < count_max);
 
 
-	if(count_max < winding_number_2 || count_max < winding_number_1 ) {
+	if(count_max == count ||count_max < winding_number_2 || count_max < winding_number_1 ) {
+	//if(count_max < winding_number_2 || count_max < winding_number_1 ) {
 		this->delete_worm();
 		winding_number_2 = 0;
 		winding_number_1 = 0;
@@ -269,16 +270,12 @@ std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long doubl
 			M[i][j] = A[i][j] / W[i];
 		}
 	}
-	if (std::fabs(M[0][0] + M[0][1] + M[0][2]- 1) > 1e-10) {
-		cout << "Sum M is= " << M[0][0] + M[0][1] + M[0][2] << endl;
-	}
+	//std::cout << "M_0: " << M[0][0] << ", M_1: " << M[0][1] << ", M_2: " << M[0][2] << ", sum: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
 
 	if (std::fabs(M[0][0]+ M[0][1]+ M[0][2] - 1) > 1e-10) {
+		cout << "sum of probabilities is not 1!!" << endl;
 		std::cout << "M_0: " << M[0][0] << ", M_1: " << M[0][1] << ", M_2: " << M[0][2] << ", sum: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
 		cout << "W0: " << W[0] << ", W1: " << W[1] << ", W2: " << W[2] << endl;
-		cout <<" A1 = "<<A[0][0]<<" ,A2 = " << A[0][1]<<" ,A3 = " << A[0][2]<< endl;
-		char c;
-		cin >> c;
 	}
 
 	return M;

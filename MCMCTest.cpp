@@ -137,7 +137,7 @@ void create_xml(std::string inputPath, char* time_normal, std::string time_sec) 
 	add_element_to_xml(param, "T_end", T_end);
 
 	// save
-	outputPath = outputPath + time_sec +".xml";
+	outputPath = outputPath + "Parameters.xml";
 	const char* charray = outputPath.c_str();
 	doc.SaveFile( charray );
 }
