@@ -164,7 +164,7 @@ double SpinLattice::calculate_Energy() {
 	Spin* Spin_neigh = NULL;
 	double S_o = 0;
 	double S_n = 0;
-	//int dir2 = 0;
+	int dir2 = 0;
 	int count = 0;
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
@@ -185,18 +185,18 @@ double SpinLattice::calculate_Energy() {
 					S_n = Spin_neigh->getSpin();
 					Energy = Energy + (J1_ + delta_J_) * S_o * S_n;
 					Energy = Energy + J1_ * S_o * S_n;
-					/*
-						// next nearest neighbor
-						dir2 = (dir + 1) % 6;
-						Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir2);
-						S_n = Spin_neigh->getSpin();
-						Energy = Energy + J2_ * S_o * S_n;
+				}
+				for (int dir = 0; dir < 3; dir++) {
+					// next nearest neighbor
+					dir2 = (dir + 1) % 6;
+					Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir2);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J2_ * S_o * S_n;
 
-						// next next nearest neighbor
-						Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir);
-						S_n = Spin_neigh->getSpin();
-						Energy = Energy + J3_ * S_o * S_n;
-					*/
+					// next next nearest neighbor
+					Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J3_ * S_o * S_n;
 				}
 			}
 		}

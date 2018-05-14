@@ -315,8 +315,20 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	vector<long double> E(3, 0);
 	vector< double > delta_E(3, 0);
 	vector< double > J1(3, 0);
+	double J2 = 0.5 * S_->get_Ji(2); // half J2
+	double J3 = S_->get_Ji(3);
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
+
+	vector <vector< double >> Dimer (3, vector< double >(3, 0));
+	for (int i = 0; i < 3; i++) {
+		Dimer[i][0] = d[i]->getDimer();
+		Dimer[i][1] = (-1)* d[i]->getDimer();
+		Dimer[i][2] = (-1)* d[i]->getDimer();
+	}
+	Dimer[2][1] = - Dimer[2][1];
+	Dimer[1][2] = - Dimer[1][2];
+
 	// calculate local J1 for all dimers
 	int v_int = this->get_vertical_dimer_index(d);
 	for (int i = 0; i < 3; i++) {
@@ -327,19 +339,42 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		}
 	}
 	//cout << "j: " << J1[0] << " " <<J1[1] << " "<< J1[2] << endl;
-	// E0
-	for( int i = 0; i < 3; i++) {
-		E[0] += J1[i] * d[i]->getDimer();
+
+	for( int k = 0; k < 3; k++){
+		// J1
+		for( int i = 0; i < 3; i++) {
+			E[k] += J1[i] * Dimer[i][k];
+		}
+
+		// J2
+		//next-neighbors of first spin
+		E[k] += J2 *  Dimer[0][k] * s[6]->getDimer();
+		E[k] += J2 *  Dimer[0][k] * s[4]->getDimer();
+		E[k] += J2 *  Dimer[1][k] * s[1]->getDimer();
+
+		//next-neightbors of second spin
+		E[k] += J2 *  Dimer[2][k] * s[2]->getDimer();
+		E[k] += J2 *  Dimer[2][k] * s[0]->getDimer();
+		E[k] += J2 *  Dimer[0][k] * s[9]->getDimer();
+
+		//next-neightbors of third spin
+		E[k] += J2 *  Dimer[1][k] * s[8]->getDimer();
+		E[k] += J2 *  Dimer[1][k] * s[10]->getDimer();
+		E[k] += J2 *  Dimer[2][k] * s[5]->getDimer();
+
+		//J3
+		//next-next-neighbors of first spin
+		E[k] += J3 *  Dimer[1][k] * s[2]->getDimer();
+		E[k] += J3 *  Dimer[0][k] * s[5]->getDimer();
+
+		//next-next-neighbors of second spin
+		E[k] += J3 *  Dimer[2][k] * s[1]->getDimer();
+		E[k] += J3 *  Dimer[0][k] * s[10]->getDimer();
+
+		//next-next-neighbors of third spin
+		E[k] += J3 *  Dimer[1][k] * s[9]->getDimer();
+		E[k] += J3 *  Dimer[2][k] * s[6]->getDimer();
 	}
-
-	E[1] = J1[0] *(-1) * d[0]->getDimer();
-	E[2] = J1[0] *(-1) * d[0]->getDimer();
-
-	E[1] += J1[1] * (-1) * d[1]->getDimer();
-	E[2] += J1[1] * d[1]->getDimer();
-
-	E[1] += J1[2] * d[2]->getDimer();
-	E[2] += J1[2] * (-1) * d[2]->getDimer();
 
 	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;
 	for (int i = 0; i < 3 ; i++) {
