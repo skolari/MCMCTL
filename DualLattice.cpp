@@ -326,8 +326,8 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		Dimer[i][1] = (-1)* d[i]->getDimer();
 		Dimer[i][2] = (-1)* d[i]->getDimer();
 	}
-	Dimer[2][1] = - Dimer[2][1];
-	Dimer[1][2] = - Dimer[1][2];
+	Dimer[2][1] = (-1) * Dimer[2][1];
+	Dimer[1][2] = (-1) * Dimer[1][2];
 
 	// calculate local J1 for all dimers
 	int v_int = this->get_vertical_dimer_index(d);
@@ -381,7 +381,7 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		delta_E[i] = E[i] - E[0];
 		W[i] = std::exp(- S_->get_Beta() * delta_E[i]);
 	}
-	//cout << delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
+	//cout << "delta E: "<<  delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
 	tuple<std::vector< long double >, std::vector< double >> foo (W, delta_E);
 	return foo;
 }
