@@ -8,10 +8,10 @@
 #include "MonteCarlo.h"
 using namespace std;
 
-MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double Beta)
+MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double delta_J, double Beta)
 	: Rnd_(Rnd), worm_(), energy_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
 {
-	S_ = new SpinLattice(Rnd, Deg, J1, J2, J3, Beta);
+	S_ = new SpinLattice(Rnd, Deg, J1, J2, J3, delta_J, Beta);
 	D_ = new DualLattice(Rnd, Deg, S_);
 	entry_node_ = NULL;
 	winding_number_2 = 0;
@@ -90,6 +90,7 @@ void MonteCarlo::proba_step() {
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
 	std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
+
 	//std::cout << "M_0: " << M[0][0] << ", M_1: " << M[0][1] << ", M_2: " << M[0][2] << ", sum: " << M[0][0]+ M[0][1]+ M[0][2] << endl;
 
 	//std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
@@ -107,8 +108,7 @@ void MonteCarlo::proba_step() {
 	else {
 		next_index = 2;
 	}
-
-
+	//cout << next_index << endl;
 
 	if (next_index == 0) {
 		next_edge = d[0]->getOppositeEdge();
@@ -128,10 +128,12 @@ void MonteCarlo::proba_step() {
 		//S_->update_Energy(delta_E[0]);
 	}
 
+	//cout << "next index: "<<next_index << endl;
 	worm_.push_back(next_edge);
-	this->update_winding_number();
-	this->get_S()->update_Energy();
 
+	this->update_winding_number();
+
+	this->get_S()->update_Energy();
 }
 
 /*
@@ -148,7 +150,7 @@ void MonteCarlo::create_update() {
 	DimerNode* end_node = last_edge->getEnd();
 	//int count = 0;
 	//int count_max = 20*S_->get_Number_spin();
-
+	//cout << "hey" << endl;
 	do {
 		this->myopic_step();
 		this->proba_step();
@@ -166,6 +168,7 @@ void MonteCarlo::create_update() {
 		this->create_update();
 	}
 	*/
+	//cout << winding_number_1 << " and " << winding_number_2 << endl;
 	if ((winding_number_2 % 2 == 0)
 			&& (winding_number_1 % 2 == 0)) {
 		this->map_dimer_to_spin();
@@ -174,6 +177,14 @@ void MonteCarlo::create_update() {
 		worm_.clear();
 	}
 	else {
+		if (winding_number_2 > 6000 ) {
+			this->map_dimer_to_spin();
+			this->Printout("./Debugg/ok");
+			cout << "stop" << endl;
+			char c;
+			 cin >> c;
+		}
+
 		this->create_update();
 	}
 }
@@ -231,6 +242,8 @@ std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long doubl
 	}
 
 	if (W_max > W_other) {
+		//cout << "i_max[: " << i_max << endl;
+		//cout << "m[0]: " << m[0] << ", m1: " << m[1]<<endl;
 		A[i_max][i_max] = W[i_max] - W[m[0]] - W[m[1]];
 
 		A[m[0]][i_max] = W[m[0]];
@@ -253,6 +266,9 @@ std::vector< std::vector<long double>> MonteCarlo::get_M(std::vector <long doubl
 		for ( int j = 0; j < 3; j++ ) {
 			M[i][j] = A[i][j] / W[i];
 		}
+	}
+	if (std::fabs(M[0][0] + M[0][1] + M[0][2]- 1) > 1e-10) {
+		cout << "Sum M is= " << M[0][0] + M[0][1] + M[0][2] << endl;
 	}
 	return M;
 }

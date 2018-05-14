@@ -314,23 +314,32 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	vector<long double> W(3, 1);
 	vector<long double> E(3, 0);
 	vector< double > delta_E(3, 0);
-
+	vector< double > J1(3, 0);
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
-
+	// calculate local J1 for all dimers
+	int v_int = this->get_vertical_dimer_index(d);
+	for (int i = 0; i < 3; i++) {
+		if (i == v_int) {
+			J1[i] = S_->get_Ji(1);
+		} else {
+			J1[i] = S_->get_Ji(1) + S_->get_delta_J();
+		}
+	}
+	//cout << "j: " << J1[0] << " " <<J1[1] << " "<< J1[2] << endl;
 	// E0
 	for( int i = 0; i < 3; i++) {
-		E[0] += S_->get_Ji(1) * d[i]->getDimer();
+		E[0] += J1[i] * d[i]->getDimer();
 	}
 
-	E[1] = S_->get_Ji(1) *(-1) * d[0]->getDimer();
-	E[2] = S_->get_Ji(1) *(-1) * d[0]->getDimer();
+	E[1] = J1[0] *(-1) * d[0]->getDimer();
+	E[2] = J1[0] *(-1) * d[0]->getDimer();
 
-	E[1] += S_->get_Ji(1) * (-1) * d[1]->getDimer();
-	E[2] += S_->get_Ji(1) * d[1]->getDimer();
+	E[1] += J1[1] * (-1) * d[1]->getDimer();
+	E[2] += J1[1] * d[1]->getDimer();
 
-	E[1] += S_->get_Ji(1) * d[2]->getDimer();
-	E[2] += S_->get_Ji(1) * (-1) * d[2]->getDimer();
+	E[1] += J1[2] * d[2]->getDimer();
+	E[2] += J1[2] * (-1) * d[2]->getDimer();
 
 	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;
 	for (int i = 0; i < 3 ; i++) {
@@ -340,4 +349,21 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	//cout << delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
 	tuple<std::vector< long double >, std::vector< double >> foo (W, delta_E);
 	return foo;
+}
+
+int DualLattice::get_vertical_dimer_index(vector< DimerEdge* > d) {
+	int index = 4;
+	for (int i= 0; i < 3 ; i++) {
+		int j_start = d[i]->getStart()->getPos(1);
+		int j_end = d[i]->getEnd()->getPos(1);
+		int delta_j = std::abs(j_start - j_end);
+		if (delta_j == 1 || delta_j == N_ - 2) {
+			index = i;
+		}
+	}
+	if (index == 4) {
+		cout << "no vaild index." << endl;
+	}
+
+	return index;
 }

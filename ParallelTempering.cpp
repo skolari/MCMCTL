@@ -10,7 +10,7 @@
 using namespace std;
 
 ParallelTempering::ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, int N_measure,
-		double J1, double J2, double J3,
+		double J1, double J2, double J3, double delta_J,
 		double T_start, double T_end)
 	: Rnd_(Rnd), Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), N_measure_(N_measure), J1_const_(J1), J2_const_(J2), J3_const_(J3),
 	  beta_(N_simul, 0), J1_(N_simul, 0), J2_(N_simul, 0), J3_(N_simul, 0), Simulations_(N_simul, NULL)
@@ -21,7 +21,7 @@ ParallelTempering::ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_th
 	}
 
 	for (int i = 0; i < N_simul; i++) {
-		Simulations_[i] = new MonteCarlo(Rnd, Deg_, N_thermal, N_algo, J1_const_, J2_const_, J3_const_, beta_[i]);
+		Simulations_[i] = new MonteCarlo(Rnd, Deg_, N_thermal, N_algo, J1_const_, J2_const_, J3_const_, delta_J, beta_[i]);
 	}
 }
 
@@ -38,22 +38,20 @@ ParallelTempering::~ParallelTempering() {
 void ParallelTempering::run() {
 	// thermalisation
 	for ( int i = 0; i < N_thermal_; i++ ) {
-		this->algorithm_step();
 		if (i % 100 == 0) {
 			std::cout << i << " out of " << N_thermal_ << " thermal steps done." << std::endl;
 		}
-
+		this->algorithm_step();
 	}
 
 	// algorithm
 	for ( int i = 0; i < N_algo_; i++ ) {
+		if (i % 100 == 0)
+			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 		this->algorithm_step();
-		double E = Simulations_[0]->get_S()->get_Energy();
 		if (i % N_measure_ == 0) {
 			this->measure_energy();
 		}
-		if (i % 100 == 0)
-			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 	}
 }
 
@@ -63,9 +61,9 @@ void ParallelTempering::run() {
  */
 void ParallelTempering::algorithm_step() {
 
-	omp_set_num_threads(N_simul_);
+	//omp_set_num_threads(N_simul_);
 
-	#pragma omp parallel for
+	//#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}

@@ -43,6 +43,7 @@ public:
 	inline double get_energy() { return Energy_; }
 	inline void add_energy(double val) { Energy_ += val; }
 	int number_spin();
+	int get_vertical_dimer_index(std::vector< DimerEdge* > d);
 
 protected:
 	// (i, j) indices of Dimer Lattice, returns coordinates in Ajd matrix.
