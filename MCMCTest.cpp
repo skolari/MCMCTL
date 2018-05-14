@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
 	double J1 = 				configFile.get<double>("J1");
 	double J2 = 				configFile.get<double>("J2");
 	double J3 = 				configFile.get<double>("J3");
+	double delta_J = 			configFile.get<double>("delta_J");
 	double T_start = 		configFile.get<double>("T_start");
 	double T_end = 			configFile.get<double>("T_end");
 
@@ -51,7 +52,7 @@ int main(int argc, char* argv[])
 	// run algorithm
 	int N = 2 * Deg + 1;
 	Random* Rnd = new Random(N);
-    ParallelTempering* P = new ParallelTempering(Rnd, Deg, N_simul, N_thermal, N_algo, N_temp, N_measure, J1, J2, J3, T_start, T_end);
+    ParallelTempering* P = new ParallelTempering(Rnd, Deg, N_simul, N_thermal, N_algo, N_temp, N_measure, J1, J2, J3, delta_J, T_start, T_end);
 	P->run();
 	P->Printout(outputPath);
 
@@ -60,20 +61,20 @@ int main(int argc, char* argv[])
 }
 
 void add_element_to_xml(TiXmlElement * chain, const char * in_value, int val ){
-	TiXmlElement* elem = new TiXmlElement( in_value );
-	std::string s = std::to_string(val);
-	const char* charray = s.c_str();
-	TiXmlText * text = new TiXmlText( charray );
-	elem->LinkEndChild( text );
+	TiXmlElement* elem = new TiXmlElement( "param" );
+	//std::string s = std::to_string(val);
+	//const char* charray = s.c_str();
+	//TiXmlText * text = new TiXmlText( charray );
+	elem->SetAttribute(in_value ,val );
 	chain->LinkEndChild( elem );
 }
 
 void add_element_to_xml(TiXmlElement * chain, const char * in_value, double val ){
-	TiXmlElement* elem = new TiXmlElement( in_value );
-	std::string s = std::to_string(val);
-	const char* charray = s.c_str();
-	TiXmlText * text = new TiXmlText( charray );
-	elem->LinkEndChild( text );
+	TiXmlElement* elem = new TiXmlElement( "param" );
+	//std::string s = std::to_string(val);
+	//const char* charray = s.c_str();
+	//TiXmlText * text = new TiXmlText( charray );
+	elem->SetDoubleAttribute(in_value ,val );
 	chain->LinkEndChild( elem );
 }
 
@@ -105,6 +106,7 @@ void create_xml(std::string inputPath, char* time_normal, std::string time_sec) 
 	double J1 = 				configFile.get<double>("J1");
 	double J2 = 				configFile.get<double>("J2");
 	double J3 = 				configFile.get<double>("J3");
+	double delta_J = 			configFile.get<double>("delta_J");
 	double T_start = 		configFile.get<double>("T_start");
 	double T_end = 			configFile.get<double>("T_end");
 
@@ -130,11 +132,12 @@ void create_xml(std::string inputPath, char* time_normal, std::string time_sec) 
 	add_element_to_xml(param, "J1", J1);
 	add_element_to_xml(param, "J2", J2);
 	add_element_to_xml(param, "J3", J3);
+	add_element_to_xml(param, "delta_J", delta_J);
 	add_element_to_xml(param, "T_start", T_start);
 	add_element_to_xml(param, "T_end", T_end);
 
 	// save
-	outputPath = outputPath + time_sec +".xml";
+	outputPath = outputPath + "Parameters.xml";
 	const char* charray = outputPath.c_str();
 	doc.SaveFile( charray );
 }

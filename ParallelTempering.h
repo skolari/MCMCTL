@@ -21,7 +21,7 @@
 class ParallelTempering {
 public:
 	ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_thermal, int N_algo, int N_measure, int N_temp,
-			double J1, double J2, double J3,
+			double J1, double J2, double J3, double delta_J,
 			double T_start, double T_end);
 
 	virtual ~ParallelTempering();

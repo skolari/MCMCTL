@@ -314,30 +314,91 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	vector<long double> W(3, 1);
 	vector<long double> E(3, 0);
 	vector< double > delta_E(3, 0);
-
+	vector< double > J1(3, 0);
+	double J2 = 0.5 * S_->get_Ji(2); // half J2
+	double J3 = S_->get_Ji(3);
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
 
-	// E0
-	for( int i = 0; i < 3; i++) {
-		E[0] += S_->get_Ji(1) * d[i]->getDimer();
+	vector <vector< double >> Dimer (3, vector< double >(3, 0));
+	for (int i = 0; i < 3; i++) {
+		Dimer[i][0] = d[i]->getDimer();
+		Dimer[i][1] = (-1)* d[i]->getDimer();
+		Dimer[i][2] = (-1)* d[i]->getDimer();
 	}
+	Dimer[2][1] = (-1) * Dimer[2][1];
+	Dimer[1][2] = (-1) * Dimer[1][2];
 
-	E[1] = S_->get_Ji(1) *(-1) * d[0]->getDimer();
-	E[2] = S_->get_Ji(1) *(-1) * d[0]->getDimer();
+	// calculate local J1 for all dimers
+	int v_int = this->get_vertical_dimer_index(d);
+	for (int i = 0; i < 3; i++) {
+		if (i == v_int) {
+			J1[i] = S_->get_Ji(1);
+		} else {
+			J1[i] = S_->get_Ji(1) + S_->get_delta_J();
+		}
+	}
+	//cout << "j: " << J1[0] << " " <<J1[1] << " "<< J1[2] << endl;
 
-	E[1] += S_->get_Ji(1) * (-1) * d[1]->getDimer();
-	E[2] += S_->get_Ji(1) * d[1]->getDimer();
+	for( int k = 0; k < 3; k++){
+		// J1
+		for( int i = 0; i < 3; i++) {
+			E[k] += J1[i] * Dimer[i][k];
+		}
 
-	E[1] += S_->get_Ji(1) * d[2]->getDimer();
-	E[2] += S_->get_Ji(1) * (-1) * d[2]->getDimer();
+		// J2
+		//next-neighbors of first spin
+		E[k] += J2 *  Dimer[0][k] * s[6]->getDimer();
+		E[k] += J2 *  Dimer[0][k] * s[4]->getDimer();
+		E[k] += J2 *  Dimer[1][k] * s[1]->getDimer();
+
+		//next-neightbors of second spin
+		E[k] += J2 *  Dimer[2][k] * s[2]->getDimer();
+		E[k] += J2 *  Dimer[2][k] * s[0]->getDimer();
+		E[k] += J2 *  Dimer[0][k] * s[9]->getDimer();
+
+		//next-neightbors of third spin
+		E[k] += J2 *  Dimer[1][k] * s[8]->getDimer();
+		E[k] += J2 *  Dimer[1][k] * s[10]->getDimer();
+		E[k] += J2 *  Dimer[2][k] * s[5]->getDimer();
+
+		//J3
+		//next-next-neighbors of first spin
+		E[k] += J3 *  Dimer[1][k] * s[2]->getDimer();
+		E[k] += J3 *  Dimer[0][k] * s[5]->getDimer();
+
+		//next-next-neighbors of second spin
+		E[k] += J3 *  Dimer[2][k] * s[1]->getDimer();
+		E[k] += J3 *  Dimer[0][k] * s[10]->getDimer();
+
+		//next-next-neighbors of third spin
+		E[k] += J3 *  Dimer[1][k] * s[9]->getDimer();
+		E[k] += J3 *  Dimer[2][k] * s[6]->getDimer();
+	}
 
 	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;
 	for (int i = 0; i < 3 ; i++) {
 		delta_E[i] = E[i] - E[0];
 		W[i] = std::exp(- S_->get_Beta() * delta_E[i]);
 	}
-	//cout << delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
+	//cout << "delta E: "<<  delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
 	tuple<std::vector< long double >, std::vector< double >> foo (W, delta_E);
 	return foo;
+}
+
+int DualLattice::get_vertical_dimer_index(vector< DimerEdge* > d) {
+	int index = 4;
+	for (int i= 0; i < 3 ; i++) {
+		int j_start = d[i]->getStart()->getPos(1);
+		int j_end = d[i]->getEnd()->getPos(1);
+		int delta_j = std::abs(j_start - j_end);
+		if (delta_j == 1 || delta_j == N_ - 2) {
+			index = i;
+		}
+	}
+	if (index == 4) {
+		cout << "no vaild index." << endl;
+	}
+
+	return index;
 }
