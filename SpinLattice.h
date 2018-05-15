@@ -21,7 +21,7 @@ class Lattice;
 
 class SpinLattice: public Lattice {
 public:
-	SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double delta_J, double Beta );
+	SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double J5, double delta_J, double Beta );
 	virtual ~SpinLattice();
 
 	void Printout(std::string outputPath) const;
@@ -39,6 +39,7 @@ public:
 		if ( i == 1 ) return J1_;
 		if ( i == 2 ) return J2_;
 		if ( i == 3 ) return J3_;
+		if ( i == 5 ) return J5_;
 		else return 0;
 	}
 
@@ -50,6 +51,7 @@ public:
 		if ( i == 1 ) J1_ = val;
 		if ( i == 2 ) J2_ = val;
 		if ( i == 3 ) J3_ = val;
+		if ( i == 5 ) J5_ = val;
 	}
 
 	inline double get_Spin(int i, int j) const { return S_[i][j]->getSpin(); }
@@ -76,6 +78,7 @@ private:
 	double J1_;
 	double J2_;
 	double J3_;
+	double J5_;
 	double delta_J_;
 	double Beta_;
 	int Number_spin_;

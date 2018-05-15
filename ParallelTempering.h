@@ -21,7 +21,7 @@
 class ParallelTempering {
 public:
 	ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_thermal, int N_algo, int N_measure, int N_temp,
-			double J1, double J2, double J3, double delta_J,
+			double J1, double J2, double J3, double J5, double delta_J,
 			double T_start, double T_end);
 
 	virtual ~ParallelTempering();
@@ -48,12 +48,9 @@ private:
 	double J1_const_;
 	double J2_const_;
 	double J3_const_;
+	double J5_const_;
 
 	std::vector<double> beta_;
-	std::vector<double> J1_;
-	std::vector<double> J2_;
-	std::vector<double> J3_;
-
 	std::vector<MonteCarlo*> Simulations_;
 };
 

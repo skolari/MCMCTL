@@ -9,8 +9,8 @@
 using namespace std;
 
 
-SpinLattice::SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double delta_J, double Beta)
-	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3), delta_J_(delta_J), Beta_(Beta)
+SpinLattice::SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double J5, double delta_J, double Beta)
+	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3), J5_(J5), delta_J_(delta_J), Beta_(Beta)
 {
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
@@ -197,6 +197,14 @@ double SpinLattice::calculate_Energy() {
 					Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir);
 					S_n = Spin_neigh->getSpin();
 					Energy = Energy + J3_ * S_o * S_n;
+				}
+					// J5
+				if (J5_ != 0) {
+					for (int dir = 0; dir < 3; dir++) {
+						Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir)->getNeighbor(dir);
+						S_n = Spin_neigh->getSpin();
+						Energy = Energy + J5_ * S_o * S_n;
+					}
 				}
 			}
 		}
