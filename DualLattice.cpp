@@ -336,7 +336,6 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	double J5 =  S_->get_Ji(5);
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
-	vector< DimerEdge* > t = this->get_t_dimer(s);
 
 
 	vector <vector< double >> Dimer (3, vector< double >(3, 0));
@@ -393,22 +392,24 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		//next-next-neighbors of third spin
 		E[k] += J3 *  Dimer[1][k] * s[9]->getDimer();
 		E[k] += J3 *  Dimer[2][k] * s[6]->getDimer();
-
-		//J5 ACHTUNG J5 = 0.5 * J2
-		//next-next-neighbors of first spin
-		E[k] += J5 *  Dimer[1][k] * s[2]->getDimer() * t[1]->getDimer();
-		E[k] += J5 *  Dimer[0][k] * s[5]->getDimer() * t[0]->getDimer();
-
-		//next-next-neighbors of second spin
-		E[k] += J5 *  Dimer[2][k] * s[1]->getDimer() * t[2]->getDimer();
-		E[k] += J5 *  Dimer[0][k] * s[10]->getDimer() * t[0]->getDimer();
-
-		//next-next-neighbors of third spin
-		E[k] += J5 *  Dimer[1][k] * s[9]->getDimer() * t[4]->getDimer();
-		E[k] += J5 *  Dimer[2][k] * s[6]->getDimer() * t[5]->getDimer();
-
 	}
+	//J5
+	if (J5 != 0) {
+		vector< DimerEdge* > t = this->get_t_dimer(s);
+		for( int k = 0; k < 3; k++){
+			//next-next-neighbors of first spin
+			E[k] += J5 *  Dimer[1][k] * s[2]->getDimer() * t[1]->getDimer();
+			E[k] += J5 *  Dimer[0][k] * s[5]->getDimer() * t[0]->getDimer();
 
+			//next-next-neighbors of second spin
+			E[k] += J5 *  Dimer[2][k] * s[1]->getDimer() * t[2]->getDimer();
+			E[k] += J5 *  Dimer[0][k] * s[10]->getDimer() * t[0]->getDimer();
+
+			//next-next-neighbors of third spin
+			E[k] += J5 *  Dimer[1][k] * s[9]->getDimer() * t[4]->getDimer();
+			E[k] += J5 *  Dimer[2][k] * s[6]->getDimer() * t[5]->getDimer();
+		}
+	}
 	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;
 	for (int i = 0; i < 3 ; i++) {
 		delta_E[i] = E[i] - E[0];
