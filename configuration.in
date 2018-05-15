@@ -1,13 +1,13 @@
-Deg=4
+Deg=6
 outputPath=./Outputfiles/
 N_simul=1
-N_thermal=10000
+N_thermal=20000
 N_algo=10000
 N_temp=10
 N_measure=1
 J1=1
-J2=0.50
-J3=0.1
+J2=0.75
+J3=0.5
 delta_J=0.0
 T_start=0.1
 T_end=10
