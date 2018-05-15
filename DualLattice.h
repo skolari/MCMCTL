@@ -38,6 +38,7 @@ public:
 	std::vector<int> SpinDirDualNode(int i, int j, int dir) const;
 	std::vector< DimerEdge* > get_local_dimer(DimerEdge* d0);
 	std::vector< DimerEdge* > get_s_dimer(std::vector<DimerEdge*> d);
+	std::vector< DimerEdge* > get_t_dimer(std::vector<DimerEdge*> s);
 	std::tuple<std::vector< long double >, std::vector< double >> get_local_weight(DimerEdge* d0);
 
 	inline double get_energy() { return Energy_; }

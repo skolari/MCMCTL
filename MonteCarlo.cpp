@@ -8,10 +8,10 @@
 #include "MonteCarlo.h"
 using namespace std;
 
-MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double delta_J, double Beta)
+MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double J5, double delta_J, double Beta)
 	: Rnd_(Rnd), worm_(), energy_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
 {
-	S_ = new SpinLattice(Rnd, Deg, J1, J2, J3, delta_J, Beta);
+	S_ = new SpinLattice(Rnd, Deg, J1, J2, J3, J5, delta_J, Beta);
 	D_ = new DualLattice(Rnd, Deg, S_);
 	entry_node_ = NULL;
 	winding_number_2 = 0;

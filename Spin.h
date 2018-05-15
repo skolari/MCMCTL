@@ -37,8 +37,16 @@ public:
 		return Neighbor_[dir];
 	}
 
+	inline int getDirNeighbor(Spin* Neighbor){
+		int dir = 0;
+		while(Neighbor_[dir] != Neighbor && dir < 6) {
+			dir += 1;
+		}
+		return dir;
+	}
+
 	inline DimerEdge* getDimer(int dir) {
-			return Dimer_[dir];
+		return Dimer_[dir];
 	}
 
 	bool operator == (const Spin *other) {

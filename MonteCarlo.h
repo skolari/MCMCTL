@@ -24,7 +24,7 @@
 
 class MonteCarlo {
 public:
-	MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double delta_J, double Beta);
+	MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, double J1, double J2, double J3, double J5, double delta_J, double Beta);
 	virtual ~MonteCarlo();
 
 	// Algorithm methods

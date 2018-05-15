@@ -304,6 +304,22 @@ vector< DimerEdge* > DualLattice::get_s_dimer(vector<DimerEdge*> d)
 	return s;
 }
 
+vector< DimerEdge* > DualLattice::get_t_dimer(vector<DimerEdge*> s) {
+	vector< DimerEdge*> t(6, NULL);
+	int dir = 0;
+	vector<int> index = {5 , 2, 1, 10, 9, 6};
+
+	for(int i = 0; i < 6; i++) {
+		Spin* spin_right = s[index[i]]->getSpin_right();
+		Spin* spin_left = s[index[i]]->getSpin_left();
+		dir = spin_right->getDirNeighbor(spin_left);
+		dir = (dir + 3) % 6;
+		t[i] = spin_right->getDimer(dir);
+	}
+
+	return t;
+}
+
 /*
  * the local weight configuration, if nothing is changed (bounce): W0, if we switch d0 and d1: W1, and if we switch d0 and d2: W2
  * @param d0 the configuration around d0 is considered
@@ -317,8 +333,10 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	vector< double > J1(3, 0);
 	double J2 = 0.5 * S_->get_Ji(2); // half J2
 	double J3 = S_->get_Ji(3);
+	double J5 =  S_->get_Ji(5);
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
+
 
 	vector <vector< double >> Dimer (3, vector< double >(3, 0));
 	for (int i = 0; i < 3; i++) {
@@ -375,7 +393,23 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		E[k] += J3 *  Dimer[1][k] * s[9]->getDimer();
 		E[k] += J3 *  Dimer[2][k] * s[6]->getDimer();
 	}
+	//J5
+	if (J5 != 0) {
+		vector< DimerEdge* > t = this->get_t_dimer(s);
+		for( int k = 0; k < 3; k++){
+			//next-next-neighbors of first spin
+			E[k] += J5 *  Dimer[1][k] * s[2]->getDimer() * t[1]->getDimer();
+			E[k] += J5 *  Dimer[0][k] * s[5]->getDimer() * t[0]->getDimer();
 
+			//next-next-neighbors of second spin
+			E[k] += J5 *  Dimer[2][k] * s[1]->getDimer() * t[2]->getDimer();
+			E[k] += J5 *  Dimer[0][k] * s[10]->getDimer() * t[0]->getDimer();
+
+			//next-next-neighbors of third spin
+			E[k] += J5 *  Dimer[1][k] * s[9]->getDimer() * t[4]->getDimer();
+			E[k] += J5 *  Dimer[2][k] * s[6]->getDimer() * t[5]->getDimer();
+		}
+	}
 	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;
 	for (int i = 0; i < 3 ; i++) {
 		delta_E[i] = E[i] - E[0];
