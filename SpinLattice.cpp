@@ -9,8 +9,8 @@
 using namespace std;
 
 
-SpinLattice::SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, double J5, double delta_J, double Beta)
-	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(J1), J2_(J2), J3_(J3), J5_(J5), delta_J_(delta_J), Beta_(Beta)
+SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J2, double J3, double J5, double delta_J, double Beta)
+	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(2, 0), J2_(2, 0), J3_(2, 0), J5_(2, 0), delta_J_(delta_J), Beta_(Beta)
 {
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
@@ -39,6 +39,38 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, double J1, double J2, double J3, 
 			}
 		}
 	}
+
+	if (Dipolar) {
+		double x = 0.5;
+		double y = std::sqrt(3) / 2;
+		J1_[0] = 1;
+		J1_[1] = 1 / std::pow(std::sqrt(x * x + (y + delta_J) * (y + delta_J)),3);
+
+		J2_[0] = 1 / std::pow(std::sqrt(1.5 * 1.5 + (y + delta_J) * (y + delta_J)),3);
+		J2_[1] = 1 / std::pow(std::sqrt(4 * (y + delta_J) * (y + delta_J)),3);
+		/*
+		J3_[0] = 1/8; // 1/2
+		J3_[1] = 1 / std::pow(std::sqrt(1 + 2 * (y + delta_J) * 2 * (y + delta_J)),3);
+
+		J5_[0] = 1/std::pow(3,3);
+		J5_[1] = 1 / std::pow(std::sqrt(3 * x * 3 * x + 3 * (y + delta_J) * 3 * (y + delta_J)),3);
+		*/
+		//cout<< J1_[0] << " " << J2_[0] << " " << J3_[0] << endl;
+	} else {
+		J1_[0] = J1;
+		J1_[1] = J1 + delta_J;
+
+		J2_[0] = J2;
+		J2_[1] = J2;
+
+		J3_[0] = J3;
+		J3_[1] = J3;
+
+		J5_[0] = J5;
+		J5_[1] = J5;
+	}
+
+
 	Number_spin_ = this->SpinLattice::number_spin();
 	Energy_ = this->calculate_Energy();
 
@@ -164,7 +196,7 @@ double SpinLattice::calculate_Energy() {
 	Spin* Spin_neigh = NULL;
 	double S_o = 0;
 	double S_n = 0;
-	int dir2 = 0;
+	//int dir2 = 0;
 	int count = 0;
 	for (int i = 0; i < N_; ++i) {
 		for (int j = 0; j < N_; ++j) {
@@ -173,37 +205,60 @@ double SpinLattice::calculate_Energy() {
 				S_o =  Spin_origin->getSpin();
 				count += 1;
 				// an other possibility is to loop over all dir and divide the final energy by 2
-
+				// nearest neighbor
 				// direction without deformation.
 				Spin_neigh = Spin_origin->getNeighbor(0);
 				S_n = Spin_neigh->getSpin();
-				Energy = Energy + J1_ * S_o * S_n;
+				Energy = Energy + J1_[0] * S_o * S_n;
 
+				// with deformation
 				for (int dir = 1; dir < 3; dir++) {
-					// nearest neighbor
 					Spin_neigh = Spin_origin->getNeighbor(dir);
 					S_n = Spin_neigh->getSpin();
-					Energy = Energy + (J1_ + delta_J_) * S_o * S_n;
-					Energy = Energy + J1_ * S_o * S_n;
+					Energy = Energy + J1_[1] * S_o * S_n;
 				}
-				for (int dir = 0; dir < 3; dir++) {
-					// next nearest neighbor
-					dir2 = (dir + 1) % 6;
-					Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir2);
-					S_n = Spin_neigh->getSpin();
-					Energy = Energy + J2_ * S_o * S_n;
 
-					// next next nearest neighbor
-					Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir);
+				// next nearest neighbor
+				//for (int dir = 0; dir < 3; dir++) {
+				//dir2 = (dir + 1) % 6;
+				if (J2_[0] != 0) {
+					Spin_neigh = Spin_origin->getNeighbor(0)->getNeighbor(1);
 					S_n = Spin_neigh->getSpin();
-					Energy = Energy + J3_ * S_o * S_n;
+					Energy = Energy + J2_[0] * S_o * S_n;
+
+					Spin_neigh = Spin_origin->getNeighbor(1)->getNeighbor(2);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J2_[1] * S_o * S_n;
+
+					Spin_neigh = Spin_origin->getNeighbor(2)->getNeighbor(3);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J2_[0] * S_o * S_n;
 				}
-					// J5
-				if (J5_ != 0) {
-					for (int dir = 0; dir < 3; dir++) {
+
+				//}
+
+				// next next nearest neighbor
+				if (J3_[0] != 0) {
+					Spin_neigh = Spin_origin->getNeighbor(0)->getNeighbor(0);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J3_[0] * S_o * S_n;
+
+					for (int dir = 1; dir < 3; dir++) {
+						Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir);
+						S_n = Spin_neigh->getSpin();
+						Energy = Energy + J3_[1] * S_o * S_n;
+					}
+				}
+				// J5
+				if (J5_[0] != 0) {
+					Spin_neigh = Spin_origin->getNeighbor(0)->getNeighbor(0)->getNeighbor(0);
+					S_n = Spin_neigh->getSpin();
+					Energy = Energy + J5_[0] * S_o * S_n;
+
+					for (int dir = 1; dir < 3; dir++) {
 						Spin_neigh = Spin_origin->getNeighbor(dir)->getNeighbor(dir)->getNeighbor(dir);
 						S_n = Spin_neigh->getSpin();
-						Energy = Energy + J5_ * S_o * S_n;
+						Energy = Energy + J5_[1] * S_o * S_n;
 					}
 				}
 			}

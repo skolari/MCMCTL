@@ -330,14 +330,52 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	vector<long double> W(3, 1);
 	vector<long double> E(3, 0);
 	vector< double > delta_E(3, 0);
-	vector< double > J1(3, 0);
-	double J2 = 0.5 * S_->get_Ji(2); // half J2
-	double J3 = S_->get_Ji(3);
-	double J5 =  S_->get_Ji(5);
+	vector< double > J1 = S_->get_Ji(1);
+	vector< double > J2 = S_->get_Ji(2);
+	J2[0] = 0.5 * J2[0];
+	J2[1] = 0.5 * J2[1]; // half J2
+	vector< double > J3 = S_->get_Ji(3);
+	vector< double > J5 =  S_->get_Ji(5);
 	vector< DimerEdge* > d = this->get_local_dimer(d0);
 	vector< DimerEdge* > s = this->get_s_dimer(d);
+	int v_int = this->get_vertical_dimer_index(d);
 
+	// translate the deformation onto local configuration
+	vector< int > j2_int(11, 0); //(7 + 4*v_int) % 12 is 1
+	vector< int > j3_int(11, 0); //(7 + 4*v_int) % 12
+	if (S_->get_delta_J() != 0) {
+		if (v_int == 0) {
+			j2_int[7] = 1;
+			j2_int[8] = 1;
 
+			j3_int[1] = 1;
+			j3_int[2] = 1;
+
+			j3_int[6] = 1;
+			j3_int[9] = 1;
+		}
+		else if (v_int == 1) {
+			j2_int[11] = 1;
+			j2_int[0] = 1;
+
+			j3_int[5] = 1;
+			j3_int[6] = 1;
+
+			j3_int[1] = 1;
+			j3_int[10] = 1;
+		}
+		else if (v_int == 2) {
+			j2_int[3] = 1;
+			j2_int[4] = 1;
+
+			j3_int[9] = 1;
+			j3_int[10] = 1;
+
+			j3_int[2] = 1;
+			j3_int[5] = 1;
+		}
+	}
+	// create dimer matrix
 	vector <vector< double >> Dimer (3, vector< double >(3, 0));
 	for (int i = 0; i < 3; i++) {
 		Dimer[i][0] = d[i]->getDimer();
@@ -347,67 +385,62 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	Dimer[2][1] = (-1) * Dimer[2][1];
 	Dimer[1][2] = (-1) * Dimer[1][2];
 
-	// calculate local J1 for all dimers
-	int v_int = this->get_vertical_dimer_index(d);
-	for (int i = 0; i < 3; i++) {
-		if (i == v_int) {
-			J1[i] = S_->get_Ji(1);
-		} else {
-			J1[i] = S_->get_Ji(1) + S_->get_delta_J();
-		}
-	}
 	//cout << "j: " << J1[0] << " " <<J1[1] << " "<< J1[2] << endl;
 
 	for( int k = 0; k < 3; k++){
 		// J1
 		for( int i = 0; i < 3; i++) {
-			E[k] += J1[i] * Dimer[i][k];
+			if (i == v_int) {
+				E[k] += J1[0] * Dimer[i][k];
+			} else {
+				E[k] += J1[1] * Dimer[i][k];
+			}
 		}
 
 		// J2
 		//next-neighbors of first spin
-		E[k] += J2 *  Dimer[0][k] * s[6]->getDimer();
-		E[k] += J2 *  Dimer[0][k] * s[4]->getDimer();
-		E[k] += J2 *  Dimer[1][k] * s[1]->getDimer();
+		E[k] += J2[j2_int[6]] *  Dimer[0][k] * s[6]->getDimer();
+		E[k] += J2[j2_int[4]] *  Dimer[0][k] * s[4]->getDimer();
+		E[k] += J2[j2_int[1]] *  Dimer[1][k] * s[1]->getDimer();
 
 		//next-neightbors of second spin
-		E[k] += J2 *  Dimer[2][k] * s[2]->getDimer();
-		E[k] += J2 *  Dimer[2][k] * s[0]->getDimer();
-		E[k] += J2 *  Dimer[0][k] * s[9]->getDimer();
+		E[k] += J2[j2_int[2]] *  Dimer[2][k] * s[2]->getDimer();
+		E[k] += J2[j2_int[0]] *  Dimer[2][k] * s[0]->getDimer();
+		E[k] += J2[j2_int[9]] *  Dimer[0][k] * s[9]->getDimer();
 
 		//next-neightbors of third spin
-		E[k] += J2 *  Dimer[1][k] * s[8]->getDimer();
-		E[k] += J2 *  Dimer[1][k] * s[10]->getDimer();
-		E[k] += J2 *  Dimer[2][k] * s[5]->getDimer();
+		E[k] += J2[j2_int[8]] *  Dimer[1][k] * s[8]->getDimer();
+		E[k] += J2[j2_int[10]] *  Dimer[1][k] * s[10]->getDimer();
+		E[k] += J2[j2_int[5]] *  Dimer[2][k] * s[5]->getDimer();
 
 		//J3
 		//next-next-neighbors of first spin
-		E[k] += J3 *  Dimer[1][k] * s[2]->getDimer();
-		E[k] += J3 *  Dimer[0][k] * s[5]->getDimer();
+		E[k] += J3[j3_int[2]] *  Dimer[1][k] * s[2]->getDimer();
+		E[k] += J3[j3_int[5]] *  Dimer[0][k] * s[5]->getDimer();
 
 		//next-next-neighbors of second spin
-		E[k] += J3 *  Dimer[2][k] * s[1]->getDimer();
-		E[k] += J3 *  Dimer[0][k] * s[10]->getDimer();
+		E[k] += J3[j3_int[1]] *  Dimer[2][k] * s[1]->getDimer();
+		E[k] += J3[j3_int[10]] *  Dimer[0][k] * s[10]->getDimer();
 
 		//next-next-neighbors of third spin
-		E[k] += J3 *  Dimer[1][k] * s[9]->getDimer();
-		E[k] += J3 *  Dimer[2][k] * s[6]->getDimer();
+		E[k] += J3[j3_int[9]] *  Dimer[1][k] * s[9]->getDimer();
+		E[k] += J3[j3_int[6]] *  Dimer[2][k] * s[6]->getDimer();
 	}
 	//J5
-	if (J5 != 0) {
+	if (J5[0] != 0) {
 		vector< DimerEdge* > t = this->get_t_dimer(s);
 		for( int k = 0; k < 3; k++){
 			//next-next-neighbors of first spin
-			E[k] += J5 *  Dimer[1][k] * s[2]->getDimer() * t[1]->getDimer();
-			E[k] += J5 *  Dimer[0][k] * s[5]->getDimer() * t[0]->getDimer();
+			E[k] += J5[j3_int[2]] *  Dimer[1][k] * s[2]->getDimer() * t[1]->getDimer();
+			E[k] += J5[j3_int[5]] *  Dimer[0][k] * s[5]->getDimer() * t[0]->getDimer();
 
 			//next-next-neighbors of second spin
-			E[k] += J5 *  Dimer[2][k] * s[1]->getDimer() * t[2]->getDimer();
-			E[k] += J5 *  Dimer[0][k] * s[10]->getDimer() * t[0]->getDimer();
+			E[k] += J5[j3_int[1]] *  Dimer[2][k] * s[1]->getDimer() * t[2]->getDimer();
+			E[k] += J5[j3_int[10]] *  Dimer[0][k] * s[10]->getDimer() * t[0]->getDimer();
 
 			//next-next-neighbors of third spin
-			E[k] += J5 *  Dimer[1][k] * s[9]->getDimer() * t[4]->getDimer();
-			E[k] += J5 *  Dimer[2][k] * s[6]->getDimer() * t[5]->getDimer();
+			E[k] += J5[j3_int[9]] *  Dimer[1][k] * s[9]->getDimer() * t[4]->getDimer();
+			E[k] += J5[j3_int[6]] *  Dimer[2][k] * s[6]->getDimer() * t[5]->getDimer();
 		}
 	}
 	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;

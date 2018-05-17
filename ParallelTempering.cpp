@@ -9,7 +9,7 @@
 
 using namespace std;
 
-ParallelTempering::ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, int N_measure,
+ParallelTempering::ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_thermal, int N_algo, int N_temp, int N_measure, bool Dipolar,
 		double J1, double J2, double J3, double J5, double delta_J,
 		double T_start, double T_end)
 	: Rnd_(Rnd), Deg_(Deg), N_simul_(N_simul), N_thermal_(N_thermal), N_algo_(N_algo), N_temp_(N_temp), N_measure_(N_measure), J1_const_(J1), J2_const_(J2), J3_const_(J3), J5_const_(J5),
@@ -21,7 +21,7 @@ ParallelTempering::ParallelTempering(Random* Rnd, int Deg, int N_simul, int N_th
 	}
 
 	for (int i = 0; i < N_simul; i++) {
-		Simulations_[i] = new MonteCarlo(Rnd, Deg_, N_thermal, N_algo, J1_const_, J2_const_, J3_const_, J5_const_, delta_J, beta_[i]);
+		Simulations_[i] = new MonteCarlo(Rnd, Deg_, N_thermal, N_algo, Dipolar, J1_const_, J2_const_, J3_const_, J5_const_, delta_J, beta_[i]);
 	}
 }
 
