@@ -34,8 +34,7 @@ public:
 
 	// Printout
 	void Printout(std::string OutputPath);
-	void Printout_Energy_and_Cv(std::string OutputPath) const;
-	void PrintoutMagnetisation(std::string OutputPath) const;
+	void Printout_Observables(std::string OutputPath) const;
 
 private:
 	Random* Rnd_;

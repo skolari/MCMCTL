@@ -284,7 +284,7 @@ void SpinLattice::update_Energy(double val)
 	Energy_ = Energy_ + val;
 }
 
-double SpinLattice::get_magnetisation_per_spin() {
+double SpinLattice::get_Magnetisation() {
 	double M  = 0;
 	for (int i = 0; i < N_; i++) {
 		for (int j = 0; j < N_; j++) {
@@ -293,7 +293,6 @@ double SpinLattice::get_magnetisation_per_spin() {
 			}
 		}
 	}
-	M = M / Number_spin_;
 	return M;
 }
 

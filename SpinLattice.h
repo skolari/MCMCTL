@@ -69,7 +69,7 @@ public:
 	// Energy methods
 	double calculate_Energy();
 	double get_energy_per_spin();
-	double get_magnetisation_per_spin();
+	double get_Magnetisation();
 	void update_Energy();
 	void update_Energy(double val);
 
@@ -85,6 +85,8 @@ private:
 	double delta_J_;
 	double Beta_;
 	int Number_spin_;
+	std::vector< int > winding_strings_; //winding number which is used to define n_string
+
 };
 
 

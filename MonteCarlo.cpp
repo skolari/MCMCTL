@@ -9,7 +9,7 @@
 using namespace std;
 
 MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, bool Dipolar, double J1, double J2, double J3, double J5, double delta_J, double Beta)
-	: Rnd_(Rnd), worm_(), energy_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
+	: Rnd_(Rnd), worm_(), winding_strings_(2,0), energy_measures_(), magnetisation_measures_(), nstring_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
 {
 	S_ = new SpinLattice(Rnd, Deg, Dipolar, J1, J2, J3, J5, delta_J, Beta);
 	D_ = new DualLattice(Rnd, Deg, S_);
@@ -172,8 +172,10 @@ void MonteCarlo::create_update() {
 	if ((winding_number_2 % 2 == 0)
 			&& (winding_number_1 % 2 == 0)) {
 		this->map_dimer_to_spin();
+
 		winding_number_2 = 0;
 		winding_number_1 = 0;
+
 		worm_.clear();
 	}
 	else {
@@ -203,7 +205,7 @@ void MonteCarlo::run_algorithm_single() {
 	for ( int i = 0; i < N_algo_; i++ ) {
 		this->create_update();
 		if (i % 20 == 0){
-			this->measure_energy();
+			this->measure();
 		}
 	}
 }
@@ -334,11 +336,20 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
 /*
  * adds a new measure to the energy_measures_ vector
  */
-void MonteCarlo::measure_energy() {
+void MonteCarlo::measure() {
 	//double E = S_->get_energy_per_spin();
 	S_->update_Energy();
 	double E = S_->get_Energy();
+	double M = S_->get_Magnetisation();
 	energy_measures_.push_back(E);
+	magnetisation_measures_.push_back(M);
+
+	//n_strings
+	double N_3 = S_->get_Number_spin() / 3.0;
+	double L = std::sqrt(N_3);
+	this->calculate_winding_strings();
+	double n_string = 2/3 - (winding_strings_[0] + winding_strings_[1])/(3 * L);
+	nstring_measures_.push_back(n_string);
 }
 
 /*
@@ -357,24 +368,51 @@ double MonteCarlo::first_moment_energy() {
 }
 
 /*
- * the second moment of the energy over all measurements (till now) of this simulation
- * @return second moment of the energy
+ * the first moment of the vector
+ * @return second moment of a vector
  */
-double MonteCarlo::second_moment_energy() {
-	int Number_sites = S_->get_Number_spin();
-	double energy_sum = 0;
-	int N = energy_measures_.size();
+double MonteCarlo::first_moment(vector< double > v) {
+	double sum = 0;
+	int N = v.size();
 	for (int i = 0; i < N; i++) {
-	    energy_sum = energy_sum + energy_measures_[i] * energy_measures_[i];
+	    sum = sum + v[i];
 	}
-	energy_sum  = energy_sum / (N * Number_sites);
-	return energy_sum;
+	sum  = sum / N;
+	return sum;
+}
+
+/*
+ * the second moment of the vector
+ * @return second moment of a vector
+ */
+double MonteCarlo::second_moment(vector< double > v) {
+	double sum = 0;
+	int N = v.size();
+	for (int i = 0; i < N; i++) {
+	    sum = sum + v[i] * v[i];
+	}
+	sum  = sum / N;
+	return sum;
+}
+
+/*
+ * the forth moment of the vector
+ * @return forth moment of a vector
+ */
+double MonteCarlo::forth_moment(vector< double > v) {
+	double sum = 0;
+	int N = v.size();
+	for (int i = 0; i < N; i++) {
+	    sum = sum + v[i] * v[i] * v[i] * v[i];
+	}
+	sum  = sum / N;
+	return sum;
 }
 
 double MonteCarlo::variance_energy() {
-
+	int Number_sites = S_->get_Number_spin();
 	double energy_first = this->first_moment_energy();
-	double energy_second = this->second_moment_energy();
+	double energy_second = this->second_moment(energy_measures_) / Number_sites;
 	return energy_second - energy_first * energy_first;
 }
 
@@ -386,9 +424,25 @@ double MonteCarlo::calculate_cv() {
 	int Number_sites = S_->get_Number_spin();
 	double beta = S_->get_Beta();
 	double first_moment_energy  = this->first_moment_energy();
-	double second_moment_energy = this->second_moment_energy();
+	double second_moment_energy = this->second_moment(energy_measures_) / Number_sites;
 	double cv =  (second_moment_energy - Number_sites * first_moment_energy * first_moment_energy) * beta * beta;
 	return cv;
+}
+
+/*
+ * Calculates the Binder Cumulant .
+ * @return B_c
+ */
+double MonteCarlo::calculate_binder_cumulant() {
+	double second_moment_mag  = this->second_moment(magnetisation_measures_);
+	double forth_moment_energy = this->forth_moment(magnetisation_measures_);
+	double Bc = 1 - forth_moment_energy / ( 3 * second_moment_mag * second_moment_mag );
+	return Bc;
+}
+
+double MonteCarlo::first_moment_nstring() {
+	double nstring = this->first_moment(nstring_measures_);
+	return nstring;
 }
 
 void MonteCarlo::delete_worm() {
@@ -444,124 +498,48 @@ void MonteCarlo::update_winding_number() {
 
 }
 
-
-/*
- * this function can be used to test the winding number for Deg_ = 3
- */
-void MonteCarlo::testwindingnumber() {
-	for (int i = 0; i < N_ - 1; i++) {
-		DimerNode* start = D_->getDimerNode(i , N_ - 2);
-		DimerNode* end = D_->getDimerNode(i+1, N_ - 2);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber upperline (0,0):" << winding_number_2 << ", " << winding_number_1 << endl;
+void MonteCarlo::calculate_winding_strings() {
+	winding_strings_[0] = 0;
+	winding_strings_[1] = 0;
+	// update vertical Spins
+	int i = 0;
+	for (int j = 0; j < Deg_; j++) {
+		i = Deg_- j;
+		if(S_->ifInsideLattice(i, j)) {
+			this->update_winding_i_dir(0, i, j, 4, true);
+		}
 	}
-	for (int i = 0; i < 3; i++) {
-		DimerNode* start = D_->getDimerNode(2*i + 1, 5);
-		DimerNode* end = D_->getDimerNode(2*i + 6, 0);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber up to down (0," << i+1 <<"):" << winding_number_2 << ", " << winding_number_1 << endl;
+	for (int j = Deg_; j < N_ - 2; j++) {
+		i = 0;
+		this->update_winding_i_dir(0, i, j, 5, false);
 	}
 
-	winding_number_2 = 0;
-	winding_number_1 = 0;
-	for (int i = 0; i < 3; i++) {
-		DimerNode* end = D_->getDimerNode(2*i + 1, 5);
-		DimerNode* start = D_->getDimerNode(2*i + 6, 0);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber down to up (0," << i+1 <<"):" << winding_number_2 << ", " << winding_number_1 << endl;
+	// update horizontal Spins
+
+	int j = N_ - 2;
+	for (int i = 0; i < N_ + Deg_ - j - 2; i++){
+		if(S_->ifInsideLattice(i, j)) {
+			this->update_winding_i_dir(1, i, j, 0, false);
+		}
 	}
 
-	winding_number_2 = 0;
-	winding_number_1 = 0;
-	for (int i = 0; i < 3; i++) {
-		DimerNode* start = D_->getDimerNode(6 + 2* i, 5 - i);
-		DimerNode* end = D_->getDimerNode(1 + 2 * i, 2 - i);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber up right to down left ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
+	i = N_ - 2;
+	for (int j = Deg_; j < N_ - 2; j++) {
+		if(S_->ifInsideLattice(i, j)) {
+			this->update_winding_i_dir(1, i, j, 4, true);
+		}
+		i = i - 1;
 	}
-	winding_number_2 = 0;
-	winding_number_1 = 0;
-	for (int i = 0; i < 3; i++) {
-		DimerNode* end = D_->getDimerNode(6 + 2* i, 5 - i);
-		DimerNode* start = D_->getDimerNode(1 + 2 * i, 2 - i);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber down left to up right ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
-	}
-
-	winding_number_2 = 0;
-	winding_number_1 = 0;
-	for (int i = 0; i < 3; i++) {
-		DimerNode* end = D_->getDimerNode(0, Deg_ + i);
-		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 1, i);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber up left to down right ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
-	}
-
-	winding_number_2 = 0;
-	winding_number_1 = 0;
-
-	for (int i = 0; i < 3; i++) {
-		DimerNode* start = D_->getDimerNode(0, Deg_ + i);
-		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 1, i);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber down right to up left ("<< i+1 <<",0):" << winding_number_2 << ", " << winding_number_1 << endl;
-	}
-
-	winding_number_2 = 0;
-	winding_number_1 = 0;
-
-	winding_number_2 = 0;
-	winding_number_1 = 0;
-	for (int i = 0; i < 3; i++) {
-		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 2, i);
-		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 1, i);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber down right side (0,0):" << winding_number_2 << ", " << winding_number_1 << endl;
-	}
-	for (int i = 0; i < 3; i++) {
-		DimerNode* start = D_->getDimerNode(2 * (N_ - 1) - 1, i);
-		DimerNode* end = D_->getDimerNode(2 * (N_ - 1) - 2, i + 1);
-		start->printoutPos();
-		end->printoutPos();
-		DimerEdge* edge = start->getEdge(end);
-		worm_.push_back(edge);
-		this->update_winding_number();
-		cout << "windingnumber down right side (0,0):" << winding_number_2 << ", " << winding_number_1 << endl;
-	}
-
-	cout << "test finished"<< endl;
 }
 
-
+void MonteCarlo::update_winding_i_dir(int index, int i, int j, int dir, bool plus) {
+	DimerEdge* dimer = S_->get_Spin_pointer(i, j)->getDimer(dir);
+	double d = dimer->getDimer();
+	if (d == 1) {
+		if(plus) {
+			winding_strings_[index] += 1;
+		} else {
+			winding_strings_[index] -= 1;
+		}
+	}
+}

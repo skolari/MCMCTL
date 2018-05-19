@@ -77,11 +77,18 @@ public:
 	void update_winding_number();
 
 	// Mesures
-	void measure_energy();
+	void measure();
 
 	double first_moment_energy();
-	double second_moment_energy();
+	double first_moment(std::vector< double > v);
+	double second_moment(std::vector< double > v);
+	double forth_moment(std::vector< double > v);
 	double calculate_cv();
+	double calculate_binder_cumulant();
+	void calculate_winding_strings();
+	double first_moment_nstring();
+	void update_winding_i_dir(int index, int i, int j, int dir, bool plus);
+
 	double variance_energy();
 	void delete_worm();
 
@@ -98,8 +105,12 @@ private:
 
 	int winding_number_1;
 	int winding_number_2;
+	std::vector< int > winding_strings_; //winding number which is used to define n_string
 
 	std::vector<double> energy_measures_;
+	std::vector<double> magnetisation_measures_;
+	std::vector<double> nstring_measures_;
+
 	// Deg_, N_
 	int Deg_;
 	int N_;

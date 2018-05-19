@@ -61,9 +61,9 @@ void ParallelTempering::run() {
  */
 void ParallelTempering::algorithm_step() {
 
-	//omp_set_num_threads(N_simul_);
+	omp_set_num_threads(N_simul_);
 
-	//#pragma omp parallel for
+	#pragma omp parallel for
 	for(int i = 0; i < N_simul_; i++) {
 		Simulations_[i]->run_parallel_step(N_temp_);
 	}
@@ -128,17 +128,16 @@ void ParallelTempering::Printout(std::string OutputPath) {
 		OutputPath_new  = OutputPath + "nr_" + s;
 		Simulations_[i]->Printout(OutputPath_new);
 	}
-	this->Printout_Energy_and_Cv(OutputPath);
-	this->PrintoutMagnetisation(OutputPath);
+	this->Printout_Observables(OutputPath);
 }
 
 /**
  * create a printout .dat file where the mean energy and cv of all systems in Simulations_ is saved.
  * @param OutputPath outputpath of the output .dat files.
  */
-void ParallelTempering::Printout_Energy_and_Cv(std::string OutputPath) const
+void ParallelTempering::Printout_Observables(std::string OutputPath) const
 {
-	string path = OutputPath + "Energy_and_Cv.dat";
+	string path = OutputPath + "Observables.dat";
 
 	ofstream *outputFileSpin = new ofstream();
 	outputFileSpin->open(path.c_str());
@@ -152,50 +151,27 @@ void ParallelTempering::Printout_Energy_and_Cv(std::string OutputPath) const
 	double E = 0;
 	double Cv = 0;
 	double beta = 0;
-	double variance = 0;
+	double Bc = 0;
+	double nstring = 0;
 	for (int i = 0; i < N_simul_; ++i) {
 		E = Simulations_[i]->first_moment_energy();
 		Cv = Simulations_[i]->calculate_cv();
-		variance  = Simulations_[i]->variance_energy();
+		Bc  = Simulations_[i]->calculate_binder_cumulant();
 		beta = Simulations_[i]->get_S()->get_Beta();
-		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(5) << beta << "\t" << E << "\t" << Cv << "\t" << variance << endl;
+		nstring = Simulations_[i]->first_moment_nstring();
+		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(5) << beta << "\t" << E << "\t" << Cv << "\t" << Bc << "\t" << nstring << endl;
 	}
 	outputFileSpin->close();
 	delete outputFileSpin;
 }
 
-/**
- * create a printout .dat file where the magnetisation of the last configurations of all systems in Simulations_ is saved.
- * @param OutputPath outputpath of the output .dat files.
- */
-void ParallelTempering::PrintoutMagnetisation(std::string OutputPath) const
-{
-	string path = OutputPath + "Magnetisation.dat";
-
-	ofstream *outputFileSpin = new ofstream();
-	outputFileSpin->open(path.c_str());
-
-	if (!outputFileSpin->is_open())
-	{
-		delete outputFileSpin;
-		outputFileSpin = NULL;
-	}
-
-	double M = 0;
-	for (int i = 0; i < N_simul_; ++i) {
-		M = Simulations_[i]->get_S()->get_magnetisation_per_spin();
-		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(3) << beta_[i] << "\t" << M << endl;
-	}
-	outputFileSpin->close();
-	delete outputFileSpin;
-}
 
 /**
  * calls the MonteCarlo::measure_energy() for all systems in Simulations_
  */
 void ParallelTempering::measure_energy() {
 	for(int i = 0; i < N_simul_; i++) {
-		Simulations_[i]->measure_energy();
+		Simulations_[i]->measure();
 	}
 }
 
