@@ -17,8 +17,9 @@ class DrawPlot:
         self.beta = data[:, 0]
         self.T = [1/x for x in self.beta]
         self.E = data[:, 1]
-        # self.E = sp.savgol_filter(self.E1, 15, 6)
         self.cv = data[:, 2]
+        self.bc = data[:, 3]
+        self.n_string = data[:, 4]
 
     def draw_spin_and_dual_lattice(self):
         self.triangular_lattice.draw_tri_lattice()
@@ -45,10 +46,33 @@ class DrawPlot:
         plt.plot(self.T, self.cv)
         plt.xlabel('T')
         plt.ylabel('C_v')
-        plt.title('Energy - C_v')
+        plt.title('$T - C_v$')
+        plt.grid(True)
+        plt.show()
+
+    def draw_bc(self):
+        plt.plot(self.T, self.bc)
+        plt.xlabel('T')
+        plt.ylabel('B_c')
+        plt.title('T - Binder cumulant')
+        plt.grid(True)
+        plt.show()
+
+    def draw_n_string(self):
+        plt.plot(self.T, self.n_string)
+        plt.xlabel('T')
+        plt.ylabel('n_string')
+        plt.title('T - n_string')
         plt.grid(True)
         plt.show()
 
     def get_entropy(self):
         entropy = log(2) - np.trapz(self.cv * self.beta, x=self.T)
         print(entropy)
+
+    def draw_observables(self):
+        self.draw_cv()
+        self.get_entropy()
+        self.draw_e()
+        self.draw_bc()
+        self.draw_n_string()

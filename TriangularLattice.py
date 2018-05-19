@@ -3,7 +3,6 @@ import networkx as nx
 import math
 import matplotlib.pyplot as plt
 
-
 class TriangularLattice:
     # Variables
 
