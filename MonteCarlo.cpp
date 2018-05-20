@@ -344,7 +344,7 @@ void MonteCarlo::measure() {
 
 	//n_strings
 	this->calculate_winding_strings();
-	double n_string = 2/3 - ( winding_strings_[0] + winding_strings_[1] )/(3 * Deg_);
+	double n_string = 2/3 - ( winding_strings_[0] + winding_strings_[1] )/( 3.0 * Deg_);
 	nstring_measures_.push_back(n_string);
 }
 
@@ -533,6 +533,7 @@ void MonteCarlo::calculate_winding_strings() {
 	for (int j = Deg_; j < N_ - 1; j++) {
 		i = 0;
 		this->update_winding_i_dir(0, i, j, 5, false);
+
 	}
 
 	// update horizontal Spins
@@ -560,6 +561,7 @@ void MonteCarlo::calculate_winding_strings() {
 void MonteCarlo::update_winding_i_dir(int index, int i, int j, int dir, bool plus) {
 	DimerEdge* dimer = S_->get_Spin_pointer(i, j)->getDimer(dir);
 	double d = dimer->getDimer();
+
 	if (d == 1) {
 		if(plus) {
 			winding_strings_[index] += 1;

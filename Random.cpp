@@ -16,7 +16,7 @@ Random::Random(int N)
 		dist_dual_n_vertical_(std::uniform_int_distribution<>(0, N_ -  2)),
 		dist_dual_n_horizontal_(std::uniform_int_distribution<>(0, 2 * (N_ - 1) - 1))
 {
-	mt.seed(::time(NULL));
+	mt.seed(time(NULL));
 }
 
 Random::~Random() {
