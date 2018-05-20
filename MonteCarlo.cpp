@@ -48,7 +48,9 @@ void MonteCarlo::init_update() {
 	this->proba_step();
 }
 
-// maybe there is a more efficient way.
+/*
+ * The myopic step of the algorithm.
+ */
 void MonteCarlo::myopic_step() {
 	DimerEdge* last_edge = worm_.back();
 	vector<DimerEdge*> d = D_->get_local_dimer(last_edge);
@@ -84,16 +86,10 @@ void MonteCarlo::proba_step() {
 	vector< long double > W;
 	vector< double > delta_E;
 	std::tie (W, delta_E) = foo;
-	//cout << delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
 
 	std::vector< std::vector<long double>> M = this->get_M(W);
 	std::vector<double> i{0, 1, 2, 3};
-	//std::vector<long double> w{M[0][0], M[0][1], M[0][2]};
 
-
-	//std::piecewise_constant_distribution<double> dist(i.begin(), i.end(), w.begin());
-
-	//int next_index = int(Rnd_->piecewise_constant_distribution(dist));
 	double rnd = Rnd_->dist();
 	int next_index = 4;
 	if (rnd < M[0][0]) {
@@ -105,7 +101,6 @@ void MonteCarlo::proba_step() {
 	else {
 		next_index = 2;
 	}
-	//cout << next_index << endl;
 
 	if (next_index == 0) {
 		next_edge = d[0]->getOppositeEdge();
@@ -125,7 +120,6 @@ void MonteCarlo::proba_step() {
 		S_->update_Energy(delta_E[2]);
 	}
 
-	//cout << "next index: "<<next_index << endl;
 	worm_.push_back(next_edge);
 
 	this->update_winding_number();
@@ -176,7 +170,6 @@ void MonteCarlo::create_update() {
 		this->create_update();
 	}
 
-	//cout << winding_number_1 << " and " << winding_number_2 << endl;
 	if ((winding_number_2 % 2 == 0)
 			&& (winding_number_1 % 2 == 0)) {
 		this->map_dimer_to_spin();
@@ -385,7 +378,8 @@ double MonteCarlo::first_moment(vector< double > v) {
 }
 
 /*
- * the second moment of the vector
+ * the second moment of the vector v
+ * @param v vector
  * @return second moment of a vector
  */
 double MonteCarlo::second_moment(vector< double > v) {
@@ -399,7 +393,8 @@ double MonteCarlo::second_moment(vector< double > v) {
 }
 
 /*
- * the forth moment of the vector
+ * the forth moment of the vector v
+ * @param v vector
  * @return forth moment of a vector
  */
 double MonteCarlo::forth_moment(vector< double > v) {
@@ -412,6 +407,9 @@ double MonteCarlo::forth_moment(vector< double > v) {
 	return sum;
 }
 
+/*
+ * Calculates the variance of the energy.
+ */
 double MonteCarlo::variance_energy() {
 	int Number_sites = S_->get_Number_spin();
 	double energy_first = this->first_moment_energy();
@@ -443,11 +441,17 @@ double MonteCarlo::calculate_binder_cumulant() {
 	return Bc;
 }
 
+/*
+ * Calculates the first moment of the n_string measures.
+ */
 double MonteCarlo::first_moment_nstring() {
 	double nstring = this->first_moment(nstring_measures_);
 	return nstring;
 }
 
+/*
+ * This swiches all dimers of the worm back and clears the worm.
+ */
 void MonteCarlo::delete_worm() {
 	int N = worm_.size();
 	for (int i = 0; i < N; i++ ) {
@@ -456,6 +460,9 @@ void MonteCarlo::delete_worm() {
 	worm_.clear();
 }
 
+/*
+ * This swiches all dimers of the worm_archive back and clears the worm_archive.
+ */
 void MonteCarlo::delete_worm_archive() {
 	int N = worm_archive_.size();
 	for (int i = 0; i < N; i++ ) {
@@ -509,9 +516,9 @@ void MonteCarlo::update_winding_number() {
 
 }
 
-
-
-
+/*
+ * Calculates the winding numbers used to calculate n_string.
+ */
 void MonteCarlo::calculate_winding_strings() {
 	winding_strings_[0] = 0;
 	winding_strings_[1] = 0;
@@ -547,6 +554,9 @@ void MonteCarlo::calculate_winding_strings() {
 	}
 }
 
+/*
+ * Helper function to calculate the winding number for n_strings.
+ */
 void MonteCarlo::update_winding_i_dir(int index, int i, int j, int dir, bool plus) {
 	DimerEdge* dimer = S_->get_Spin_pointer(i, j)->getDimer(dir);
 	double d = dimer->getDimer();

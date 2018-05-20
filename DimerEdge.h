@@ -46,13 +46,15 @@ public:
 	}
 
 	DimerEdge* getOppositeEdge();
+
 	void switchDimer();
+
 private:
 	double Dimer_; // if 1 both Spin_right and Spin_left are equal, else -1.
-	DimerNode* start_;
-	DimerNode* end_;
-	Spin* Spin_right_;
-	Spin* Spin_left_;
+	DimerNode* start_; // start node of the edge
+	DimerNode* end_; // end node of the edge
+	Spin* Spin_right_; // assiciated right spin with respect to the direction of the edge
+	Spin* Spin_left_; // assiciated left spin with respect to the direction of the edge
 };
 
 #endif /* DIMEREDGE_H_ */

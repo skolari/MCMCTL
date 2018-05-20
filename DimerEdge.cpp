@@ -23,10 +23,16 @@ void DimerEdge::setDimer(double val) {
 	Dimer_ = val;
 }
 
+/*
+ * Get the edge in the opposite direction.
+ */
 DimerEdge* DimerEdge::getOppositeEdge() {
 	return end_->getEdge(start_);
 }
 
+/*
+ * Switch the sign of the dimer value.
+ */
 void DimerEdge::switchDimer() {
 	double dimer = (-1) * this->getDimer();
 	this->setDimer(dimer);
