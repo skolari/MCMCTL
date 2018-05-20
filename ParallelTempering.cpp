@@ -112,6 +112,16 @@ void ParallelTempering::J_swap(int i, int j) {
 	Simulations_[i]->set_energy_measures_(Simulations_[j]->get_energy_measures_());
 	Simulations_[j]->set_energy_measures_(energy_measures);
 
+	vector<double> magnetisation_measures = Simulations_[i]->get_magnetisation_measures_();
+	Simulations_[i]->set_magnetisation_measures_(Simulations_[j]->get_magnetisation_measures_());
+	Simulations_[j]->set_magnetisation_measures_(magnetisation_measures);
+
+	vector<double> nstring_measures = Simulations_[i]->get_nstring_measures_();
+	Simulations_[i]->set_nstring_measures_(Simulations_[j]->get_nstring_measures_());
+	Simulations_[j]->set_nstring_measures_(nstring_measures);
+
+
+
 	std::swap(Simulations_[i],Simulations_[j]);
 }
 

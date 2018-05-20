@@ -1,8 +1,8 @@
 Deg=6
 outputPath=./Outputfiles/
 N_simul=50
-N_thermal=10000
-N_algo=100
+N_thermal=50000
+N_algo=50000
 N_temp=10
 N_measure=1
 Dipolar=false

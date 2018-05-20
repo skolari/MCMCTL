@@ -53,6 +53,22 @@ public:
 		energy_measures_  = v;
 	}
 
+	inline std::vector<double> get_magnetisation_measures_() {
+		return magnetisation_measures_;
+	}
+
+	inline void set_magnetisation_measures_(std::vector<double> v) {
+		get_magnetisation_measures_  = v;
+	}
+
+	inline std::vector<double> get_nstring_measures_() {
+			return nstring_measures_;
+		}
+
+	inline void set_nstring_measures_(std::vector<double> v) {
+		nstring_measures_  = v;
+	}
+
 	inline int get_winding_number_1() const {
 		return winding_number_1;
 	}
