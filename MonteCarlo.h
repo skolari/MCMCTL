@@ -62,8 +62,8 @@ public:
 	}
 
 	inline std::vector<double> get_nstring_measures_() {
-			return nstring_measures_;
-		}
+		return nstring_measures_;
+	}
 
 	inline void set_nstring_measures_(std::vector<double> v) {
 		nstring_measures_  = v;
