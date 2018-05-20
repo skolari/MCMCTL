@@ -441,12 +441,12 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 			E[k] += J5[j3_int[6]] *  Dimer[2][k] * s[6]->getDimer() * t[5]->getDimer();
 		}
 	}
-	//cout << "E0: " << E[0] << ", E1: " << E[1] << ", E2: " << E[2] << endl;
+
 	for (int i = 0; i < 3 ; i++) {
 		delta_E[i] = E[i] - E[0];
 		W[i] = std::exp(- S_->get_Beta() * delta_E[i]);
 	}
-	//cout << "W: "<<  W[0] << " , "  << W[1] << " , " <<W[2] << endl;
+
 	tuple<std::vector< long double >, std::vector< double >> foo (W, delta_E);
 	return foo;
 }

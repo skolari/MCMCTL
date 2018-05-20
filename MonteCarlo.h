@@ -113,22 +113,21 @@ public:
 	void testwindingnumber();
 
 private:
-	Random* Rnd_;
-	SpinLattice* S_;
-	DualLattice* D_;
+	Random* Rnd_; // pointer to the random engine of the programm
+	SpinLattice* S_; // pointer to the spin lattice
+	DualLattice* D_; // pointer to the dual lattice
 
-	DimerNode* entry_node_;
-	std::vector<DimerEdge*> worm_;
-	std::vector<DimerEdge*> worm_archive_;
-
+	DimerNode* entry_node_; // the first node of the worm.
+	std::vector<DimerEdge*> worm_; // the worm which is on construction
+	std::vector<DimerEdge*> worm_archive_; // this collects all closed worms till the map2spin function is called.
 
 	int winding_number_1;
 	int winding_number_2;
 	std::vector< int > winding_strings_; //winding number which is used to define n_string
 
-	std::vector<double> energy_measures_;
-	std::vector<double> magnetisation_measures_;
-	std::vector<double> nstring_measures_;
+	std::vector<double> energy_measures_; // vector which collects the energy measures
+	std::vector<double> magnetisation_measures_; // vector which collects the magnetisation measures
+	std::vector<double> nstring_measures_; // vector which collects the nstring measures
 
 	// Deg_, N_
 	int Deg_;
@@ -136,15 +135,6 @@ private:
 	// Algorithm
 	int N_thermal_;
 	int N_algo_;
-
-	// Random
-	std::random_device rd;
-	std::mt19937 mt;
-	std::uniform_int_distribution<int> dist_2; // chooses randomly 0 to 1
-	std::uniform_int_distribution<int> dist_3; // chooses randomly 0 to 2
-	std::uniform_int_distribution<int> dist_N; // chooses randomly 0 to N-1, N size of spin lattice.
-	std::uniform_int_distribution<int> dist_2N; // chooses randomly 0 to N-1, N size of spin lattice.
-
 };
 
 #endif /* MONTECARLO_H_ */
