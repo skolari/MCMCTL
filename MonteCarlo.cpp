@@ -350,10 +350,8 @@ void MonteCarlo::measure() {
 	magnetisation_measures_.push_back(M);
 
 	//n_strings
-	double N_3 = S_->get_Number_spin() / 3.0;
-	double L = std::sqrt(N_3);
 	this->calculate_winding_strings();
-	double n_string = 2/3 - (winding_strings_[0] + winding_strings_[1])/(3 * L);
+	double n_string = 2/3 - ( winding_strings_[0] + winding_strings_[1] )/(3 * Deg_);
 	nstring_measures_.push_back(n_string);
 }
 
@@ -523,26 +521,31 @@ void MonteCarlo::calculate_winding_strings() {
 		i = Deg_- j;
 		if(S_->ifInsideLattice(i, j)) {
 			this->update_winding_i_dir(0, i, j, 4, true);
+			cout << "v1" << endl;
 		}
 	}
-	for (int j = Deg_; j < N_ - 2; j++) {
+	for (int j = Deg_; j < N_ - 1; j++) {
 		i = 0;
 		this->update_winding_i_dir(0, i, j, 5, false);
+		cout << "v2" << endl;
 	}
 
 	// update horizontal Spins
 
 	int j = N_ - 2;
-	for (int i = 0; i < N_ + Deg_ - j - 2; i++){
+	for (int i = 0; i < N_ - Deg_ - 1; i++){
 		if(S_->ifInsideLattice(i, j)) {
 			this->update_winding_i_dir(1, i, j, 0, false);
+			cout << "h1" << endl;
 		}
 	}
 
 	i = N_ - 2;
+	this->update_winding_i_dir(1, i, Deg_, 1, true);
 	for (int j = Deg_; j < N_ - 2; j++) {
 		if(S_->ifInsideLattice(i, j)) {
 			this->update_winding_i_dir(1, i, j, 4, true);
+			cout << "h2" << endl;
 		}
 		i = i - 1;
 	}

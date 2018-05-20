@@ -164,10 +164,10 @@ void ParallelTempering::Printout_Observables(std::string OutputPath) const
 	double Bc = 0;
 	double nstring = 0;
 	for (int i = 0; i < N_simul_; ++i) {
+		beta = Simulations_[i]->get_S()->get_Beta();
 		E = Simulations_[i]->first_moment_energy();
 		Cv = Simulations_[i]->calculate_cv();
 		Bc  = Simulations_[i]->calculate_binder_cumulant();
-		beta = Simulations_[i]->get_S()->get_Beta();
 		nstring = Simulations_[i]->first_moment_nstring();
 		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(5) << beta << "\t" << E << "\t" << Cv << "\t" << Bc << "\t" << nstring << endl;
 	}
