@@ -9,3 +9,5 @@ Triangular_Lattice_py/
 ./.idea/*
 *.iml
 *.prefs
+./__pycache__/*
+*.pyc

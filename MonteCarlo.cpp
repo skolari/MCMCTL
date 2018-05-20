@@ -9,7 +9,7 @@
 using namespace std;
 
 MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, bool Dipolar, double J1, double J2, double J3, double J5, double delta_J, double Beta)
-	: Rnd_(Rnd), worm_(), winding_strings_(2,0), energy_measures_(), magnetisation_measures_(), nstring_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
+	: Rnd_(Rnd), worm_(), worm_archive_(), winding_strings_(2,0), energy_measures_(), magnetisation_measures_(), nstring_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
 {
 	S_ = new SpinLattice(Rnd, Deg, Dipolar, J1, J2, J3, J5, delta_J, Beta);
 	D_ = new DualLattice(Rnd, Deg, S_);
@@ -31,7 +31,6 @@ MonteCarlo::~MonteCarlo() {
 void MonteCarlo::init_update() {
 
 	worm_.clear();
-
 	int rnd_i = 0;
 	int rnd_j = 0;
 	int rnd = 0;
@@ -96,7 +95,6 @@ void MonteCarlo::proba_step() {
 
 	//int next_index = int(Rnd_->piecewise_constant_distribution(dist));
 	double rnd = Rnd_->dist();
-	//cout << "rnd. " << rnd << endl;
 	int next_index = 4;
 	if (rnd < M[0][0]) {
 		next_index = 0;
@@ -117,22 +115,20 @@ void MonteCarlo::proba_step() {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
-		//S_->update_Energy(delta_E[1]);
+		S_->update_Energy(delta_E[1]);
 	}
 
 	else if (next_index == 2) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[2]);
 		next_edge = d[2];
-		//S_->update_Energy(delta_E[0]);
+		S_->update_Energy(delta_E[2]);
 	}
 
 	//cout << "next index: "<<next_index << endl;
 	worm_.push_back(next_edge);
 
 	this->update_winding_number();
-
-	this->get_S()->update_Energy();
 }
 
 /*
@@ -156,14 +152,27 @@ void MonteCarlo::create_update() {
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
 		count += 1;
+	//} while(end_node != entry_node_);
 	} while(end_node != entry_node_ && count < count_max);
 
 
-	if(count_max == count ||count_max < winding_number_2 || count_max < winding_number_1 ) {
+	if(count_max == count) {
 		this->delete_worm();
+		this->delete_worm_archive();
+		this->get_S()->update_Energy();
 		winding_number_2 = 0;
 		winding_number_1 = 0;
-		//cerr << "Too long worm." << endl;
+		//cout << "Too long worm." << endl;
+		this->create_update();
+	}
+
+	if( count_max < winding_number_2 || count_max < winding_number_1 ) {
+		this->delete_worm();
+		this->delete_worm_archive();
+		this->get_S()->update_Energy();
+		winding_number_2 = 0;
+		winding_number_1 = 0;
+		//cout << "Too long winding." << endl;
 		this->create_update();
 	}
 
@@ -176,8 +185,14 @@ void MonteCarlo::create_update() {
 		winding_number_1 = 0;
 
 		worm_.clear();
+		worm_archive_.clear();
 	}
 	else {
+		unsigned N = worm_.size();
+		for (unsigned i = 0; i < N; i++ ) {
+			worm_archive_.push_back(worm_[i]);
+		}
+
 		this->create_update();
 	}
 }
@@ -328,15 +343,10 @@ void MonteCarlo::update_spin_neighbor_dir(int i, int j, int dir) {
  */
 void MonteCarlo::measure() {
 	//double E = S_->get_energy_per_spin();
-	S_->update_Energy();
+	//S_->update_Energy();
 	double E = S_->get_Energy();
 	double M = S_->get_Magnetisation();
 	energy_measures_.push_back(E);
-	if (E != -48) {
-		this->Printout("./Debugg/fuck");
-		char c;
-		cin >> c;
-	}
 	magnetisation_measures_.push_back(M);
 
 	//n_strings
@@ -443,9 +453,17 @@ double MonteCarlo::first_moment_nstring() {
 void MonteCarlo::delete_worm() {
 	int N = worm_.size();
 	for (int i = 0; i < N; i++ ) {
-		worm_[i]->switchDimer();
+		worm_[i]->switchDimer(); //does not work
 	}
 	worm_.clear();
+}
+
+void MonteCarlo::delete_worm_archive() {
+	int N = worm_archive_.size();
+	for (int i = 0; i < N; i++ ) {
+		worm_archive_[i]->switchDimer();  //does not work
+	}
+	worm_archive_.clear();
 }
 
 
@@ -492,6 +510,9 @@ void MonteCarlo::update_winding_number() {
 	}
 
 }
+
+
+
 
 void MonteCarlo::calculate_winding_strings() {
 	winding_strings_[0] = 0;

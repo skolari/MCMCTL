@@ -107,6 +107,7 @@ public:
 
 	double variance_energy();
 	void delete_worm();
+	void delete_worm_archive();
 
 	//test function
 	void testwindingnumber();
@@ -118,6 +119,8 @@ private:
 
 	DimerNode* entry_node_;
 	std::vector<DimerEdge*> worm_;
+	std::vector<DimerEdge*> worm_archive_;
+
 
 	int winding_number_1;
 	int winding_number_2;
