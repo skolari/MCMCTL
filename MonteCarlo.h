@@ -58,7 +58,7 @@ public:
 	}
 
 	inline void set_magnetisation_measures_(std::vector<double> v) {
-		get_magnetisation_measures_  = v;
+		magnetisation_measures_  = v;
 	}
 
 	inline std::vector<double> get_nstring_measures_() {
