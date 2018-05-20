@@ -21,6 +21,7 @@
 #include "DimerEdge.h"
 #include "DimerNode.h"
 #include "Random.h"
+#include "LatticeTopology.h"
 
 class MonteCarlo {
 public:
@@ -65,8 +66,16 @@ public:
 		return nstring_measures_;
 	}
 
+	inline std::vector<double> get_gm_measures_() {
+		return gm_measures_;
+	}
+
 	inline void set_nstring_measures_(std::vector<double> v) {
 		nstring_measures_  = v;
+	}
+
+	inline void set_gm_measures_(std::vector<double> v) {
+		gm_measures_  = v;
 	}
 
 	inline int get_winding_number_1() const {
@@ -128,7 +137,7 @@ private:
 	std::vector<double> energy_measures_; // vector which collects the energy measures
 	std::vector<double> magnetisation_measures_; // vector which collects the magnetisation measures
 	std::vector<double> nstring_measures_; // vector which collects the nstring measures
-
+	std::vector<double> gm_measures_; // vector which collects the gm measures
 	// Deg_, N_
 	int Deg_;
 	int N_;

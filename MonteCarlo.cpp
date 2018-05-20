@@ -9,7 +9,7 @@
 using namespace std;
 
 MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, bool Dipolar, double J1, double J2, double J3, double J5, double delta_J, double Beta)
-	: Rnd_(Rnd), worm_(), worm_archive_(), winding_strings_(2,0), energy_measures_(), magnetisation_measures_(), nstring_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
+	: Rnd_(Rnd), worm_(), worm_archive_(), winding_strings_(2,0), energy_measures_(), magnetisation_measures_(), nstring_measures_(), gm_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
 {
 	S_ = new SpinLattice(Rnd, Deg, Dipolar, J1, J2, J3, J5, delta_J, Beta);
 	D_ = new DualLattice(Rnd, Deg, S_);
@@ -339,6 +339,10 @@ void MonteCarlo::measure() {
 	//S_->update_Energy();
 	double E = S_->get_Energy();
 	double M = S_->get_Magnetisation();
+
+	LatticeTopology* L = new  LatticeTopology();
+	double gm = L->geometric_mean_of_Lattice(S_);
+	gm_measures_.push_back(gm);
 	energy_measures_.push_back(E);
 	magnetisation_measures_.push_back(M);
 

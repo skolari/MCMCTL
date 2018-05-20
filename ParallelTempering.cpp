@@ -120,6 +120,9 @@ void ParallelTempering::J_swap(int i, int j) {
 	Simulations_[i]->set_nstring_measures_(Simulations_[j]->get_nstring_measures_());
 	Simulations_[j]->set_nstring_measures_(nstring_measures);
 
+	vector<double> gm_measures = Simulations_[i]->get_gm_measures_();
+	Simulations_[i]->set_gm_measures_(Simulations_[j]->get_gm_measures_());
+	Simulations_[j]->set_gm_measures_(gm_measures);
 
 
 	std::swap(Simulations_[i],Simulations_[j]);
@@ -163,13 +166,16 @@ void ParallelTempering::Printout_Observables(std::string OutputPath) const
 	double beta = 0;
 	double Bc = 0;
 	double nstring = 0;
+	double gm = 0;
+
 	for (int i = 0; i < N_simul_; ++i) {
 		beta = Simulations_[i]->get_S()->get_Beta();
 		E = Simulations_[i]->first_moment_energy();
 		Cv = Simulations_[i]->calculate_cv();
 		Bc  = Simulations_[i]->calculate_binder_cumulant();
 		nstring = Simulations_[i]->first_moment_nstring();
-		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(5) << beta << "\t" << E << "\t" << Cv << "\t" << Bc << "\t" << nstring << endl;
+		gm = Simulations_[i]->first_moment( Simulations_[i]->get_gm_measures_());
+		*outputFileSpin << std::fixed << std::showpoint << std::setprecision(5) << beta << "\t" << E << "\t" << Cv << "\t" << Bc << "\t" << nstring << "\t" << gm << std::endl;
 	}
 	outputFileSpin->close();
 	delete outputFileSpin;
