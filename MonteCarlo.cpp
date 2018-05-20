@@ -149,18 +149,17 @@ void MonteCarlo::create_update() {
 	DimerNode* end_node = last_edge->getEnd();
 	int count = 0;
 	int count_max = 20 * S_->get_Number_spin();
+
 	do {
 		this->myopic_step();
 		this->proba_step();
 		last_edge = worm_.back();
 		end_node = last_edge->getEnd();
 		count += 1;
-	//} while(end_node != entry_node_);
 	} while(end_node != entry_node_ && count < count_max);
 
 
 	if(count_max == count ||count_max < winding_number_2 || count_max < winding_number_1 ) {
-	//if(count_max < winding_number_2 || count_max < winding_number_1 ) {
 		this->delete_worm();
 		winding_number_2 = 0;
 		winding_number_1 = 0;
@@ -179,15 +178,6 @@ void MonteCarlo::create_update() {
 		worm_.clear();
 	}
 	else {
-		/*
-		if (winding_number_2 > 6000 ) {
-			this->map_dimer_to_spin();
-			this->Printout("./Debugg/ok");
-			cout << "stop" << endl;
-			char c;
-			 cin >> c;
-		}
-		*/
 		this->create_update();
 	}
 }
@@ -342,6 +332,11 @@ void MonteCarlo::measure() {
 	double E = S_->get_Energy();
 	double M = S_->get_Magnetisation();
 	energy_measures_.push_back(E);
+	if (E != -48) {
+		this->Printout("./Debugg/fuck");
+		char c;
+		cin >> c;
+	}
 	magnetisation_measures_.push_back(M);
 
 	//n_strings

@@ -24,7 +24,6 @@ int main(int argc, char* argv[])
 	std::string time_sec = time_t_to_string(result);
 
 
-
 	std::string inputPath = "configuration.in";
 	if(argc>1){
 	    inputPath=argv[1];

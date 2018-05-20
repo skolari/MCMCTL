@@ -327,8 +327,8 @@ vector< DimerEdge* > DualLattice::get_t_dimer(vector<DimerEdge*> s) {
  */
 tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_weight(DimerEdge* d0)
 {
-	vector<long double> W(3, 1);
-	vector<long double> E(3, 0);
+	vector< long double > W(3, 1);
+	vector< long double > E(3, 0);
 	vector< double > delta_E(3, 0);
 	vector< double > J1 = S_->get_Ji(1);
 	vector< double > J2 = S_->get_Ji(2);
@@ -375,6 +375,7 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 			j3_int[5] = 1;
 		}
 	}
+
 	// create dimer matrix
 	vector <vector< double >> Dimer (3, vector< double >(3, 0));
 	for (int i = 0; i < 3; i++) {
@@ -385,8 +386,6 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	Dimer[2][1] = (-1) * Dimer[2][1];
 	Dimer[1][2] = (-1) * Dimer[1][2];
 
-	//cout << "j: " << J1[0] << " " <<J1[1] << " "<< J1[2] << endl;
-
 	for( int k = 0; k < 3; k++){
 		// J1
 		for( int i = 0; i < 3; i++) {
@@ -396,7 +395,6 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 				E[k] += J1[1] * Dimer[i][k];
 			}
 		}
-
 		// J2
 		//next-neighbors of first spin
 		E[k] += J2[j2_int[6]] *  Dimer[0][k] * s[6]->getDimer();
@@ -448,7 +446,7 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		delta_E[i] = E[i] - E[0];
 		W[i] = std::exp(- S_->get_Beta() * delta_E[i]);
 	}
-	//cout << "delta E: "<<  delta_E[0] << " , "  << delta_E[1] << " , " <<delta_E[2] << endl;
+	//cout << "W: "<<  W[0] << " , "  << W[1] << " , " <<W[2] << endl;
 	tuple<std::vector< long double >, std::vector< double >> foo (W, delta_E);
 	return foo;
 }
