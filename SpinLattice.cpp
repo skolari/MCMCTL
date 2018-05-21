@@ -292,7 +292,7 @@ double SpinLattice::get_Magnetisation() {
 			}
 		}
 	}
-	return M;
+	return M / Number_spin_;
 }
 
 // can be optimized

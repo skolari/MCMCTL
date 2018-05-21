@@ -440,8 +440,9 @@ double MonteCarlo::calculate_cv() {
  */
 double MonteCarlo::calculate_binder_cumulant() {
 	double second_moment_mag  = this->second_moment(magnetisation_measures_);
-	double forth_moment_energy = this->forth_moment(magnetisation_measures_);
-	double Bc = 1 - forth_moment_energy / ( 3 * second_moment_mag * second_moment_mag );
+	double forth_moment_mag = this->forth_moment(magnetisation_measures_);
+	double Bc = 1 - forth_moment_mag / ( 3 * second_moment_mag * second_moment_mag );
+	cout << forth_moment_mag << " " << second_moment_mag << endl;
 	return Bc;
 }
 

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 # import scipy.signal as sp
-from math import log
+from math import log, exp
 from TriangularLattice import TriangularLattice
 from DualLattice import DualLattice
 
@@ -20,6 +20,12 @@ class DrawPlot:
         self.cv = data[:, 2]
         self.bc = data[:, 3]
         self.n_string = data[:, 4]
+        self.gm = data[:, 5]
+        self.f = 48 * self.gm * self.T + self.E
+        # self.S = self.beta * self.E
+        # self.S = [exp((-1)*x) for x in self.S]
+        # self.S = [log(x) for x in self.S]
+
 
     def draw_spin_and_dual_lattice(self):
         self.triangular_lattice.draw_tri_lattice()
@@ -66,6 +72,14 @@ class DrawPlot:
         plt.grid(True)
         plt.show()
 
+    def draw_gm(self):
+        plt.plot(self.T, self.gm)
+        plt.xlabel('T')
+        plt.ylabel('gm')
+        plt.title('T - gm')
+        plt.grid(True)
+        plt.show()
+
     def get_entropy(self):
         entropy = log(2) - np.trapz(self.cv * self.beta, x=self.T)
         print(entropy)
@@ -76,3 +90,4 @@ class DrawPlot:
         self.draw_e()
         self.draw_bc()
         self.draw_n_string()
+        self.draw_gm()
