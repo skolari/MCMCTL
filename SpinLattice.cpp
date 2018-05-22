@@ -41,6 +41,7 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J
 	}
 
 	if (Dipolar) {
+		cout << "dipolar" << endl;
 		double x = 0.5;
 		double y = std::sqrt(3) / 2;
 		J1_[0] = 1;
@@ -224,16 +225,16 @@ double SpinLattice::calculate_Energy() {
 					Spin_neigh = Spin_origin->getNeighbor(0)->getNeighbor(1);
 					S_n = Spin_neigh->getSpin();
 					Energy = Energy + J2_[0] * S_o * S_n;
-					//cout << J2_[0] * S_o * S_n << endl;
+
 					Spin_neigh = Spin_origin->getNeighbor(1)->getNeighbor(2);
 					S_n = Spin_neigh->getSpin();
 					Energy = Energy + J2_[1] * S_o * S_n;
-					//cout << J2_[1] * S_o * S_n << endl;
+
 
 					Spin_neigh = Spin_origin->getNeighbor(2)->getNeighbor(3);
 					S_n = Spin_neigh->getSpin();
 					Energy = Energy + J2_[0] * S_o * S_n;
-					//cout << J2_[0] * S_o * S_n << endl<< endl;
+
 				}
 
 				//}

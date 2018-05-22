@@ -341,8 +341,9 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 	int v_int = this->get_vertical_dimer_index(d);
 
 	// translate the deformation onto local configuration
-	vector< int > j2_int(11, 0); //(7 + 4*v_int) % 12 is 1
-	vector< int > j3_int(11, 0); //(7 + 4*v_int) % 12
+	vector< int > j2_int(12, 0); //(7 + 4*v_int) % 12 is 1
+	vector< int > j3_int(12, 0); //(7 + 4*v_int) % 12
+
 	if (S_->get_delta_J() != 0) {
 		if (v_int == 0) {
 			j2_int[7] = 1;
@@ -398,18 +399,25 @@ tuple<std::vector< long double >, std::vector< double >> DualLattice::get_local_
 		// J2
 		//next-neighbors of first spin
 		E[k] += J2[j2_int[6]] *  Dimer[0][k] * s[6]->getDimer();
-		E[k] += J2[j2_int[4]] *  Dimer[0][k] * s[4]->getDimer();
 		E[k] += J2[j2_int[1]] *  Dimer[1][k] * s[1]->getDimer();
+
+		E[k] += J2[j2_int[4]] *  Dimer[0][k] * s[4]->getDimer();
+		E[k] += J2[j2_int[3]] *  Dimer[1][k] * s[3]->getDimer();
 
 		//next-neightbors of second spin
 		E[k] += J2[j2_int[2]] *  Dimer[2][k] * s[2]->getDimer();
-		E[k] += J2[j2_int[0]] *  Dimer[2][k] * s[0]->getDimer();
 		E[k] += J2[j2_int[9]] *  Dimer[0][k] * s[9]->getDimer();
 
+		E[k] += J2[j2_int[11]] *  Dimer[0][k] * s[11]->getDimer();
+		E[k] += J2[j2_int[0]] *  Dimer[2][k] * s[0]->getDimer();
+
+
 		//next-neightbors of third spin
-		E[k] += J2[j2_int[8]] *  Dimer[1][k] * s[8]->getDimer();
 		E[k] += J2[j2_int[10]] *  Dimer[1][k] * s[10]->getDimer();
 		E[k] += J2[j2_int[5]] *  Dimer[2][k] * s[5]->getDimer();
+
+		E[k] += J2[j2_int[8]] *  Dimer[1][k] * s[8]->getDimer();
+		E[k] += J2[j2_int[7]] *  Dimer[2][k] * s[7]->getDimer();
 
 		//J3
 		//next-next-neighbors of first spin

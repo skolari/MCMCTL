@@ -1,8 +1,8 @@
 from DrawPlot import DrawPlot
 
 
-filename_s = 'Outputfiles/nr_0_Spin.dat'
-filename_d = 'Outputfiles/nr_0_DimerAdj.dat'
+filename_s = 'Outputfiles/nr_1_Spin.dat'
+filename_d = 'Outputfiles/nr_1_DimerAdj.dat'
 # filename_s = 'Debugg/fuck_Spin.dat'
 # filename_d = 'Debugg/fuck_DimerAdj.dat'
 filename_e = 'Outputfiles/Observables.dat'
