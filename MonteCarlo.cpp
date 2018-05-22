@@ -110,14 +110,14 @@ void MonteCarlo::proba_step() {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[1]);
 		next_edge = d[1];
-		S_->update_Energy(delta_E[1]);
+		S_->update_Energy();
 	}
 
 	else if (next_index == 2) {
 		D_->switchDimer(d[0]);
 		D_->switchDimer(d[2]);
 		next_edge = d[2];
-		S_->update_Energy(delta_E[2]);
+		S_->update_Energy();
 	}
 
 	worm_.push_back(next_edge);
@@ -348,7 +348,7 @@ void MonteCarlo::measure() {
 
 	//n_strings
 	this->calculate_winding_strings();
-	double n_string = 2/3 - ( winding_strings_[0] + winding_strings_[1] )/( 3.0 * Deg_);
+	double n_string = 2.0/3.0 - ( winding_strings_[0] + winding_strings_[1] ) / ( 3.0 * Deg_);
 	nstring_measures_.push_back(n_string);
 }
 
@@ -441,8 +441,12 @@ double MonteCarlo::calculate_cv() {
 double MonteCarlo::calculate_binder_cumulant() {
 	double second_moment_mag  = this->second_moment(magnetisation_measures_);
 	double forth_moment_mag = this->forth_moment(magnetisation_measures_);
-	double Bc = 1 - forth_moment_mag / ( 3 * second_moment_mag * second_moment_mag );
-	cout << forth_moment_mag << " " << second_moment_mag << endl;
+	double Bc = 0;
+	if (second_moment_mag == 0 && forth_moment_mag == 0) {
+		Bc = 1;
+	} else {
+		 Bc = 1 - forth_moment_mag / ( 3.0 * second_moment_mag * second_moment_mag );
+	}
 	return Bc;
 }
 
