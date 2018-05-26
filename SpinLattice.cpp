@@ -10,7 +10,8 @@ using namespace std;
 
 
 SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J2, double J3, double J5, double delta_J, double Beta)
-	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(2, 0), J2_(2, 0), J3_(2, 0), J5_(2, 0), delta_J_(delta_J), Beta_(Beta)
+	: Lattice(Rnd, Deg), S_(2 * Deg + 1, vector<Spin*>(2 * Deg + 1, NULL)), J1_(2, 0), J2_(2, 0), J3_(2, 0), J5_(2, 0), delta_J_(delta_J), Beta_(Beta),
+	  a1_(2, 0),  a2_(2, 0), k1_(2, 0), k2_(2, 0)
 {
 	double rnd = 0;
 	for (int i = 0; i < N_; ++i) {
@@ -27,6 +28,7 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J
 			}
 		}
 	}
+
 	// Set neighbors
 	vector<int> step (2, 0);
 	for (int i = 0; i < N_; ++i) {
@@ -71,7 +73,12 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J
 		J5_[1] = J5;
 	}
 
-
+	a1_;
+	a2_;
+	k1_;
+	k2_;
+	v_0 = this->n_to_ij(0, 0);
+	double Normalisation_  = normalisation();
 	Number_spin_ = this->SpinLattice::number_spin();
 	Energy_ = this->calculate_Energy();
 
@@ -298,7 +305,7 @@ double SpinLattice::get_Magnetisation() {
 	return M / Number_spin_;
 }
 
-// can be optimized
+// can be optimized n = 3*deg^2
 int SpinLattice::number_spin() {
 	int count = 0;
 	for (int i = 0; i < N_; i++) {
@@ -315,4 +322,38 @@ double SpinLattice::get_energy_per_spin() {
 	this->update_Energy();
 	double E = this->get_Energy();
 	return E / Number_spin_;
+}
+
+// Fourier
+vector <vector< double > > SpinLattice::correlation(int i0, int j0) {
+	vector <vector< double > > corr(N_, vector<double>(N_,0));
+	double S0 = this->get_Spin(i0, j0);
+	for (int i = 0; i < N_; i ++) {
+		for (int j = 0; j < N_; j++ ) {
+			if(this->ifInsideLattice(i, j)){
+				corr[i][j] = S0 * this->get_Spin(i, j);
+			}
+		}
+	}
+	return corr;
+}
+
+vector <vector< double > > SpinLattice::correlation() {
+	vector <vector< double > > corr(N_, vector<double>(N_,0));
+	double S0 = this->get_Spin(v_0[0], v_0[1]);
+	for (int i = 0; i < N_; i ++) {
+		for (int j = 0; j < N_; j++ ) {
+			if(this->ifInsideLattice(i, j)){
+				corr[i][j] = S0 * this->get_Spin(i, j);
+			}
+		}
+	}
+	return corr;
+}
+
+vector < int > SpinLattice::n_to_ij(int n1, int n2) {
+	vector< int > v(2, 0);
+	v[0] = - n2 + N_ - 1;
+	v[1] = n1;
+	return v;
 }

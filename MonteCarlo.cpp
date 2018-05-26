@@ -9,7 +9,7 @@
 using namespace std;
 
 MonteCarlo::MonteCarlo(Random* Rnd, int Deg, int N_thermal, int N_algo, bool Dipolar, double J1, double J2, double J3, double J5, double delta_J, double Beta)
-	: Rnd_(Rnd), worm_(), worm_archive_(), winding_strings_(2,0), energy_measures_(), magnetisation_measures_(), nstring_measures_(), gm_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
+	: Rnd_(Rnd), worm_(), worm_archive_(), winding_strings_(2,0), energy_measures_(), magnetisation_measures_(), nstring_measures_(), gm_measures_(), correlation_measures_(), N_thermal_(N_thermal), N_algo_(N_algo)
 {
 	S_ = new SpinLattice(Rnd, Deg, Dipolar, J1, J2, J3, J5, delta_J, Beta);
 	D_ = new DualLattice(Rnd, Deg, S_);
@@ -350,6 +350,10 @@ void MonteCarlo::measure() {
 	this->calculate_winding_strings();
 	double n_string = 2.0/3.0 - ( winding_strings_[0] + winding_strings_[1] ) / ( 3.0 * Deg_);
 	nstring_measures_.push_back(n_string);
+
+	// correlation
+	std::vector<std::vector<double> > corr = S_->correlation();
+	correlation_measures_.push_back(corr);
 }
 
 /*

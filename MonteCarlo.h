@@ -138,6 +138,8 @@ private:
 	std::vector<double> magnetisation_measures_; // vector which collects the magnetisation measures
 	std::vector<double> nstring_measures_; // vector which collects the nstring measures
 	std::vector<double> gm_measures_; // vector which collects the gm measures
+	std::vector < std::vector<std::vector<double> > > correlation_measures_; // vector which collects the gm measures
+
 	// Deg_, N_
 	int Deg_;
 	int N_;

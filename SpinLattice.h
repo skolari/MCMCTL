@@ -49,14 +49,7 @@ public:
 	inline double get_delta_J() const {
 		return delta_J_;
 	}
-	/*
-	inline void set_Ji(int i, double val) {
-		if ( i == 1 ) J1_ = val;
-		if ( i == 2 ) J2_ = val;
-		if ( i == 3 ) J3_ = val;
-		if ( i == 5 ) J5_ = val;
-	}
-	*/
+
 	inline double get_Spin(int i, int j) const { return S_[i][j]->getSpin(); }
 	Spin* get_Spin_pointer(int i, int j) const;
 	void set_Spin(Spin* S, double val);
@@ -75,6 +68,29 @@ public:
 
 	int number_spin();
 
+	// Fourier over the triangular lattice
+
+	inline std::vector< double > r(int n1, int n2) {
+		std::vector< double > r(2, 0);
+		r[0] = a1_[0] * n1 + a2_[0] * n2;
+		r[1] = a1_[1] * n1 + a2_[1] * n2;
+		return r;
+	}
+
+	inline std::vector< double > k(int n1, int n2) {
+		std::vector< double > k(2, 0);
+		k[0] = k1_[0] * n1 + k2_[0] * n2;
+		k[1] = k1_[1] * n1 + k2_[1] * n2;
+		return k;
+	}
+
+	std::vector <std::vector< double > > correlation(int i0, int j0);
+	std::vector <std::vector< double > > correlation();
+
+	std::vector < int > n_to_ij(int n1, int n2);
+
+
+
 private:
 	std::vector< std::vector<Spin*> > S_;
 	double Energy_;
@@ -82,10 +98,20 @@ private:
 	std::vector< double >  J2_;
 	std::vector< double >  J3_;
 	std::vector< double >  J5_;
+
 	double delta_J_;
 	double Beta_;
 	int Number_spin_;
 	std::vector< int > winding_strings_; //winding number which is used to define n_string
+
+	// structure vector basis
+	std::vector< double > a1_;
+	std::vector< double > a2_;
+	std::vector< double > k1_;
+	std::vector< double > k2_;
+	std::vector< double > v_0;
+	double Normalisation_;
+
 
 };
 

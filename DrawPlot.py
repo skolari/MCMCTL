@@ -88,6 +88,6 @@ class DrawPlot:
         self.draw_cv()
         self.get_entropy()
         self.draw_e()
-        self.draw_bc()
+        # self.draw_bc()
         self.draw_n_string()
         self.draw_gm()
