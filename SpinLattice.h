@@ -13,6 +13,7 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
+#include <complex>
 #include "Lattice.h"
 #include "Spin.h"
 #include "Random.h"
@@ -89,6 +90,8 @@ public:
 
 	std::vector < int > n_to_ij(int n1, int n2);
 
+	double fourier_transform_coeff(std::vector<double> k, std::vector < std::vector <double>> corr);
+	std::vector<std::vector< double >> fourier_transform(std::vector < std::vector <double>> corr);
 
 
 private:
@@ -107,8 +110,8 @@ private:
 	// structure vector basis
 	std::vector< double > a1_;
 	std::vector< double > a2_;
-	std::vector< double > k1_;
-	std::vector< double > k2_;
+	std::vector< double > G1_;
+	std::vector< double > G2_;
 	std::vector< double > v_0;
 	double Normalisation_;
 

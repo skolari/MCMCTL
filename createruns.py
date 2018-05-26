@@ -1,5 +1,28 @@
-import datetime
-now = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
+# import datetime
+#now = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
+
+
+J1 = 7.0
+J2 = J1 / 100.0
+deltaJ = [0.1, 0.5]
+deltaJ = [round(x * J2, 3) for x in deltaJ]
+
+config = '''Deg=4
+outputPath=./Outputfiles/
+N_simul=150
+N_thermal=10000
+N_algo=10000
+N_temp=10
+N_measure=1
+Dipolar=false
+J1={1}
+J2={2}
+J3=0.0
+J5=0.0
+delta_J={0}
+T_start=0.1
+T_end=12
+'''
 
 contents = '''#!/bin/bash
 #SBATCH --output="MCMCTL.out"
@@ -8,46 +31,55 @@ contents = '''#!/bin/bash
 #SBATCH --ntasks 1
 #SBATCH --cpus-per-task 28
 #SBATCH --mem 50GB
-#SBATCH --account=fsl
 
 #SBATCH --mail-type ALL
 #SBATCH --mail-user manuel.stathis@epfl.ch
-#SBATCH --time 12:00:00
+#SBATCH --time 3:00:00
+
+#date
+today=`date +%Y-%m-%d-%H-%M`;
 
 #working directory
-SCRGD="/scratch/$USER/Runs_{1}_MCMCTL"
-SCR="/scratch/$USER/Runs_{1}_MCMCTL{0}"
+SCRGD="/scratch/$USER/Runs_MCMCTL_$today_{0}"
+SCR="/scratch/$USER/Runs_MCMCTL_$today_{0}/Outputfiles"
 
 #home directory
-HD="/home/$USER/2018-Ising_triangular/"
-HDR="/home/$USER/2018-Ising_triangular/"
+HD="/home/$USER/MCMCTL"
+HDR="/home/$USER/MCMCTL/Outputfiles_$today"
+# compile code
+cd $HD
+make
 
 #create the scratch directories to work
 mkdir $SCRGD
 mkdir $SCR
+
 #copy data from HD to SCR
-cp $HD/*.py $SCR
+cp $HD/MCMCIsingTri $SCRGD
+cp $HD/configuration.in $SCRGD
 
 #go to scratch and run code
-cd $SCR
+cd $SCRGD
 
-module load gcc
-module load python/3.6.1
-
-python3 KagomeRunBasis_2dot7dot2.py --L {0} --J1 1 --J2 0 --J3 0 --J4 0.0539 --nst 1000 --nsm 500 --nips 50 --nb 20 --nt_list 28 29 29 --t_list 0.0005 0.05 0.15 0.5 --output Kag_J1-J4_L{0} --nmaxiter 10 --randominit False --same False
+./MCMCIsingTri configuration_{0}.in > $SCR/file.out
 
 #create the results directory in home
 mkdir $HDR
+
 #copy the results to the results directory
-cp $SCR/*.pkl $HDR
+cp $SCR/*.xml $HDR
+cp $SCR/*.dat $HDR
+cp $SCRGD/*.out $HDR
 cp $SCR/*.out $HDR
-cp $SCR/*.err $HDR
+cp $SCRGD/*.err $HDR
 #remove the files
 cd $SCRGD
 rm -r $SCR
+rm -r MCMCIsingTri
 '''
 
-sizes = [4, 8, 12, 16]
-for L in sizes:
-    with open("DipolarToJ4_L{0}.run".format(L), 'w') as f:
-            f.write(contents.format(L, now))
+for dJ in deltaJ:
+    with open("run_deltaJ_{0}.run".format(dJ), 'w') as f:
+        f.write(contents.format(dJ))
+    with open("configuration_deltaJ_{0}.in".format(dJ), 'w') as ff:
+        ff.write(config.format(dJ, J1, J2))

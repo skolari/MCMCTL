@@ -73,10 +73,11 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J
 		J5_[1] = J5;
 	}
 
-	a1_;
-	a2_;
-	k1_;
-	k2_;
+	a1_ = {1, 0};
+	a2_ = {0.5, sqrt(3)* 0.5};
+	double fact = 4 * M_PI / sqrt(3);
+	G1_ = { 2 * M_PI, fact*(-0.5)};
+	G2_= {0, fact};
 	v_0 = this->n_to_ij(0, 0);
 	double Normalisation_  = normalisation();
 	Number_spin_ = this->SpinLattice::number_spin();
@@ -357,3 +358,26 @@ vector < int > SpinLattice::n_to_ij(int n1, int n2) {
 	v[1] = n1;
 	return v;
 }
+
+double SpinLattice::fourier_transform_coeff(std::vector<double> k, vector <vector <double>> corr) {
+	double coeff = 0;
+	vector <int> v(2,0);
+	complex<double> factor;
+	for (int n1 = Deg_ - 1; n1 < 1; n1++ ) { // TODO set limits for n1, n2
+		for (int n2 = Deg_ - 2; n2 < N_ - 1; n2++) {
+			v = this->n_to_ij(n1, n2);
+
+			factor = (0.0, (-1) * k[0] * (n1 *a1_[0] + n2 * a2_[0]) - * k[1] * (n1 *a1_[1] + n2 * a2_[1]));
+			factor = exp(factor);
+			coeff += corr[v[0]][v[1]] * factor.real();
+		}
+	}
+	return coeff;
+}
+
+std::vector<std::vector< double >> fourier_transform(std::vector < std::vector <double>> corr) {
+	// call fourier coeff with k in range fo g1 g2
+	// normalisation factor
+}
+
+
