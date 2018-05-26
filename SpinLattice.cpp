@@ -49,13 +49,13 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J
 
 		J2_[0] = 1 / std::pow(std::sqrt(1.5 * 1.5 + (y + delta_J) * (y + delta_J)),3);
 		J2_[1] = 1 / std::pow(std::sqrt(4 * (y + delta_J) * (y + delta_J)),3);
-		/*
+
 		J3_[0] = 1/8; // 1/2
 		J3_[1] = 1 / std::pow(std::sqrt(1 + 2 * (y + delta_J) * 2 * (y + delta_J)),3);
 
 		J5_[0] = 1/std::pow(3,3);
 		J5_[1] = 1 / std::pow(std::sqrt(3 * x * 3 * x + 3 * (y + delta_J) * 3 * (y + delta_J)),3);
-		*/
+
 		//cout<< J1_[0] << " " << J2_[0] << " " << J3_[0] << endl;
 	} else {
 		J1_[0] = J1;
