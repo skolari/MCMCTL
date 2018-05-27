@@ -1,11 +1,12 @@
 import datetime
+import numpy as np
 today = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
 
 
 J1 = 7.0
 J2 = J1 / 100.0
-T_end = 20 * J2
-deltaJ = [0.1, 0.5]
+T_end = 6
+deltaJ = np.linspace(0, -2, 20)
 deltaJ = [round(x * J2, 3) for x in deltaJ]
 
 config = '''Deg=4
@@ -21,7 +22,7 @@ J2={2}
 J3=0.0
 J5=0.0
 delta_J={0}
-T_start=0.1
+T_start=0.05
 T_end={3}
 '''
 
