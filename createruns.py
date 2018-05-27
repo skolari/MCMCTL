@@ -37,8 +37,6 @@ contents = '''#!/bin/bash
 #SBATCH --mail-user manuel.stathis@epfl.ch
 #SBATCH --time 3:00:00
 
-#date
-today=`date +%Y-%m-%d-%H-%M`;
 
 #working directory
 SCRPRE="/scratch/$USER/Runs_MCMCTL_{1}"
@@ -65,7 +63,7 @@ cp $HD/configuration.in $SCRGD
 #go to scratch and run code
 cd $SCRGD
 
-./MCMCIsingTri configuration_{0}.in
+./MCMCIsingTri configuration_deltaJ_{0}.in
 
 #create the results directory in home
 mkdir $HDRPRE
