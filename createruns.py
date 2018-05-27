@@ -41,10 +41,12 @@ contents = '''#!/bin/bash
 today=`date +%Y-%m-%d-%H-%M`;
 
 #working directory
+SCRPRE="/scratch/$USER/Runs_MCMCTL_{1}"
 SCRGD="/scratch/$USER/Runs_MCMCTL_{1}/deltaJ_{0}"
 SCR="/scratch/$USER/Runs_MCMCTL_{1}/deltaJ_{0}/Outputfiles"
 
 #home directory
+HDPRE="/home/$USER/MCMCTL/Outputfiles_{1}"
 HD="/home/$USER/MCMCTL"
 HDR="/home/$USER/MCMCTL/Outputfiles_{1}/deltaJ_{0}"
 # compile code
@@ -52,6 +54,7 @@ cd $HD
 make
 
 #create the scratch directories to work
+mkdir $SCRPRE
 mkdir $SCRGD
 mkdir $SCR
 
@@ -65,6 +68,7 @@ cd $SCRGD
 ./MCMCIsingTri configuration_{0}.in
 
 #create the results directory in home
+mkdir $HDRPRE
 mkdir $HDR
 
 #copy the results to the results directory
@@ -82,7 +86,6 @@ rm -r MCMCIsingTri
 for dJ in deltaJ:
     dJ_str = str(dJ)
     dJ_str = dJ_str.replace(".", "")
-    print
     with open("run_deltaJ_{0}.run".format(dJ_str), 'w') as f:
         f.write(contents.format(dJ_str, today))
     with open("configuration_deltaJ_{0}.in".format(dJ_str), 'w') as ff:
