@@ -78,8 +78,10 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J
 	double fact = 4 * M_PI / sqrt(3);
 	G1_ = { 2 * M_PI, fact*(-0.5)};
 	G2_= {0, fact};
+	k1_ = {4 * M_PI / ( 3 * ( Deg_ + 1 )), 0};
+	k2_ = {4 * M_PI / ( 3 * ( Deg_ + 1 )) * (- 0.5), 4 * M_PI / ( 3 * ( Deg_ + 1 )) * 0.5 * sqrt(3)};
 	v_0 = this->n_to_ij(0, 0);
-	double Normalisation_  = normalisation();
+	Normalisation_  = this->normalisation();
 	Number_spin_ = this->SpinLattice::number_spin();
 	Energy_ = this->calculate_Energy();
 
@@ -362,22 +364,43 @@ vector < int > SpinLattice::n_to_ij(int n1, int n2) {
 double SpinLattice::fourier_transform_coeff(std::vector<double> k, vector <vector <double>> corr) {
 	double coeff = 0;
 	vector <int> v(2,0);
-	complex<double> factor;
-	for (int n1 = Deg_ - 1; n1 < 1; n1++ ) { // TODO set limits for n1, n2
-		for (int n2 = Deg_ - 2; n2 < N_ - 1; n2++) {
+	for(int n2 = 0; n2 < Deg_; n2 ++) {
+		for (int n1 = 0 - n2; n1 < Deg_; n1 ++) {
 			v = this->n_to_ij(n1, n2);
 
-			factor = (0.0, (-1) * k[0] * (n1 *a1_[0] + n2 * a2_[0]) - * k[1] * (n1 *a1_[1] + n2 * a2_[1]));
+			complex<double> factor (0.0, (-1) * k[0] * (n1 *a1_[0] + n2 * a2_[0]) - k[1] * (n1 *a1_[1] + n2 * a2_[1]));
 			factor = exp(factor);
 			coeff += corr[v[0]][v[1]] * factor.real();
 		}
 	}
-	return coeff;
+	for(int n2 = Deg_; n2 < N_ - 1; n2 ++) {
+		for (int n1 = - Deg_ + 1; n1 < N_ - n2 - 1; n1 ++) {
+			v = this->n_to_ij(n1, n2);
+			double im =  (-1) * k[0] * (n1 *a1_[0] + n2 * a2_[0]) -k[1] * (n1 *a1_[1] + n2 * a2_[1]);
+			complex<double>factor (0.0, im);
+			factor = exp(factor);
+			coeff += corr[v[0]][v[1]] * factor.real();
+		}
+	}
+
+	return Normalisation_ * coeff;
 }
 
-std::vector<std::vector< double >> fourier_transform(std::vector < std::vector <double>> corr) {
+vector<vector< double >> SpinLattice::fourier_transform(std::vector < std::vector <double>> corr) {
 	// call fourier coeff with k in range fo g1 g2
 	// normalisation factor
+	vector<vector< double >> f (N_, vector< double >(N_, 0));
+	int i = 0;
+	int j = 0;
+	for(int n2 = -Deg_; n2 < Deg_; n2 ++) {
+		j = n2 + Deg_;
+		for (int n1 = -Deg_ ; n1 < Deg_; n1 ++) {
+			i = n1 + Deg_;
+			f[i][j] = this->fourier_transform_coeff(this->k(n1,n2), corr);
+		}
+	}
+
+	return f;
 }
 
 

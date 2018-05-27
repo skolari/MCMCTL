@@ -8,6 +8,7 @@
 
 #ifndef SPINLATTICE_H_
 #define SPINLATTICE_H_
+#define _USE_MATH_DEFINES
 
 #include <iostream>
 #include <fstream>
@@ -93,7 +94,11 @@ public:
 	double fourier_transform_coeff(std::vector<double> k, std::vector < std::vector <double>> corr);
 	std::vector<std::vector< double >> fourier_transform(std::vector < std::vector <double>> corr);
 
-
+	inline double normalisation() {
+		//double V = std::pow((2 * M_PI), 2);
+		double V = 1.5 * fabs(G1_[0] * G2_[1] - G1_[1] * G2_[0]);
+		return 1/(V); // nicht sicher
+	}
 private:
 	std::vector< std::vector<Spin*> > S_;
 	double Energy_;
@@ -112,7 +117,10 @@ private:
 	std::vector< double > a2_;
 	std::vector< double > G1_;
 	std::vector< double > G2_;
-	std::vector< double > v_0;
+	std::vector< double > k1_;
+	std::vector< double > k2_;
+
+	std::vector< int > v_0;
 	double Normalisation_;
 
 

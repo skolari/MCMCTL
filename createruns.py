@@ -40,12 +40,12 @@ contents = '''#!/bin/bash
 today=`date +%Y-%m-%d-%H-%M`;
 
 #working directory
-SCRGD="/scratch/$USER/Runs_MCMCTL_$today_{0}"
-SCR="/scratch/$USER/Runs_MCMCTL_$today_{0}/Outputfiles"
+SCRGD="/scratch/$USER/Runs_MCMCTL_$today/deltaJ_{0}"
+SCR="/scratch/$USER/Runs_MCMCTL_$today/deltaJ_{0}/Outputfiles"
 
 #home directory
 HD="/home/$USER/MCMCTL"
-HDR="/home/$USER/MCMCTL/Outputfiles_$today"
+HDR="/home/$USER/MCMCTL/Outputfiles_$today/deltaJ_{0}"
 # compile code
 cd $HD
 make
