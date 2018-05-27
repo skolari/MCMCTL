@@ -26,8 +26,8 @@ T_end={3}
 '''
 
 contents = '''#!/bin/bash
-#SBATCH --output="MCMCTL.out"
-#SBATCH --error="MCMCTL.err"
+#SBATCH --output="MCMCTL_{0}.out"
+#SBATCH --error="MCMCTL_{0}.err"
 #SBATCH --nodes 1
 #SBATCH --ntasks 1
 #SBATCH --cpus-per-task 28
@@ -80,6 +80,8 @@ rm -r MCMCIsingTri
 '''
 
 for dJ in deltaJ:
+    dJ_str = str(dJ)
+    dJ_str = dJ_str.replace(".", "")
     with open("run_deltaJ_{0}.run".format(dJ), 'w') as f:
         f.write(contents.format(dJ, today))
     with open("configuration_deltaJ_{0}.in".format(dJ), 'w') as ff:
