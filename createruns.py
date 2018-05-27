@@ -11,8 +11,8 @@ deltaJ = [round(x * J2, 3) for x in deltaJ]
 config = '''Deg=4
 outputPath=./Outputfiles/
 N_simul=150
-N_thermal=1000
-N_algo=100
+N_thermal=10000
+N_algo=10000
 N_temp=10
 N_measure=1
 Dipolar=false
@@ -58,7 +58,7 @@ mkdir $SCR
 
 #copy data from HD to SCR
 cp $HD/MCMCIsingTri $SCRGD
-cp $HD/configuration.in $SCRGD
+cp $HD/configuration_deltaJ_{0}.in $SCRGD
 
 #go to scratch and run code
 cd $SCRGD
