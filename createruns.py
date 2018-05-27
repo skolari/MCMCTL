@@ -1,5 +1,5 @@
-# import datetime
-#now = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
+import datetime
+today = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
 
 
 J1 = 7.0
@@ -41,12 +41,12 @@ contents = '''#!/bin/bash
 today=`date +%Y-%m-%d-%H-%M`;
 
 #working directory
-SCRGD="/scratch/$USER/Runs_MCMCTL_${today}/deltaJ_{0}"
-SCR="/scratch/$USER/Runs_MCMCTL_${today}/deltaJ_{0}/Outputfiles"
+SCRGD="/scratch/$USER/Runs_MCMCTL_{1}/deltaJ_{0}"
+SCR="/scratch/$USER/Runs_MCMCTL_{1}/deltaJ_{0}/Outputfiles"
 
 #home directory
 HD="/home/$USER/MCMCTL"
-HDR="/home/$USER/MCMCTL/Outputfiles_${today}/deltaJ_{0}"
+HDR="/home/$USER/MCMCTL/Outputfiles_{1}/deltaJ_{0}"
 # compile code
 cd $HD
 make
@@ -81,6 +81,6 @@ rm -r MCMCIsingTri
 
 for dJ in deltaJ:
     with open("run_deltaJ_{0}.run".format(dJ), 'w') as f:
-        f.write(contents.format(dJ))
+        f.write(contents.format(dJ, today))
     with open("configuration_deltaJ_{0}.in".format(dJ), 'w') as ff:
         ff.write(config.format(dJ, J1, J2, T_end))
