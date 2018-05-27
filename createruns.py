@@ -82,7 +82,8 @@ rm -r MCMCIsingTri
 for dJ in deltaJ:
     dJ_str = str(dJ)
     dJ_str = dJ_str.replace(".", "")
+    print
     with open("run_deltaJ_{0}.run".format(dJ_str), 'w') as f:
-        f.write(contents.format(dJ, today))
+        f.write(contents.format(dJ_str, today))
     with open("configuration_deltaJ_{0}.in".format(dJ_str), 'w') as ff:
         ff.write(config.format(dJ, J1, J2, T_end))
