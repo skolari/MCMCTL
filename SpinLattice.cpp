@@ -356,7 +356,7 @@ vector <vector< double > > SpinLattice::correlation() {
 
 vector < int > SpinLattice::n_to_ij(int n1, int n2) {
 	vector< int > v(2, 0);
-	v[0] = - n2 + N_ - 1;
+	v[0] = - n2 + N_ - 2;
 	v[1] = n1;
 	return v;
 }

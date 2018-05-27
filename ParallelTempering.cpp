@@ -124,6 +124,10 @@ void ParallelTempering::J_swap(int i, int j) {
 	Simulations_[i]->set_gm_measures_(Simulations_[j]->get_gm_measures_());
 	Simulations_[j]->set_gm_measures_(gm_measures);
 
+	vector <vector <vector<double>>> correlation_measures = Simulations_[i]->get_correlation_measures_();
+	Simulations_[i]->set_correlation_measures_(Simulations_[j]->get_correlation_measures_());
+	Simulations_[j]->set_correlation_measures_(correlation_measures);
+
 
 	std::swap(Simulations_[i],Simulations_[j]);
 }
@@ -140,6 +144,7 @@ void ParallelTempering::Printout(std::string OutputPath) {
 		s = std::to_string(i);
 		OutputPath_new  = OutputPath + "nr_" + s;
 		Simulations_[i]->Printout(OutputPath_new);
+		Simulations_[i]->Printout_Fourier(OutputPath_new);
 	}
 	this->Printout_Observables(OutputPath);
 }

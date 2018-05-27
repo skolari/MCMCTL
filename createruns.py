@@ -4,6 +4,7 @@
 
 J1 = 7.0
 J2 = J1 / 100.0
+T_end = 20 * J2
 deltaJ = [0.1, 0.5]
 deltaJ = [round(x * J2, 3) for x in deltaJ]
 
@@ -21,7 +22,7 @@ J3=0.0
 J5=0.0
 delta_J={0}
 T_start=0.1
-T_end=12
+T_end={3}
 '''
 
 contents = '''#!/bin/bash
@@ -82,4 +83,4 @@ for dJ in deltaJ:
     with open("run_deltaJ_{0}.run".format(dJ), 'w') as f:
         f.write(contents.format(dJ))
     with open("configuration_deltaJ_{0}.in".format(dJ), 'w') as ff:
-        ff.write(config.format(dJ, J1, J2))
+        ff.write(config.format(dJ, J1, J2, T_end))

@@ -40,7 +40,7 @@ public:
 
 	// Printout
 	void Printout(std::string OutputPath);
-
+	void Printout_Fourier(std::string Outputpath);
 	// getters and setters
 	inline DimerNode* get_entry_node() const {
 		return entry_node_;
@@ -66,16 +66,24 @@ public:
 		return nstring_measures_;
 	}
 
-	inline std::vector<double> get_gm_measures_() {
-		return gm_measures_;
-	}
-
 	inline void set_nstring_measures_(std::vector<double> v) {
 		nstring_measures_  = v;
 	}
 
+	inline std::vector<double> get_gm_measures_() {
+		return gm_measures_;
+	}
+
 	inline void set_gm_measures_(std::vector<double> v) {
 		gm_measures_  = v;
+	}
+
+	inline std::vector<std::vector<std::vector<double>>> get_correlation_measures_() {
+		return correlation_measures_;
+	}
+
+	inline void set_correlation_measures_(std::vector<std::vector<std::vector<double>>> v) {
+		correlation_measures_  = v;
 	}
 
 	inline int get_winding_number_1() const {
@@ -85,6 +93,7 @@ public:
 	inline int get_winding_number_2() const {
 		return winding_number_2;
 	}
+
 
 	inline double get_energy() const {
 		S_->update_Energy(); // should update after every probastep...
@@ -112,6 +121,7 @@ public:
 	double calculate_binder_cumulant();
 	void calculate_winding_strings();
 	double first_moment_nstring();
+	std::vector< std::vector <double> > first_moment_correlations();
 	void update_winding_i_dir(int index, int i, int j, int dir, bool plus);
 
 	double variance_energy();
@@ -138,7 +148,7 @@ private:
 	std::vector<double> magnetisation_measures_; // vector which collects the magnetisation measures
 	std::vector<double> nstring_measures_; // vector which collects the nstring measures
 	std::vector<double> gm_measures_; // vector which collects the gm measures
-	std::vector < std::vector<std::vector<double> > > correlation_measures_; // vector which collects the gm measures
+	std::vector < std::vector<std::vector<double>>> correlation_measures_; // vector which collects the gm measures
 
 	// Deg_, N_
 	int Deg_;

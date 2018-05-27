@@ -462,6 +462,23 @@ double MonteCarlo::first_moment_nstring() {
 	return nstring;
 }
 
+vector< vector <double> > MonteCarlo::first_moment_correlations() {
+	int Ni = correlation_measures_[0].size();
+	int Nj = correlation_measures_[0][0].size();
+	int number_of_measures = correlation_measures_.size();
+
+	vector< vector <double> > A (Ni, vector <double>(Nj, 0));
+	for(int i = 0; i < Ni ; i++) {
+		for(int j = 0; j < Nj ; j++) {
+			for(int k = 0; k < number_of_measures ; k++) {
+				A[i][j] += correlation_measures_[k][j][i];
+			}
+			A[i][j] = A[i][j] / number_of_measures;
+		}
+	}
+	return A;
+}
+
 /*
  * This swiches all dimers of the worm back and clears the worm.
  */
@@ -582,4 +599,32 @@ void MonteCarlo::update_winding_i_dir(int index, int i, int j, int dir, bool plu
 			winding_strings_[index] -= 1;
 		}
 	}
+}
+
+void MonteCarlo::Printout_Fourier(std::string Outputpath) {
+	string path = Outputpath + "_Fourier.dat";
+
+	ofstream *outputFileSpin = new ofstream();
+	outputFileSpin->open(path.c_str());
+
+	if (!outputFileSpin->is_open())
+	{
+		delete outputFileSpin;
+		outputFileSpin = NULL;
+	}
+
+	vector <vector <double>> A = S_->fourier_transform(this->first_moment_correlations());
+	int Ni = A.size();
+	int Nj = A[0].size();
+
+	for(int i = 0; i < Ni; i++) {
+		for(int j = 0; j < Nj; j++) {
+			*outputFileSpin << A[i][j] << "\t";
+		}
+		*outputFileSpin << endl;
+	}
+
+	outputFileSpin->close();
+	delete outputFileSpin;
+
 }

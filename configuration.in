@@ -1,7 +1,7 @@
 Deg=4
 outputPath=./Outputfiles/
 N_simul=2
-N_thermal=5000
+N_thermal=500
 N_algo=1
 N_temp=10
 N_measure=1
