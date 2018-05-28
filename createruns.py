@@ -4,8 +4,8 @@ today = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
 
 J1 = 7.0
 J2 = J1 / 100.0
-T_end = 4
-deltaJ = [(-0.1) * x for x in range(20)]
+T_end = 2
+deltaJ = [(-0.05) * (x + 1) for x in range(40)]
 deltaJ = [round(x * J2, 3) for x in deltaJ]
 
 config = '''Deg=4

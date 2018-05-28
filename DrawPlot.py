@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
+
 import numpy as np
 # import scipy.signal as sp
 from math import log, exp
 from TriangularLattice import TriangularLattice
 from DualLattice import DualLattice
-
 
 class DrawPlot:
     # Variables
@@ -65,9 +65,12 @@ class DrawPlot:
         plt.show()
 
     def draw_n_string(self):
+        plt.rc('text', usetex=True)
+        plt.rc('font', family='serif')
+
         plt.plot(self.T, self.n_string, '.')
         plt.xlabel('T')
-        plt.ylabel('n_string')
+        plt.ylabel('n_{string}')
         plt.title('T - n_string')
         plt.grid(True)
         plt.show()
@@ -85,6 +88,7 @@ class DrawPlot:
         print(entropy)
 
     def draw_observables(self):
+
         self.draw_cv()
         # self.get_entropy()
         self.draw_e()
