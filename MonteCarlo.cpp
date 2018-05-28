@@ -631,3 +631,24 @@ void MonteCarlo::Printout_Fourier(std::string Outputpath) {
 
 }
 */
+
+void MonteCarlo::Printout_energy(std::string OutputPath)
+{
+	string path = OutputPath + "_Energy.dat";
+
+	ofstream *outputFileSpin = new ofstream();
+	outputFileSpin->open(path.c_str());
+
+	if (!outputFileSpin->is_open())
+	{
+		delete outputFileSpin;
+		outputFileSpin = NULL;
+	}
+
+	for (unsigned i = 0; i < energy_measures_.size(); ++i) {
+		*outputFileSpin << energy_measures_[i] << std::endl;
+	}
+	outputFileSpin->close();
+	delete outputFileSpin;
+}
+

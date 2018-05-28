@@ -40,6 +40,8 @@ public:
 
 	// Printout
 	void Printout(std::string OutputPath);
+	void Printout_energy(std::string OutputPath);
+
 	//void Printout_Fourier(std::string Outputpath);
 	// getters and setters
 	inline DimerNode* get_entry_node() const {

@@ -144,7 +144,7 @@ void ParallelTempering::Printout(std::string OutputPath) {
 		s = std::to_string(i);
 		OutputPath_new  = OutputPath + "nr_" + s;
 		Simulations_[i]->Printout(OutputPath_new);
-		//Simulations_[i]->Printout_Fourier(OutputPath_new);
+		Simulations_[i]->Printout_energy(OutputPath_new);
 	}
 	this->Printout_Observables(OutputPath);
 }
@@ -187,6 +187,9 @@ void ParallelTempering::Printout_Observables(std::string OutputPath) const
 }
 
 
+
+
+
 /**
  * calls the MonteCarlo::measure_energy() for all systems in Simulations_
  */
@@ -195,4 +198,3 @@ void ParallelTempering::measure_energy() {
 		Simulations_[i]->measure();
 	}
 }
-

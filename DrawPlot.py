@@ -87,7 +87,7 @@ class DrawPlot:
     def draw_observables(self):
         self.draw_cv()
         # self.get_entropy()
-        # self.draw_e()
+        self.draw_e()
         # self.draw_bc()
         self.draw_n_string()
         self.draw_gm()

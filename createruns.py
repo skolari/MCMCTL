@@ -4,15 +4,15 @@ today = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
 
 J1 = 7.0
 J2 = J1 / 100.0
-T_end = 6
-deltaJ = [(-0.1) * x for x in range(2)]
+T_end = 4
+deltaJ = [(-0.1) * x for x in range(20)]
 deltaJ = [round(x * J2, 3) for x in deltaJ]
 
 config = '''Deg=4
 outputPath=./Outputfiles/
-N_simul=3
-N_thermal=1000
-N_algo=100
+N_simul=120
+N_thermal=10000
+N_algo=10000
 N_temp=10
 N_measure=1
 Dipolar=false
