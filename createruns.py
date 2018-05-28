@@ -6,7 +6,7 @@ today = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
 J1 = 7.0
 J2 = J1 / 100.0
 T_end = 6
-deltaJ = np.linspace(0, -2, 20)
+deltaJ = [(-0.1) * x for x in range(20)]
 deltaJ = [round(x * J2, 3) for x in deltaJ]
 
 config = '''Deg=4
@@ -67,7 +67,7 @@ cd $SCRGD
 ./MCMCIsingTri configuration_deltaJ_{0}.in
 
 #create the results directory in home
-mkdir $HDRPRE
+mkdir $HDPRE
 mkdir $HDR
 
 #copy the results to the results directory
@@ -78,8 +78,7 @@ cp $SCR/*.out $HDR
 cp $SCRGD/*.err $HDR
 #remove the files
 cd $SCRGD
-rm -r $SCR
-rm -r MCMCIsingTri
+rm -rf *
 '''
 
 for dJ in deltaJ:
