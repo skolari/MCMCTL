@@ -1,5 +1,4 @@
 import datetime
-import numpy as np
 today = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
 
 
