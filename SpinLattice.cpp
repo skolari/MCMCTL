@@ -80,7 +80,7 @@ SpinLattice::SpinLattice(Random* Rnd, int Deg, bool Dipolar, double J1, double J
 	G2_= {0, fact};
 	k1_ = {4 * M_PI / ( 3 * ( Deg_ + 1 )), 0};
 	k2_ = {4 * M_PI / ( 3 * ( Deg_ + 1 )) * (- 0.5), 4 * M_PI / ( 3 * ( Deg_ + 1 )) * 0.5 * sqrt(3)};
-	v_0 = this->n_to_ij(0, 0);
+	//v_0 = this->n_to_ij(0, 0);
 	Normalisation_  = this->normalisation();
 	Number_spin_ = this->SpinLattice::number_spin();
 	Energy_ = this->calculate_Energy();
@@ -327,6 +327,7 @@ double SpinLattice::get_energy_per_spin() {
 	return E / Number_spin_;
 }
 
+/*
 // Fourier
 vector <vector< double > > SpinLattice::correlation(int i0, int j0) {
 	vector <vector< double > > corr(N_, vector<double>(N_,0));
@@ -360,6 +361,7 @@ vector < int > SpinLattice::n_to_ij(int n1, int n2) {
 	v[1] = n1;
 	return v;
 }
+
 
 double SpinLattice::fourier_transform_coeff(std::vector<double> k, vector <vector <double>> corr) {
 	double coeff = 0;
@@ -403,4 +405,4 @@ vector<vector< double >> SpinLattice::fourier_transform(std::vector < std::vecto
 	return f;
 }
 
-
+*/

@@ -86,13 +86,12 @@ public:
 		return k;
 	}
 
-	std::vector <std::vector< double > > correlation(int i0, int j0);
-	std::vector <std::vector< double > > correlation();
+	//std::vector <std::vector< double > > correlation(int i0, int j0);
+	//std::vector <std::vector< double > > correlation();
 
-	std::vector < int > n_to_ij(int n1, int n2);
-
-	double fourier_transform_coeff(std::vector<double> k, std::vector < std::vector <double>> corr);
-	std::vector<std::vector< double >> fourier_transform(std::vector < std::vector <double>> corr);
+	//std::vector < int > n_to_ij(int n1, int n2);
+	//double fourier_transform_coeff(std::vector<double> k, std::vector < std::vector <double>> corr);
+	//std::vector<std::vector< double >> fourier_transform(std::vector < std::vector <double>> corr);
 
 	inline double normalisation() {
 		//double V = std::pow((2 * M_PI), 2);
@@ -120,7 +119,7 @@ private:
 	std::vector< double > k1_;
 	std::vector< double > k2_;
 
-	std::vector< int > v_0;
+	//std::vector< int > v_0;
 	double Normalisation_;
 
 

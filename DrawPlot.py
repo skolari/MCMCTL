@@ -65,7 +65,7 @@ class DrawPlot:
         plt.show()
 
     def draw_n_string(self):
-        plt.plot(self.T, self.n_string)
+        plt.plot(self.T, self.n_string, '.')
         plt.xlabel('T')
         plt.ylabel('n_string')
         plt.title('T - n_string')
@@ -73,7 +73,7 @@ class DrawPlot:
         plt.show()
 
     def draw_gm(self):
-        plt.plot(self.T, self.gm)
+        plt.plot(self.T, self.gm, '.')
         plt.xlabel('T')
         plt.ylabel('gm')
         plt.title('T - gm')
@@ -86,8 +86,8 @@ class DrawPlot:
 
     def draw_observables(self):
         self.draw_cv()
-        self.get_entropy()
-        self.draw_e()
+        # self.get_entropy()
+        # self.draw_e()
         # self.draw_bc()
         self.draw_n_string()
         self.draw_gm()

@@ -35,7 +35,7 @@ contents = '''#!/bin/bash
 
 #SBATCH --mail-type ALL
 #SBATCH --mail-user manuel.stathis@epfl.ch
-#SBATCH --time 3:00:00
+#SBATCH --time 1:30:00
 
 
 #working directory
@@ -63,7 +63,7 @@ cp $HD/configuration_deltaJ_{0}.in $SCRGD
 #go to scratch and run code
 cd $SCRGD
 
-./MCMCIsingTri configuration_deltaJ_{0}.in
+./MCMCIsingTri configuration_deltaJ_{0}.in > file.out
 
 #create the results directory in home
 mkdir -p $HDPRE
