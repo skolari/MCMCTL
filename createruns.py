@@ -52,9 +52,9 @@ cd $HD
 make
 
 #create the scratch directories to work
-mkdir $SCRPRE
-mkdir $SCRGD
-mkdir $SCR
+mkdir -p $SCRPRE
+mkdir -p $SCRGD
+mkdir -p $SCR
 
 #copy data from HD to SCR
 cp $HD/MCMCIsingTri $SCRGD
@@ -66,8 +66,8 @@ cd $SCRGD
 ./MCMCIsingTri configuration_deltaJ_{0}.in
 
 #create the results directory in home
-mkdir $HDPRE
-mkdir $HDR
+mkdir -p $HDPRE
+mkdir -p $HDR
 
 #copy the results to the results directory
 cp $SCR/*.xml $HDR
