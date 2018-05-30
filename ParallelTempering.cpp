@@ -38,7 +38,7 @@ ParallelTempering::~ParallelTempering() {
 void ParallelTempering::run() {
 	// thermalisation
 	for ( int i = 0; i < N_thermal_; i++ ) {
-		if (i % 100 == 0) {
+		if (i % 1 == 100) {
 			std::cout << i << " out of " << N_thermal_ << " thermal steps done." << std::endl;
 		}
 		this->algorithm_step();
@@ -46,7 +46,7 @@ void ParallelTempering::run() {
 
 	// algorithm
 	for ( int i = 0; i < N_algo_; i++ ) {
-		if (i % 100 == 0)
+		if (i % 1 == 100)
 			std::cout << i << " out of " << N_algo_ << " algo steps done." << std::endl;
 		this->algorithm_step();
 		if (i % N_measure_ == 0) {

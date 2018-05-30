@@ -138,7 +138,7 @@ void MonteCarlo::create_update() {
 	DimerEdge* last_edge = worm_.back();
 	DimerNode* end_node = last_edge->getEnd();
 	int count = 0;
-	int count_max = 20 * S_->get_Number_spin();
+	int count_max = 5 * S_->get_Number_spin();
 
 	do {
 		this->myopic_step();

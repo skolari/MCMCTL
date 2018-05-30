@@ -65,9 +65,6 @@ class DrawPlot:
         plt.show()
 
     def draw_n_string(self):
-        plt.rc('text', usetex=True)
-        plt.rc('font', family='serif')
-
         plt.plot(self.T, self.n_string, '.')
         plt.xlabel('T')
         plt.ylabel('n_{string}')
