@@ -10,8 +10,8 @@ deltaJ = [round(x * J2, 3) for x in deltaJ]
 
 config = '''Deg=40
 outputPath=./Outputfiles/
-N_simul=50
-N_thermal=2000
+N_simul=40
+N_thermal=1000
 N_algo=1000
 N_temp=10
 N_measure=1
