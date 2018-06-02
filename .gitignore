@@ -11,3 +11,4 @@ Triangular_Lattice_py/
 *.prefs
 ./__pycache__/*
 *.pyc
+*.asv

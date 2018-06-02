@@ -34,6 +34,7 @@ public:
 
 	// Printout
 	void Printout(std::string OutputPath);
+	void Printout_light(std::string OutputPath);
 	void Printout_Observables(std::string OutputPath) const;
 
 private:

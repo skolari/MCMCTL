@@ -5,13 +5,13 @@ today = datetime.datetime.now().strftime('%Y-%m-%d_%Hh')
 J1 = 7.0
 J2 = J1 / 100.0
 T_end = J2 * 15
-deltaJ = [(-0.05) * x for x in range(40)]
+deltaJ = [(-0.1) * (x + 1) for x in range(20)]
 deltaJ = [round(x * J2, 3) for x in deltaJ]
 
-config = '''Deg=40
+config = '''Deg=24
 outputPath=./Outputfiles/
-N_simul=40
-N_thermal=1000
+N_simul=100
+N_thermal=2000
 N_algo=1000
 N_temp=10
 N_measure=1
@@ -35,7 +35,7 @@ contents = '''#!/bin/bash
 
 #SBATCH --mail-type ALL
 #SBATCH --mail-user manuel.stathis@epfl.ch
-#SBATCH --time 12:00:00
+#SBATCH --time 18:00:00
 
 
 #working directory

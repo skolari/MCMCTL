@@ -150,6 +150,21 @@ void ParallelTempering::Printout(std::string OutputPath) {
 }
 
 /**
+ * Print out the mean energy per spin and Cv and all Energy measures.
+ * @param OutputPath outputpath of the output .dat files.
+ */
+void ParallelTempering::Printout_light(std::string OutputPath) {
+	std::string s = "";
+	std::string OutputPath_new = "";
+	for (int i = 0; i < N_simul_; i++) {
+		s = std::to_string(i);
+		OutputPath_new  = OutputPath + "nr_" + s;
+		Simulations_[i]->Printout_energy(OutputPath_new);
+	}
+	this->Printout_Observables(OutputPath);
+}
+
+/**
  * create a printout .dat file< where the mean energy and cv of all systems in Simulations_ is saved.
  * @param OutputPath outputpath of the output .dat files.
  */

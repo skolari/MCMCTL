@@ -26,11 +26,10 @@ class DrawPlot:
         # self.S = [exp((-1)*x) for x in self.S]
         # self.S = [log(x) for x in self.S]
 
-
     def draw_spin_and_dual_lattice(self):
         self.triangular_lattice.draw_tri_lattice()
         self.dual_lattice.draw_dual_lattice()
-        # plt.savefig("stripes.pdf", format='pdf')
+        plt.savefig("zigzag.pdf", format='pdf')
         plt.show()
 
     def draw_spin_lattice(self):

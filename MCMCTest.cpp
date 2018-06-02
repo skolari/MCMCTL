@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 	Random* Rnd = new Random(N);
     ParallelTempering* P = new ParallelTempering(Rnd, Deg, N_simul, N_thermal, N_algo, N_temp, N_measure, Dipolar, J1, J2, J3, J5, delta_J, T_start, T_end);
 	P->run();
-	P->Printout(outputPath);
+	P->Printout_light(outputPath);
 
 	cout << "Printout complete" << endl;
 	return 0;

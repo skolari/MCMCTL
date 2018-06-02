@@ -1,12 +1,12 @@
 fs = 16;
-n = 40;
-path = '..\Results\Outputfiles_2018-05-28_21h\deltaJ_';
+n = 19;
+path = '..\Results\Outputfiles_2018-06-01_00h\deltaJ_';
 deltaJ = zeros(n,1);
 deltaJ_str = strings([n,1]);
 J2 = 0.07;
 
 for i = 1:n
-    deltaJ(i) = (-0.05) * i * J2;
+    deltaJ(i) = (-0.1) * i * J2;
     deltaJ_str(i) = num2str(round(deltaJ(i), 3));
     deltaJ_str(i) = erase(deltaJ_str(i),".");
 end
