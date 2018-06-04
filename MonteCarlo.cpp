@@ -557,14 +557,12 @@ void MonteCarlo::calculate_winding_strings() {
 	int i = 0;
 	for (int j = 0; j < Deg_; j++) {
 		i = Deg_- j;
-		if(S_->ifInsideLattice(i, j)) {
-			this->update_winding_i_dir(0, i, j, 4, true);
-		}
+		this->update_winding_i_dir(1, i, j, 1, false);
 	}
-	for (int j = Deg_; j < N_ - 1; j++) {
-		i = 0;
-		this->update_winding_i_dir(0, i, j, 5, false);
 
+	i = 0;
+	for (int j = Deg_; j < N_ - 1; j++) {
+		this->update_winding_i_dir(0, i, j, 2, false);
 	}
 
 	// update horizontal Spins
@@ -572,17 +570,15 @@ void MonteCarlo::calculate_winding_strings() {
 	int j = N_ - 2;
 	for (int i = 0; i < N_ - Deg_ - 1; i++){
 		if(S_->ifInsideLattice(i, j)) {
-			this->update_winding_i_dir(1, i, j, 0, false);
+			this->update_winding_i_dir(1, i, j, 0, true);
 		}
 	}
 
-	i = N_ - 2;
-	this->update_winding_i_dir(1, i, Deg_, 1, true);
-	for (int j = Deg_; j < N_ - 2; j++) {
+	j = 0;
+	for (int i = Deg_; i < N_ - 1; i++) {
 		if(S_->ifInsideLattice(i, j)) {
-			this->update_winding_i_dir(1, i, j, 4, true);
+			this->update_winding_i_dir(0, i, j, 0, true);
 		}
-		i = i - 1;
 	}
 }
 

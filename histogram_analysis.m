@@ -1,8 +1,10 @@
 fs = 16;
-nr = 27;
+nr = 90;
 %path = '..\Results\Outputfiles_2018-05-28_21h\deltaJ_-0137\';
 %path = '..\Results\Outputfiles_2018-05-29_00h\deltaJ_0004\';
-path = '..\Results\Outputfiles_2018-06-01_00h\deltaJ_-0133\';
+%path = '..\Results\Outputfiles_2018-06-01_00h\deltaJ_-0133\';
+path = '..\Results\Outputfiles_2018-06-03_19h\deltaJ_0133\';
+
 J2 = 0.07;
 %path = '..\Results\Outputfiles_2018-05-28-14-47-14\';
 path1 = strcat(path,'nr_',num2str(nr),'_Energy.dat');

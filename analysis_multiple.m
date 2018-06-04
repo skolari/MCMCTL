@@ -1,12 +1,16 @@
 fs = 16;
-n = 19;
-path = '..\Results\Outputfiles_2018-06-01_00h\deltaJ_';
+%n = 40;
+n = 20;
+%path = '..\Results\Outputfiles_2018-06-03_01h\deltaJ_';
+%path = '..\Results\Outputfiles_2018-05-28_21h\deltaJ_';
+path = '..\Results\Outputfiles_2018-06-03_19h\deltaJ_';
 deltaJ = zeros(n,1);
 deltaJ_str = strings([n,1]);
 J2 = 0.07;
 
 for i = 1:n
-    deltaJ(i) = (-0.1) * i * J2;
+    %deltaJ(i) = (-0.05) * i * J2;
+    deltaJ(i) = (-0.15) * i * J2;
     deltaJ_str(i) = num2str(round(deltaJ(i), 3));
     deltaJ_str(i) = erase(deltaJ_str(i),".");
 end
@@ -25,7 +29,7 @@ for i = 1:n
 end
 deltaJ  = deltaJ./J2;
 [X,Y] = meshgrid(T,deltaJ);
-figure(1)
+figure
 title('$n_{string}$','interpreter', 'latex')
 surf(X,Y,nstring','EdgeColor','none','LineStyle','none','FaceLighting','phong')
 set(gca, 'fontsize', fs)
@@ -36,7 +40,7 @@ zlabel('$n_{string}$', 'fontsize', fs,'interpreter', 'latex')
 h = colorbar;
 ylabel(h,'$n_{string}$', 'fontsize', fs,'interpreter', 'latex')
 
-figure(2)
+figure
 title('$gm$','interpreter', 'latex')
 surf(X,Y,gm','EdgeColor','none','LineStyle','none','FaceLighting','phong')
 set(gca, 'fontsize', fs)
