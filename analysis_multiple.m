@@ -3,18 +3,26 @@ fs = 16;
 n = 20;
 %path = '..\Results\Outputfiles_2018-06-03_01h\deltaJ_';
 %path = '..\Results\Outputfiles_2018-05-28_21h\deltaJ_';
-path = '..\Results\Outputfiles_2018-06-03_19h\deltaJ_';
+%path = '..\Results\Outputfiles_2018-06-03_19h\deltaJ_';
+path = '..\Results\Outputfiles_2018-06-04_23h\deltaJ_';
+
 deltaJ = zeros(n,1);
 deltaJ_str = strings([n,1]);
 J2 = 0.07;
 
-for i = 1:n
-    %deltaJ(i) = (-0.05) * i * J2;
-    deltaJ(i) = (-0.15) * i * J2;
+for i = 1:20
+    deltaJ(i) = (-0.15) * (21-i) * J2;
     deltaJ_str(i) = num2str(round(deltaJ(i), 3));
     deltaJ_str(i) = erase(deltaJ_str(i),".");
 end
-
+% 
+%     deltaJ(21) = 0;
+%     deltaJ_str(21) = '0';
+% for i = 1:20
+%     deltaJ(i+21) = (0.1) * i * J2;
+%     deltaJ_str(i+21) = num2str(round(deltaJ(i+21), 3));
+%     deltaJ_str(i+21) = erase(deltaJ_str(i+21),".");
+% end
 tmppath = path + deltaJ_str(1) + "\"  + "Observables.dat"; 
 data = load(tmppath);
 T = (1/J2)./data(:,1);
@@ -34,19 +42,23 @@ title('$n_{string}$','interpreter', 'latex')
 surf(X,Y,nstring','EdgeColor','none','LineStyle','none','FaceLighting','phong')
 set(gca, 'fontsize', fs)
 set(gca,'Ydir','reverse')
+    set(gca,'TickLabelInterpreter','latex')
 ylabel('$\delta J / J_2$','interpreter', 'latex', 'fontsize', fs)
 xlabel('$T / J_2$','interpreter', 'latex', 'fontsize', fs)
 zlabel('$n_{string}$', 'fontsize', fs,'interpreter', 'latex')
 h = colorbar;
 ylabel(h,'$n_{string}$', 'fontsize', fs,'interpreter', 'latex')
+xlim([0.1/J2,15])
 
 figure
 title('$gm$','interpreter', 'latex')
 surf(X,Y,gm','EdgeColor','none','LineStyle','none','FaceLighting','phong')
 set(gca, 'fontsize', fs)
 set(gca,'Ydir','reverse')
+set(gca,'TickLabelInterpreter','latex')
 ylabel('$\delta J / J_2$','interpreter', 'latex', 'fontsize', fs)
 xlabel('$T / J_2$','interpreter', 'latex', 'fontsize', fs)
 zlabel('$g_m$', 'fontsize', fs,'interpreter', 'latex')
 h = colorbar;
 ylabel(h,'$g_m$', 'fontsize', fs,'interpreter', 'latex')
+xlim([0.1/J2,15])
