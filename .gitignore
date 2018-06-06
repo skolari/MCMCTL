@@ -12,3 +12,7 @@ Triangular_Lattice_py/
 ./__pycache__/*
 *.pyc
 *.asv
+*.jpg
+*.fig
+*.eps
+*.pdf
